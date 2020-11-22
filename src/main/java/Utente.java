@@ -1,5 +1,7 @@
 public abstract class Utente {
+
     private String nome;
+    private String cognome;
     private String email;
     private String password;
 
@@ -9,6 +11,14 @@ public abstract class Utente {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
     }
 
     public String getEmail() {

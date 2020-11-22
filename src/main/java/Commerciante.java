@@ -1,13 +1,26 @@
+import java.util.LinkedList;
 import java.util.List;
 
 public class Commerciante extends Utente {
     private List<PuntoVendita> puntiVendita;
 
+    public Commerciante(){
+        this.puntiVendita = new LinkedList<>();
+    }
+
+    public Commerciante(String nome, String cognome, String email, String password){
+        this.setNome(nome);
+        this.setCognome(cognome);
+        this.setEmail(email);
+        this.setPassword(password);
+        this.puntiVendita = new LinkedList<>();
+    }
+
     public List<PuntoVendita> getPuntiVendita() {
         return puntiVendita;
     }
 
-    public void addPuntoVendita(String posizione, String nome) {
-        // TODO: bisogna prima implementare PuntoVendita
+    public void addPuntoVendita(String nome, String posizione) {
+        puntiVendita.add(new PuntoVendita(nome,posizione));
     }
 }

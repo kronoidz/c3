@@ -1,6 +1,7 @@
 import java.util.List;
 
 public class CentroCittadino {
+
     private List<PuntoVendita> puntiVendita;
 
     public List<PuntoVendita> getPuntiVendita() {
