@@ -1,10 +1,10 @@
 public interface IOfferta {
 
-    String getImporto();
+     String getImporto();
 
-    void setImporto(String importo);
+     void setImporto(String importo);
 
-    String getDescrizione();
+     String getDescrizione();
 
     void setDescrizione(String descrizione);
 }
