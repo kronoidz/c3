@@ -1,3 +1,5 @@
+package it.unicam.c3.Anagrafica;
+
 public abstract class Utente {
 
     private String nome;

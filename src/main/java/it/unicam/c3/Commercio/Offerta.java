@@ -1,3 +1,5 @@
+package it.unicam.c3.Commercio;
+
 public abstract class Offerta implements IOfferta{
     private String descrizione;
     private String importo;

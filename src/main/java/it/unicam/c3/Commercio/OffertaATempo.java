@@ -1,3 +1,5 @@
+package it.unicam.c3.Commercio;
+
 import java.time.LocalDate;
 
 public class OffertaATempo extends Offerta{
