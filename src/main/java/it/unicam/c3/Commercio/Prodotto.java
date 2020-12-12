@@ -1,3 +1,5 @@
+package it.unicam.c3.Commercio;
+
 public class Prodotto {
     private String descrizione;
     private double prezzo;

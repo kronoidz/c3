@@ -1,3 +1,7 @@
+package it.unicam.c3.Città;
+
+import it.unicam.c3.Commercio.PuntoVendita;
+
 import java.util.List;
 
 public class CentroCittadino {

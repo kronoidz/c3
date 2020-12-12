@@ -1,3 +1,7 @@
+package it.unicam.c3.Commercio;
+
+import it.unicam.c3.Anagrafica.Commerciante;
+
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;

@@ -1,3 +1,5 @@
+package it.unicam.c3.Commercio;
+
 public class OffertaSemplice extends Offerta{
 
     public OffertaSemplice(){
