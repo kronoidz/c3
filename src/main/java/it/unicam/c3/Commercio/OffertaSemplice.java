@@ -1,12 +1,12 @@
 package it.unicam.c3.Commercio;
 
-public class OffertaSemplice extends Offerta{
+public class OffertaSemplice extends Offerta {
 
-    public OffertaSemplice(){
+    public OffertaSemplice() {
         super();
     }
 
-    public OffertaSemplice(String descrizione, String importo){
-       super(descrizione,importo);
+    public OffertaSemplice(String descrizione, String importo) {
+        super(descrizione, importo);
     }
 }

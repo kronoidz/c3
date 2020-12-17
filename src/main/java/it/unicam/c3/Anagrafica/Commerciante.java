@@ -1,6 +1,6 @@
 package it.unicam.c3.Anagrafica;
 
-import it.unicam.c3.Anagrafica.Utente;
+import it.unicam.c3.Commercio.PuntoVendita;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.List;
 public class Commerciante extends Utente {
     private List<PuntoVendita> puntiVendita;
 
-    public Commerciante(){
+    public Commerciante() {
         this.puntiVendita = new LinkedList<>();
     }
 
-    public Commerciante(String nome, String cognome, String email, String password){
+    public Commerciante(String nome, String cognome, String email, String password) {
         this.setNome(nome);
         this.setCognome(cognome);
         this.setEmail(email);
@@ -25,6 +25,6 @@ public class Commerciante extends Utente {
     }
 
     public void addPuntoVendita(String nome, String posizione) {
-        puntiVendita.add(new PuntoVendita(nome,posizione));
+        puntiVendita.add(new PuntoVendita(nome, posizione));
     }
 }
