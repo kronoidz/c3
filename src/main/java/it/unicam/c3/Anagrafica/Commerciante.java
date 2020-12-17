@@ -1,6 +1,7 @@
 package it.unicam.c3.Anagrafica;
 
 import it.unicam.c3.Anagrafica.Utente;
+import it.unicam.c3.Commercio.PuntoVendita;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,4 +28,5 @@ public class Commerciante extends Utente {
     public void addPuntoVendita(String nome, String posizione) {
         puntiVendita.add(new PuntoVendita(nome,posizione));
     }
+
 }
