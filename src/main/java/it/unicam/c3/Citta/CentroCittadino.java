@@ -1,4 +1,4 @@
-package it.unicam.c3.Città;
+package it.unicam.c3.Citta;
 
 import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;

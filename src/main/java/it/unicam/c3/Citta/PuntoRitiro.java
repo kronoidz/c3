@@ -1,4 +1,4 @@
-package it.unicam.c3.Città;
+package it.unicam.c3.Citta;
 
 public class PuntoRitiro {
     private String indirizzo;

@@ -2,7 +2,7 @@ package it.unicam.c3.Consegne;
 
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
-import it.unicam.c3.Città.PuntoRitiro;
+import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Ordini.Ordine;
 
 import java.util.List;
