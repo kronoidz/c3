@@ -14,53 +14,53 @@ public class PuntoVendita {
     List<IOfferta> offerte;
 
 
-    public PuntoVendita(){
+    public PuntoVendita() {
         prodotti = new LinkedList<>();
     }
 
-    public PuntoVendita(String nome, String posizione){
-        this.nome=nome;
-        this.posizione=posizione;
-        this.prodotti=new LinkedList<>();
+    public PuntoVendita(String nome, String posizione) {
+        this.nome = nome;
+        this.posizione = posizione;
+        this.prodotti = new LinkedList<>();
     }
 
-    public String getPosizione(){
+    public String getPosizione() {
         return posizione;
     }
 
-    public void setPosizione(String posizione){
-        this.posizione=posizione;
+    public void setPosizione(String posizione) {
+        this.posizione = posizione;
     }
 
-    public String getNome(){
-        return  this.nome;
+    public String getNome() {
+        return this.nome;
     }
 
-    public void setNome(String nome){
-        this.nome=nome;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public Commerciante getCommerciante(){
+    public Commerciante getCommerciante() {
         return this.commerciante;
     }
 
-    public List<Prodotto> getProdotti(){
+    public List<Prodotto> getProdotti() {
         return this.prodotti;
     }
 
-    public void addProdotto(String descrizione, double prezzo){
+    public void addProdotto(String descrizione, double prezzo) {
         this.prodotti.add(new Prodotto(descrizione, prezzo));
     }
 
-    public List<IOfferta> getOfferte(){
+    public List<IOfferta> getOfferte() {
         return this.offerte;
     }
 
-    public void addOfferta(String descrizione, String importo){
-        this.offerte.add(new OffertaSemplice(descrizione,importo));
+    public void addOfferta(String descrizione, String importo) {
+        this.offerte.add(new OffertaSemplice(descrizione, importo));
     }
 
-    public void addOfferta(String descrizione, String importo, LocalDate scadenza){
-        this.offerte.add(new OffertaATempo(descrizione,importo,scadenza));
+    public void addOfferta(String descrizione, String importo, LocalDate scadenza) {
+        this.offerte.add(new OffertaATempo(descrizione, importo, scadenza));
     }
 }
