@@ -23,6 +23,9 @@ dependencies {
     // This dependency is found on compile classpath of this component and consumers.
     compile 'com.google.guava:guava:23.0'
 
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:28.2-jre'
+
     // Use JUnit test framework
     //testCompile 'junit:junit:4.12'
 

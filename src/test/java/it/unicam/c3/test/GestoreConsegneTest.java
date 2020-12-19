@@ -1,15 +1,14 @@
-package it.unicam.c3.test;
-
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Consegne.GestoreConsegne;
 import it.unicam.c3.Ordini.Ordine;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class GestoreConsegneTest {
     private GestoreConsegne gc;
@@ -21,8 +20,8 @@ public class GestoreConsegneTest {
     private Ordine ordine3;
 
 
-    @BeforeEach
-    void initGestoreConsegne(){
+    @Before
+    public void initGestoreConsegne(){
         gc = new GestoreConsegne();
         cc = new CentroCittadino();
         cc.addPuntoRitiro(new PuntoRitiro("Via Panfilo, 16", 10));
@@ -42,7 +41,7 @@ public class GestoreConsegneTest {
 
     @Test
     public void numberConsegneInAttesa(){
-        assertEquals(0, gc.getConsegneInAttesa().size());
+        assertEquals(3,gc.getConsegneInAttesa().size());
     }
 
 }

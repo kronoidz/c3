@@ -14,6 +14,20 @@ public class CentroCittadino {
     private List<Corriere> corrieri;
     private List<PuntoRitiro> puntiRitiro;
 
+    public CentroCittadino(){
+        commercianti = new LinkedList<>();
+        clienti = new LinkedList<>();
+        corrieri = new LinkedList<>();
+        puntiRitiro = new LinkedList<>();
+    }
+
+    public CentroCittadino(List<Commerciante> commercianti, List<Cliente> clienti, List<Corriere> corrieri, List<PuntoRitiro> puntiRitiro){
+        this.commercianti=commercianti;
+        this.clienti=clienti;
+        this.corrieri=corrieri;
+        this.puntiRitiro=puntiRitiro;
+    }
+
     public List<PuntoVendita> getPuntiVendita() {
         List<PuntoVendita> puntiVendita = new LinkedList<>();
         for (Commerciante c:commercianti) {
