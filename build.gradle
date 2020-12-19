@@ -24,7 +24,7 @@ dependencies {
     compile 'com.google.guava:guava:23.0'
 
     // Use JUnit test framework
-    testCompile 'junit:junit:4.12'
+    //testCompile 'junit:junit:4.12'
 
     // Use JUnit Jupiter API for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
@@ -34,5 +34,5 @@ dependencies {
 }
 
 // Define the main class for the application
-mainClassName = 'App'
+mainClassName = 'C3'
 

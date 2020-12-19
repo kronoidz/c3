@@ -43,6 +43,7 @@ public class GestoreConsegne implements IGestoreConsegna{
         return consegneInAttesa;
     }
 
+    // fixme
     @Override
     public void setStato(Consegna consegna, Corriere corriere, StatoConsegna stato) throws IllegalArgumentException{
         if(stato == StatoConsegna.EFFETTUATA || stato==StatoConsegna.PRESA_IN_CARICO) {
