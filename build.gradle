@@ -6,11 +6,13 @@
  * user guide available at https://docs.gradle.org/4.4.1/userguide/tutorial_java_projects.html
  */
 
-// Apply the java plugin to add support for Java
-apply plugin: 'java'
+plugins {
+    // Apply the java plugin to add support for Java
+    id 'java'
 
-// Apply the application plugin to add support for building an application
-apply plugin: 'application'
+    // Apply the application plugin to add support for building a CLI application.
+    id 'application'
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -26,9 +28,6 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:28.2-jre'
 
-    // Use JUnit test framework
-    //testCompile 'junit:junit:4.12'
-
     // Use JUnit Jupiter API for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
 
@@ -36,10 +35,13 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
 }
 
-test {
-    useJUnitPlatform()
+application {
+    // Define the main class for the application.
+    mainClassName = 'C3'
 }
 
-// Define the main class for the application
-mainClassName = 'C3'
+
+test{
+    useJUnitPlatform()
+}
 

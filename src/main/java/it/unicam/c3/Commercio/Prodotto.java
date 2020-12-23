@@ -26,4 +26,8 @@ public class Prodotto {
     public void setPrezzo(double prezzo) {
         this.prezzo = prezzo;
     }
+
+    public String toString(){
+        return this.descrizione+" Prezzo: ["+this.prezzo+"]";
+    }
 }

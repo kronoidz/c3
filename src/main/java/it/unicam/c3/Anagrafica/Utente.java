@@ -40,6 +40,6 @@ public abstract class Utente {
     }
 
     public String toString(){
-        return this.nome+" "+this.cognome;
+        return this.nome+" "+this.cognome+" "+this.email;
     }
 }

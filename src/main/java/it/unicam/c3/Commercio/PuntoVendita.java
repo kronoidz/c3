@@ -14,11 +14,13 @@ public class PuntoVendita {
     List<IOfferta> offerte;
 
 
-    public PuntoVendita() {
+    public PuntoVendita(Commerciante commerciante) {
+        this.commerciante=commerciante;
         prodotti = new LinkedList<>();
     }
 
-    public PuntoVendita(String nome, String posizione) {
+    public PuntoVendita(Commerciante commerciante, String nome, String posizione) {
+       this.commerciante=commerciante;
         this.nome = nome;
         this.posizione = posizione;
         this.prodotti = new LinkedList<>();
@@ -62,5 +64,9 @@ public class PuntoVendita {
 
     public void addOfferta(String descrizione, String importo, LocalDate scadenza) {
         this.offerte.add(new OffertaATempo(descrizione, importo, scadenza));
+    }
+
+    public String toString(){
+        return this.nome+" Posizione: ["+this.posizione+"]";
     }
 }

@@ -33,4 +33,9 @@ public class PuntoRitiro {
     public void decrementOccupati(int amount){
         this.occupati=this.occupati-amount;
     }
+
+    public String toString(){
+        return this.indirizzo+" Capienza: ["+this.capienza+"] Slot Disponibili:["+getSlotDisponibili()+"]";
+    }
+
 }

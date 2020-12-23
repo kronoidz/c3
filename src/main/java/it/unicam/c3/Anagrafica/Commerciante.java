@@ -25,6 +25,6 @@ public class Commerciante extends Utente {
     }
 
     public void addPuntoVendita(String nome, String posizione) {
-        puntiVendita.add(new PuntoVendita(nome, posizione));
+        puntiVendita.add(new PuntoVendita(this,nome, posizione));
     }
 }

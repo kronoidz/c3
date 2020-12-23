@@ -12,18 +12,22 @@ public abstract class Offerta implements IOfferta {
         setImporto(importo);
     }
 
+    @Override
     public String getImporto() {
         return importo;
     }
 
+    @Override
     public void setImporto(String importo) {
         this.importo = importo;
     }
 
+    @Override
     public String getDescrizione() {
         return descrizione;
     }
 
+    @Override
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }

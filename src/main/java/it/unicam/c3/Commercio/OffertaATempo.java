@@ -20,4 +20,10 @@ public class OffertaATempo extends Offerta {
     public void setScadenza(LocalDate scadenza) {
         this.scadenza = scadenza;
     }
+
+    public String toString(){
+        if(this.scadenza!=null){
+            return getDescrizione()+" Importo: ["+getImporto()+"] Scadenza: ["+getScadenza().toString()+"]";
+        }else return getDescrizione()+" Importo: ["+getImporto()+"] Scadenza: [NULL]";
+    }
 }

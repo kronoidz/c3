@@ -56,6 +56,9 @@ public class Consegna {
     }
 
     public String toString(){
-        return "Commerciante: ["+commerciante.toString()+"] Ordine: ["+ordine.toString()+"] Stato: ["+stato.toString()+"] Corriere: ["+corriere.toString()+"] Punto Ritiro: ["+ puntoRitiro.getIndirizzo()+"] ";
+        if(corriere!=null) {
+            return "Commerciante: [" + commerciante.toString() + "] Ordine: [" + ordine.toString() + "] Stato: [" + stato.toString()+"] Corriere: ["+this.corriere.toString()+"] Punto Ritiro: [" + puntoRitiro.getIndirizzo() + "] ";
+        } else return "Commerciante: [" + commerciante.toString() + "] Ordine: [" + ordine.toString() + "] Stato: [" + stato.toString() +"] Corriere: [NULL] Punto Ritiro: [" + puntoRitiro.getIndirizzo() + "] ";
+
     }
 }

@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GestoreOrdini {
+public class GestoreOrdini implements IGestoreOrdini{
     private static GestoreOrdini instance;
     private List<Ordine> ordini;
 
@@ -18,14 +18,25 @@ public class GestoreOrdini {
         ordini = new LinkedList<>();
     }
 
+    private GestoreOrdini(List<Ordine> ordini) {
+        this.ordini = ordini;
+    }
+
     public static GestoreOrdini getInstance() {
         if (instance == null) {
             instance = new GestoreOrdini();
         }
-
         return instance;
     }
 
+    public static GestoreOrdini getInstance(List<Ordine> ordini) {
+        if (instance == null) {
+            instance = new GestoreOrdini(ordini);
+        }
+        return instance;
+    }
+
+    @Override
     public void addOrdine(Cliente cliente, PuntoVendita pv, List<Prodotto> prodotti) {
         Ordine ordine = new Ordine();
 
@@ -37,45 +48,53 @@ public class GestoreOrdini {
         ordini.add(ordine);
     }
 
+    @Override
     public List<Ordine> getOrdini(Cliente cliente) {
         return ordini.stream()
-                .filter(ordine -> ordine.getCliente() == cliente)
+                .filter(ordine->ordine.getCliente()!=null)
+                .filter(ordine -> ordine.getCliente().equals(cliente))
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Ordine> getOrdini(Cliente cliente, StatoOrdine stato) {
         return ordini.stream()
+                .filter(ordine->ordine.getCliente()!=null)
                 .filter(ordine -> ordine.getCliente() == cliente &&
                                   ordine.getStato() == stato)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Ordine> getOrdini(Commerciante commerciante) {
         return ordini.stream()
+                .filter(ordine->ordine.getPuntoVendita()!=null)
+                .filter(ordine->ordine.getPuntoVendita().getCommerciante()!=null)
                 .filter(ordine ->
-                        ordine.getPuntoVendita().getCommerciante() == commerciante)
+                        ordine.getPuntoVendita().getCommerciante().equals(commerciante))
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Ordine> getOrdini(Commerciante commerciante, StatoOrdine stato) {
         return ordini.stream()
+                .filter(ordine->ordine.getPuntoVendita()!=null)
+                .filter(ordine->ordine.getPuntoVendita().getCommerciante()!=null)
                 .filter(ordine ->
-                        ordine.getPuntoVendita().getCommerciante() == commerciante &&
-                        ordine.getStato() == stato)
+                        ordine.getPuntoVendita().getCommerciante().equals(commerciante) &&
+                        ordine.getStato().equals(stato))
                 .collect(Collectors.toList());
     }
 
-    public void setStato(int index, StatoOrdine stato) {
-        ordini.get(index).setStato(stato);
+    @Override
+    public void setStato(int index, StatoOrdine stato) throws IllegalArgumentException{
+        this.setStato(ordini.get(index),stato);
     }
 
-    public void setStato(Ordine ordine, StatoOrdine stato) {
-        for (Ordine o : ordini) {
-            if (o == ordine) {
+    @Override
+    public void setStato(Ordine ordine, StatoOrdine stato) throws IllegalArgumentException{
+        if(ordini.contains(ordine)){
                 ordine.setStato(stato);
-            }
+            }else throw new IllegalArgumentException("Error setStato Ordine: Ordine non trovato");
         }
-
-        throw new RuntimeException("setStato(Ordine, StatoOrdine): Ordine non trovato");
-    }
 }

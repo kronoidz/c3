@@ -9,4 +9,9 @@ public class OffertaSemplice extends Offerta {
     public OffertaSemplice(String descrizione, String importo) {
         super(descrizione, importo);
     }
+
+    public String toString(){
+        return getDescrizione()+" Importo: ["+getImporto()+"]";
+    }
+
 }

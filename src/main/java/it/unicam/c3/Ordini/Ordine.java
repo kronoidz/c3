@@ -52,4 +52,11 @@ public class Ordine {
     public void removeProdotto(int index) {
         prodotti.remove(index);
     }
+
+    public String toString(){
+       if(clienteOrdinante!=null && pv!=null) {
+           return "Cliente: ["+this.clienteOrdinante.toString()+"] PuntoVendita: ["+this.pv.toString()+"] Stato: ["+getStato().toString()+"] N. Prodotti: ["+getProdotti().size()+"]";
+       }else return "Cliente: [NULL] PuntoVendita: [NULL] Stato: ["+getStato().toString()+"] N. Prodotti: ["+getProdotti().size()+"]";
+
+    }
 }
