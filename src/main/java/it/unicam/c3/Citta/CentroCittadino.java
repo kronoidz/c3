@@ -4,28 +4,45 @@ import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Commercio.PuntoVendita;
+import it.unicam.c3.Consegne.Consegna;
+import it.unicam.c3.Consegne.GestoreConsegne;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class CentroCittadino {
+    private static CentroCittadino instance;
     private List<Commerciante> commercianti;
     private List<Cliente> clienti;
     private List<Corriere> corrieri;
     private List<PuntoRitiro> puntiRitiro;
 
-    public CentroCittadino(){
+    private CentroCittadino(){
         commercianti = new LinkedList<>();
         clienti = new LinkedList<>();
         corrieri = new LinkedList<>();
         puntiRitiro = new LinkedList<>();
     }
 
-    public CentroCittadino(List<Commerciante> commercianti, List<Cliente> clienti, List<Corriere> corrieri, List<PuntoRitiro> puntiRitiro){
+    private CentroCittadino(List<Commerciante> commercianti, List<Cliente> clienti, List<Corriere> corrieri, List<PuntoRitiro> puntiRitiro){
         this.commercianti=commercianti;
         this.clienti=clienti;
         this.corrieri=corrieri;
         this.puntiRitiro=puntiRitiro;
+    }
+
+    public static CentroCittadino getInstance() {
+        if (instance == null) {
+            instance = new CentroCittadino();
+        }
+        return instance;
+    }
+
+    public static CentroCittadino getInstance(List<Commerciante> commercianti, List<Cliente> clienti, List<Corriere> corrieri, List<PuntoRitiro> puntiRitiro) {
+        if (instance == null) {
+            instance = new CentroCittadino(commercianti,clienti,corrieri,puntiRitiro);
+        }
+        return instance;
     }
 
     public List<PuntoVendita> getPuntiVendita() {
