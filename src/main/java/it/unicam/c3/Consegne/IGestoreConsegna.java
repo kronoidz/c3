@@ -1,5 +1,6 @@
 package it.unicam.c3.Consegne;
 
+import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.PuntoRitiro;
@@ -81,6 +82,23 @@ public interface IGestoreConsegna {
      * @throws IllegalArgumentException
      */
     void consegnaEffettuata(int index, Corriere corriere) throws IllegalArgumentException;
+
+    /**
+     * used when a customer picks up a delivery
+     * @param consegna
+     * @param cliente
+     * @throws IllegalArgumentException
+     */
+    void consegnaRitirata(Consegna consegna, Cliente cliente) throws IllegalArgumentException;
+
+    /**
+     * used when a customer picks up a delivery
+     * @param index
+     * @param cliente
+     * @throws IllegalArgumentException
+     */
+    void consegnaRitirata(int index, Cliente cliente) throws IllegalArgumentException;
+
 
     /**
      * set delivery state

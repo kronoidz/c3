@@ -17,6 +17,7 @@ public class PuntoVendita {
     public PuntoVendita(Commerciante commerciante) {
         this.commerciante=commerciante;
         prodotti = new LinkedList<>();
+        offerte=new LinkedList<>();
     }
 
     public PuntoVendita(Commerciante commerciante, String nome, String posizione) {
@@ -24,6 +25,7 @@ public class PuntoVendita {
         this.nome = nome;
         this.posizione = posizione;
         this.prodotti = new LinkedList<>();
+        offerte=new LinkedList<>();
     }
 
     public String getPosizione() {
@@ -67,6 +69,6 @@ public class PuntoVendita {
     }
 
     public String toString(){
-        return this.nome+" Posizione: ["+this.posizione+"]";
+        return "Nome: ["+this.nome+"] Posizione: ["+this.posizione+"]";
     }
 }

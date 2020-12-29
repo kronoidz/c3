@@ -5,18 +5,27 @@ import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Ordini.Ordine;
 
+import java.util.UUID;
+
 public class Consegna {
     private StatoConsegna stato;
     private Ordine ordine;
     private Corriere corriere;
     private Commerciante commerciante;
     private PuntoRitiro puntoRitiro;
+    private final UUID id = UUID.randomUUID();
+    private boolean ritirabile;
 
     public Consegna(Commerciante commerciante, Ordine ordine, PuntoRitiro puntoRitiro){
         this.commerciante=commerciante;
         this.ordine=ordine;
         this.puntoRitiro=puntoRitiro;
         this.stato=StatoConsegna.IN_ATTESA;
+        ritirabile=false;
+    }
+
+    public String getId(){
+        return this.id.toString();
     }
 
     public void setStato(StatoConsegna stato){
@@ -53,6 +62,14 @@ public class Consegna {
 
     public PuntoRitiro getPuntoRitiro(){
         return this.puntoRitiro;
+    }
+
+    public boolean isRitirabile(){
+        return ritirabile;
+    }
+
+    public boolean setRitirabile(boolean bool){
+        return ritirabile=bool;
     }
 
     public String toString(){

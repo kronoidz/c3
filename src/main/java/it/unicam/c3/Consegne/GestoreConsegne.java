@@ -1,5 +1,6 @@
 package it.unicam.c3.Consegne;
 
+import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.PuntoRitiro;
@@ -102,6 +103,7 @@ public class GestoreConsegne implements IGestoreConsegna{
     public void consegnaEffettuata(Consegna consegna, Corriere corriere) throws IllegalArgumentException{
         if(consegna.getCorriere().equals(corriere)&&consegna.getStato().equals(StatoConsegna.PRESA_IN_CARICO)){
             setConsegna(consegna,corriere,StatoConsegna.EFFETTUATA);
+            consegna.getPuntoRitiro().incrementOccupati(1);
         }else throw new IllegalArgumentException();
     }
 
@@ -109,6 +111,20 @@ public class GestoreConsegne implements IGestoreConsegna{
     public void consegnaEffettuata(int index, Corriere corriere) throws IllegalArgumentException{
        consegnaEffettuata(this.consegne.get(index), corriere);
     }
+
+    @Override
+    public void consegnaRitirata(Consegna consegna, Cliente cliente) throws IllegalArgumentException {
+        if(consegna.getOrdine().getCliente().equals(cliente)&&consegna.getStato().equals(StatoConsegna.EFFETTUATA)){
+            setStato(consegna, StatoConsegna.RITIRATA);
+            consegna.getPuntoRitiro().decrementOccupati(1);
+        }else throw new IllegalArgumentException();
+    }
+
+    @Override
+    public void consegnaRitirata(int index, Cliente cliente) throws IllegalArgumentException {
+        consegnaRitirata(this.consegne.get(index),cliente);
+    }
+
 
     @Override
     public void setStato(Consegna consegna, StatoConsegna stato) throws IllegalArgumentException{

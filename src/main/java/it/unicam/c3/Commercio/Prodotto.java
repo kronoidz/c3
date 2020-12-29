@@ -28,6 +28,6 @@ public class Prodotto {
     }
 
     public String toString(){
-        return this.descrizione+" Prezzo: ["+this.prezzo+"]";
+        return "Prodotto: ["+this.descrizione+"] Prezzo: ["+this.prezzo+"]";
     }
 }

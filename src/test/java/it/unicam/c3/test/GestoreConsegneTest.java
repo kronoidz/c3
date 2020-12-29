@@ -1,3 +1,5 @@
+package it.unicam.c3.test;
+
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;

@@ -40,6 +40,10 @@ application {
     mainClassName = 'C3'
 }
 
+run {
+    standardInput = System.in
+}
+
 
 test{
     useJUnitPlatform()

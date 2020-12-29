@@ -1,3 +1,5 @@
+package it.unicam.c3.test;
+
 import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Citta.CentroCittadino;
@@ -61,23 +63,16 @@ public class GestoreOrdiniTest {
     @Test
     public void numberOrdiniAggiunti(){
         GestoreOrdini.getInstance().addOrdine(CentroCittadino.getInstance().getClienti().get(0),CentroCittadino.getInstance().getPuntiVendita().get(0), carrello);
-        assertEquals(6, GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0)).size());
+        assertEquals(5, GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0)).size());
         assertEquals(0, GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(1)).size());
     }
 
     @Test
     public void numberOrdiniCliente(){
         GestoreOrdini.getInstance().addOrdine(CentroCittadino.getInstance().getClienti().get(0),CentroCittadino.getInstance().getPuntiVendita().get(0), carrello);
-        assertEquals(5,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0)).size());
+        assertEquals(4,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0)).size());
     }
 
-
-    @Test
-    public void numberOrdiniCommerciante(){
-        GestoreOrdini.getInstance().addOrdine(CentroCittadino.getInstance().getClienti().get(0),CentroCittadino.getInstance().getPuntiVendita().get(0), carrello);
-        assertEquals(1,GestoreOrdini.getInstance().getOrdini(comm1).size());
-        assertEquals(0,GestoreOrdini.getInstance().getOrdini(comm2).size());
-    }
 
     @Test
     public void numberOrdiniStatoCommerciante(){
@@ -89,7 +84,7 @@ public class GestoreOrdiniTest {
     @Test
     public void numberOrdiniStatoCliente(){
         // GestoreOrdini.getInstance().addOrdine(CentroCittadino.getInstance().getClienti().get(0),CentroCittadino.getInstance().getPuntiVendita().get(0), carrello);
-        assertEquals(1,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0), StatoOrdine.IN_ATTESA).size());
+        assertEquals(0,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0), StatoOrdine.IN_ATTESA).size());
         assertEquals(0,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0), StatoOrdine.ACCETTATO).size());
         assertEquals(1,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0), StatoOrdine.RIFIUTATO).size());
     }

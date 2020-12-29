@@ -60,8 +60,8 @@ public class GestoreOrdini implements IGestoreOrdini{
     public List<Ordine> getOrdini(Cliente cliente, StatoOrdine stato) {
         return ordini.stream()
                 .filter(ordine->ordine.getCliente()!=null)
-                .filter(ordine -> ordine.getCliente() == cliente &&
-                                  ordine.getStato() == stato)
+                .filter(ordine -> ordine.getCliente().equals(cliente) &&
+                                  ordine.getStato().equals(stato))
                 .collect(Collectors.toList());
     }
 
