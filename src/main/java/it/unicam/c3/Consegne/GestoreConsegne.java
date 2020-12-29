@@ -62,6 +62,21 @@ public class GestoreConsegne implements IGestoreConsegna{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Consegna> getConsegne(Commerciante commerciante) {
+        return this.consegne.stream()
+                .filter(consegna -> consegna.getCommerciante().equals(commerciante))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Consegna> getConsegne(Commerciante commerciante, StatoConsegna stato) {
+        return this.consegne.stream()
+                .filter(consegna -> consegna.getCommerciante().equals(commerciante))
+                .filter(consegna -> consegna.getStato() == stato)
+                .collect(Collectors.toList());
+    }
+
     private void setConsegna(Consegna consegna, Corriere corriere, StatoConsegna stato){
         if(stato.equals(StatoConsegna.EFFETTUATA) || stato.equals(StatoConsegna.PRESA_IN_CARICO)) {
             if(this.consegne.contains(consegna)) {

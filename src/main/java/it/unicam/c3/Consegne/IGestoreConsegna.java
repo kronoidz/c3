@@ -37,6 +37,20 @@ public interface IGestoreConsegna {
     List<Consegna> getConsegne(StatoConsegna stato);
 
     /**
+     *
+     * @param commerciante
+     * @return
+     */
+    List<Consegna> getConsegne(Commerciante commerciante);
+
+    /**
+     *
+     * @param stato
+     * @return
+     */
+    List<Consegna> getConsegne(Commerciante commerciante, StatoConsegna stato);
+
+    /**
      * used when a courier takes over a delivery
      * @param consegna
      * @param corriere
