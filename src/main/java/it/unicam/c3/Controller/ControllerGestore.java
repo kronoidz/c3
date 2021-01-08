@@ -23,8 +23,16 @@ public class ControllerGestore {
     }
 
     public void addPuntoRitiro(String indirizzo, int capienza) {
-        CentroCittadino.getInstance().addPuntoRitiro(
-                new PuntoRitiro(indirizzo, capienza)
-        );
+        CentroCittadino.getInstance().addPuntoRitiro(indirizzo, capienza);
     }
+
+    public void removePuntoRitiro(PuntoRitiro pr){
+        CentroCittadino.getInstance().getPuntiRitiro().remove(pr);
+    }
+
+    public void removePuntoRitiro(int indexPr){
+        this.removePuntoRitiro(CentroCittadino.getInstance().getPuntiRitiro().get(indexPr));
+    }
+
+
 }

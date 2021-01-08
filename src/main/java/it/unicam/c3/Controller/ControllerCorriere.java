@@ -5,13 +5,16 @@ import it.unicam.c3.Consegne.Consegna;
 import it.unicam.c3.Consegne.GestoreConsegne;
 import it.unicam.c3.Consegne.StatoConsegna;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public class ControllerCorriere {
     private Corriere corriere;
+    private ControllerEmail infoEmail;
 
     public ControllerCorriere(Corriere corriere){
         this.corriere=corriere;
+        this.infoEmail=new ControllerEmail();
     }
 
     /**
@@ -43,22 +46,35 @@ public class ControllerCorriere {
      * @param indexConsegna
      */
     public void prendiInCarico(int indexConsegna){
-        GestoreConsegne.getInstance().prendiInCaricoConsegna(indexConsegna,this.corriere);
+       this.prendiInCarico(this.getConsegneInAttesa().get(indexConsegna));
     }
 
     /**
      * Utilizzato quando la consegna è stata portata a termine
      * @param consegna
      */
-    public void effettuaConsegna(Consegna consegna){
+    public void effettuaConsegna(Consegna consegna) throws MessagingException {
         GestoreConsegne.getInstance().consegnaEffettuata(consegna,this.corriere);
+        infoEmail.sendEmail(consegna.getOrdine().getCliente().getEmail(), "Consegna effettuata", "Si informa che la sua consegna \u00E8 stata effettuata presso un punto di ritiro.\nAppena l'ordine verr\u00E0 pagato presso il punto vendita"+
+        ", sar\u00E0 disponibile per il ritiro.\nIl punto di ritiro e l'id di sblocco verranno resi disponibili " +
+                "successivamente al pagamento dell'ordine\n\nPunto Vendita: "+consegna.getOrdine().getPuntoVendita().getNome()+" sito in "+consegna.getOrdine().getPuntoVendita().getPosizione()+"\n\nNB: Questa mail \u00E8 generata da un sistema automatico non presidiato pertanto si invita cortesemente a non rispondere - eventuali email ricevute rimarranno inevase.\n" +
+                "\nGrazie e cordiali saluti.\nC3 Team System");
     }
 
     /**
      * Utilizzato quando la consegna è stata portata a termine
      * @param indexConsegna
      */
-    public void effettuaConsegna(int indexConsegna){
-        GestoreConsegne.getInstance().consegnaEffettuata(indexConsegna,this.corriere);
+    public void effettuaConsegna(int indexConsegna) throws MessagingException {
+        this.effettuaConsegna(this.getConsegneInCarico().get(indexConsegna));
     }
+
+    public void annullaPresaInCarico(Consegna consegna){
+        GestoreConsegne.getInstance().annullaPresaInCarico(consegna,this.corriere);
+    }
+
+    public void annullaPresaInCarico(int indexConsegna){
+        this.annullaPresaInCarico(this.getConsegneInCarico().get(indexConsegna));
+    }
+
 }

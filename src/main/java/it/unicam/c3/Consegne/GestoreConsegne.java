@@ -137,4 +137,15 @@ public class GestoreConsegne implements IGestoreConsegna{
     public void setStato(int index, StatoConsegna stato) throws IllegalArgumentException{
         setStato(consegne.get(index), stato);
     }
+
+    public void annullaPresaInCarico(Consegna consegna, Corriere corriere){
+        if(consegna.getCorriere().equals(corriere)){
+            consegna.setCorriere(null);
+            consegna.setStato(StatoConsegna.IN_ATTESA);
+        } else throw new IllegalArgumentException();
+    }
+
+    public void annullaPresaInCarico(int indexConsegna, Corriere corriere){
+        this.annullaPresaInCarico(this.consegne.get(indexConsegna),corriere);
+    }
 }
