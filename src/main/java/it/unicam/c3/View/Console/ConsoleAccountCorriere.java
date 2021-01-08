@@ -1,4 +1,4 @@
-package it.unicam.c3.View;
+package it.unicam.c3.View.Console;
 
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Controller.ControllerCorriere;

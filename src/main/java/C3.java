@@ -3,7 +3,7 @@ import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Consegne.GestoreConsegne;
 import it.unicam.c3.Ordini.GestoreOrdini;
-import it.unicam.c3.View.ConsoleView;
+import it.unicam.c3.View.Console.ConsoleView;
 import it.unicam.c3.View.View;
 import java.io.IOException;
 

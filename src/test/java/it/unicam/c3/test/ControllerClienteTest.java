@@ -28,7 +28,7 @@ public class ControllerClienteTest {
         commerciante1.getPuntiVendita().get(1).addProdotto("Torta 5 persone", 25);
 
 
-        commerciante2 = new Commerciante("Alessandro", "Precugi", "alepeg@gmail.com", "prova");
+        commerciante2 = new Commerciante("Alessandro", "Pecugi", "alepeg@gmail.com", "prova");
         commerciante2.addPuntoVendita("Moonshiners", "Via Spalato, 50");
         commerciante2.getPuntiVendita().get(0).addProdotto("Vino Bianco", 12);
         commerciante2.getPuntiVendita().get(0).addProdotto("Prosecco DOC", 15);

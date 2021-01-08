@@ -1,13 +1,15 @@
-package it.unicam.c3.View;
+package it.unicam.c3.View.Console;
 
 import it.unicam.c3.Anagrafica.Cliente;
+import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
+import it.unicam.c3.View.View;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ConsoleView implements View{
+public class ConsoleView implements View {
     private static final String ACCOUNT_CLIENTE="1";
     private static final String ACCOUNT_COMMERCIANTE="2";
     private static final String ACCOUNT_CORRIERE="3";
@@ -15,10 +17,12 @@ public class ConsoleView implements View{
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     ConsoleAccountCliente clienteView;
     ConsoleAccountCorriere corriereView;
+    ConsoleAccountCommerciante commercianteView;
 
     //////////OGGETTI TEST CONSOLE !!
    private Cliente cliente = new Cliente("Lorenzo","Serini","lorenzose.1995@gmai.com","prova");
    private Corriere corriere = new Corriere("Jhon","Doe","jn@gmail.com","prova");
+   private Commerciante commerciante = new Commerciante("Alessandro", "Pecugi", "alessandro.pecugi@gmail.com", "ciao");
     ///////////////////////////
 
 
@@ -37,7 +41,8 @@ public class ConsoleView implements View{
                     clienteView.clienteView();
                     break;
                 case ACCOUNT_COMMERCIANTE:
-                    System.out.println("STAY TUNED");
+                    commercianteView = new ConsoleAccountCommerciante(commerciante);
+                    commercianteView.commercianteView();
                     break;
                 case ACCOUNT_CORRIERE:
                     corriereView=new ConsoleAccountCorriere(corriere);
@@ -45,7 +50,7 @@ public class ConsoleView implements View{
                     break;
             }
         }while(!line.equals(CLOSE_APPLICATION));
-      //  br.close();
+        // TODO: br.close();
     }
 
     private void choiceLogin(){
