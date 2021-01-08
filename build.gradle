@@ -12,6 +12,9 @@ plugins {
 
     // Apply the application plugin to add support for building a CLI application.
     id 'application'
+
+    id 'org.springframework.boot' version '2.4.1'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 }
 
 // In this section you declare where to find the dependencies of your project
@@ -38,6 +41,8 @@ dependencies {
 
     compile group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
 
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 application {

@@ -33,8 +33,8 @@ public class GestoreOrdiniTest {
         comm2=new Commerciante("Alessandro","Pecugi","alepec@gmail.com","prova");
         comm2.addPuntoVendita("Pescheria","Via Bonifazi 12");
 
-        CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Via Panfilo, 16", 10));
-        CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Corso Cavour, 18", 10));
+        CentroCittadino.getInstance().addPuntoRitiro("Via Panfilo, 16", 10);
+        CentroCittadino.getInstance().addPuntoRitiro("Corso Cavour, 18", 10);
         CentroCittadino.getInstance().addCommerciante(comm1);
         CentroCittadino.getInstance().addCommerciante(comm2);
         CentroCittadino.getInstance().addCliente(new Cliente("Paolo", "Rossi", "paolorossi@gmail.com", "prova"));

@@ -3,12 +3,12 @@ package it.unicam.c3.test;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
-import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Consegne.GestoreConsegne;
 import it.unicam.c3.Consegne.StatoConsegna;
 import it.unicam.c3.Ordini.Ordine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -19,8 +19,8 @@ public class GestoreConsegneTest {
 
     @BeforeEach
     public void initGestoreConsegne(){
-            CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Via Panfilo, 16", 10));
-            CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Corso Cavour, 18", 10));
+            CentroCittadino.getInstance().addPuntoRitiro("Via Panfilo, 16", 10);
+            CentroCittadino.getInstance().addPuntoRitiro("Corso Cavour, 18", 10);
             CentroCittadino.getInstance().addCommerciante(new Commerciante("Paolo", "Rossi", "paolorossi@gmail.com", "prova"));
             CentroCittadino.getInstance().addCorriere(new Corriere());
             CentroCittadino.getInstance().addCorriere(new Corriere());

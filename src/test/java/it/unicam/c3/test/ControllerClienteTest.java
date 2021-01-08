@@ -40,7 +40,7 @@ public class ControllerClienteTest {
         CentroCittadino.getInstance().addCommerciante(commerciante1);
         CentroCittadino.getInstance().addCommerciante(commerciante2);
 
-        CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Via Acquivive,35", 30));
+        CentroCittadino.getInstance().addPuntoRitiro("Via Acquivive,35", 30);
     }
 
     @Test

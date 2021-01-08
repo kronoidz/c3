@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>C3 &mdash; Autenticazione</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/2.0.3/pure-min.css" integrity="sha512-FEioxlObRXIskNAQ1/L0byx0SEkfAY+5fO024p9kGEfUQnACGRfCG5Af4bp/7sPNSzKbMtvmcJOWZC7fPX1/FA==" crossorigin="anonymous" />
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <form class="pure-form pure-form-aligned">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="tipo-utente">Tipo Utente:</label>
+                <select id="tipo-utente">
+                    <option>Commerciante</option>
+                    <option>Cliente</option>
+                    <option>Corriere</option>
+                    <option>Amministratore</option>
+                </select>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="email">Email:</label>
+                <input type="text" name="email" id="email">
+            </div>
+
+            <div class="pure-control-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password">
+            </div>
+
+            <div class="pure-control-group">
+                <button type="submit" class="pure-button pure-button-primary">Accedi</button>
+            </div>
+        </fieldset>
+    </form>
+</body>
+</html>

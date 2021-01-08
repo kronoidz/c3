@@ -70,6 +70,7 @@ public class ConsoleAccountCommerciante {
     }
 
     private void ordiniView() {
+        
     }
 
     private void puntiVenditaView() {

@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ControllerAutenticazione {
-    public static boolean autenticazioneAbilitata = false;
-
     public ControllerCommerciante autenticaCommerciante(String email, String password) {
         List<Commerciante> commercianti = CentroCittadino.getInstance()
                 .getCommercianti()
@@ -54,13 +52,6 @@ public class ControllerAutenticazione {
         return new ControllerCorriere(corrieri.get(0));
     }
 
-    public ControllerGestore autenticaGestore(String password) {
-        if (!Amministrazione.checkPassword(password))
-            return null;
-
-        return new ControllerGestore();
-    }
-
     public enum TipoUtente {
         COMMERCIANTE, CLIENTE, CORRIERE
     }
@@ -85,10 +76,5 @@ public class ControllerAutenticazione {
                 );
                 break;
         }
-        // todo: invia email verifica
-    }
-
-    public void logout() {
-        // ?
     }
 }
