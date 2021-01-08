@@ -142,7 +142,7 @@ public class GestoreConsegne implements IGestoreConsegna{
         if(consegna.getCorriere().equals(corriere)){
             consegna.setCorriere(null);
             consegna.setStato(StatoConsegna.IN_ATTESA);
-        } else throw new IllegalArgumentException();
+        }
     }
 
     public void annullaPresaInCarico(int indexConsegna, Corriere corriere){

@@ -56,6 +56,14 @@ public class PuntoVendita {
         this.prodotti.add(new Prodotto(descrizione, prezzo));
     }
 
+    public void removeProdotto(Prodotto prodotto){
+        this.prodotti.remove(prodotto);
+    }
+
+    public void removeProdotto(int indexProdotto){
+        this.removeProdotto(this.prodotti.get(indexProdotto));
+    }
+
     public List<IOfferta> getOfferte() {
         return this.offerte;
     }
@@ -71,4 +79,5 @@ public class PuntoVendita {
     public String toString(){
         return "Nome: ["+this.nome+"] Posizione: ["+this.posizione+"]";
     }
+
 }

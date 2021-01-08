@@ -26,6 +26,12 @@ public class PuntoRitiro {
         return this.capienza-this.occupati;
     }
 
+    public int getCapienza(){
+        return this.capienza;
+    }
+
+    public int getSlotOccupati(){ return this.occupati;}
+
     public void incrementOccupati(int amount){
         this.occupati=this.occupati+amount;
     }

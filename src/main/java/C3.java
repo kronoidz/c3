@@ -1,15 +1,32 @@
+
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Consegne.GestoreConsegne;
+import it.unicam.c3.Controller.ControllerCorriere;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.View.Console.ConsoleView;
 import it.unicam.c3.View.View;
+
+import com.sun.mail.smtp.SMTPTransport;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.security.Security;
+import java.util.Date;
+import java.util.Properties;
+
 
 public class C3 {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws MessagingException, IOException {
+            proto1();
+    }
+
+
+
+    public static void proto1() throws IOException, MessagingException {
         Commerciante commerciante1 = new Commerciante("Giulio", "Bianchi", "giuliob.1995@gmail.com", "prova");
         commerciante1.addPuntoVendita("Il magazzino del gusto", "Corso Cavour, 15");
         commerciante1.addPuntoVendita("La fabbrica di cioccolato", "via Roma, 22");
@@ -34,7 +51,7 @@ public class C3 {
         CentroCittadino.getInstance().addCommerciante(commerciante1);
         CentroCittadino.getInstance().addCommerciante(commerciante2);
 
-        CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Via Acquivive,35", 30));
+        CentroCittadino.getInstance().addPuntoRitiro("Via Acquivive,35", 30);
 
 
         View consoleView = new ConsoleView();

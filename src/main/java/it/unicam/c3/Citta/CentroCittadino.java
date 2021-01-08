@@ -73,8 +73,8 @@ public class CentroCittadino {
         return  this.puntiRitiro;
     }
 
-    public void addPuntoRitiro(PuntoRitiro pr){
-        this.puntiRitiro.add(pr);
+    public void addPuntoRitiro(String indirizzo, int capienza){
+        this.puntiRitiro.add(new PuntoRitiro(indirizzo,capienza));
     }
 
     public void removePuntoRitiro(int index){
