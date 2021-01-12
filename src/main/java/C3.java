@@ -6,6 +6,7 @@ import it.unicam.c3.Consegne.GestoreConsegne;
 import it.unicam.c3.Controller.ControllerCorriere;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.View.Console.ConsoleView;
+import it.unicam.c3.View.Spring.SpringView;
 import it.unicam.c3.View.View;
 
 import com.sun.mail.smtp.SMTPTransport;
@@ -21,9 +22,13 @@ import java.util.Properties;
 public class C3 {
 
     public static void main(String[] args) throws MessagingException, IOException {
-           // proto1();
-        View consoleView = new ConsoleView();
-        consoleView.start();
+        // proto1();
+
+        // View consoleView = new ConsoleView();
+        // consoleView.start();
+
+        View springView = new SpringView();
+        springView.start();
     }
 
 
