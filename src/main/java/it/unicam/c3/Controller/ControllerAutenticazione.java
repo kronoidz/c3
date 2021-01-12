@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ControllerAutenticazione {
-    public static boolean autenticazioneAbilitata = false;
+
+    //public static boolean autenticazioneAbilitata = false;
 
     public ControllerCommerciante autenticaCommerciante(String email, String password) {
         List<Commerciante> commercianti = CentroCittadino.getInstance()

@@ -21,7 +21,9 @@ import java.util.Properties;
 public class C3 {
 
     public static void main(String[] args) throws MessagingException, IOException {
-            proto1();
+           // proto1();
+        View consoleView = new ConsoleView();
+        consoleView.start();
     }
 
 

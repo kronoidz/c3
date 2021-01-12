@@ -78,29 +78,29 @@ public class GestoreConsegne implements IGestoreConsegna{
                 .collect(Collectors.toList());
     }
 
-    private void setConsegna(Consegna consegna, Corriere corriere, StatoConsegna stato){
+    private void setConsegna(Consegna consegna, Corriere corriere, StatoConsegna stato) throws Exception {
         if(stato.equals(StatoConsegna.EFFETTUATA) || stato.equals(StatoConsegna.PRESA_IN_CARICO)) {
             if(this.consegne.contains(consegna)) {
                 consegna.setCorriere(corriere);
                 consegna.setStato(stato);
-            }else throw new IllegalArgumentException();
-        } else throw new IllegalArgumentException();
+            }else throw new Exception("Consegna non trovata!");
+        } else throw new Exception("Stato consegna errato!");
     }
 
     @Override
-    public void prendiInCaricoConsegna(Consegna consegna, Corriere corriere) throws IllegalArgumentException{
+    public void prendiInCaricoConsegna(Consegna consegna, Corriere corriere) throws Exception {
            if(corriere!=null){
                setConsegna(consegna,corriere,StatoConsegna.PRESA_IN_CARICO);
            }else throw new IllegalArgumentException();
     }
 
     @Override
-    public void prendiInCaricoConsegna(int index, Corriere corriere) throws IllegalArgumentException{
+    public void prendiInCaricoConsegna(int index, Corriere corriere) throws Exception {
         prendiInCaricoConsegna(this.consegne.get(index), corriere);
     }
 
     @Override
-    public void consegnaEffettuata(Consegna consegna, Corriere corriere) throws IllegalArgumentException{
+    public void consegnaEffettuata(Consegna consegna, Corriere corriere) throws Exception {
         if(consegna.getCorriere().equals(corriere)&&consegna.getStato().equals(StatoConsegna.PRESA_IN_CARICO)){
             setConsegna(consegna,corriere,StatoConsegna.EFFETTUATA);
             consegna.getPuntoRitiro().incrementOccupati(1);
@@ -108,7 +108,7 @@ public class GestoreConsegne implements IGestoreConsegna{
     }
 
     @Override
-    public void consegnaEffettuata(int index, Corriere corriere) throws IllegalArgumentException{
+    public void consegnaEffettuata(int index, Corriere corriere) throws Exception {
        consegnaEffettuata(this.consegne.get(index), corriere);
     }
 
@@ -136,6 +136,10 @@ public class GestoreConsegne implements IGestoreConsegna{
     @Override
     public void setStato(int index, StatoConsegna stato) throws IllegalArgumentException{
         setStato(consegne.get(index), stato);
+    }
+
+    public void abilitaRitiro(Consegna consegna){
+        consegna.setRitirabile(true);
     }
 
     public void annullaPresaInCarico(Consegna consegna, Corriere corriere){

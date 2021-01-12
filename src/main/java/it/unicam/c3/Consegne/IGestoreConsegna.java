@@ -57,7 +57,7 @@ public interface IGestoreConsegna {
      * @param corriere
      * @throws IllegalArgumentException
      */
-    void prendiInCaricoConsegna(Consegna consegna, Corriere corriere) throws IllegalArgumentException;
+    void prendiInCaricoConsegna(Consegna consegna, Corriere corriere) throws Exception;
 
     /**
      * used when a courier takes over a delivery
@@ -65,7 +65,7 @@ public interface IGestoreConsegna {
      * @param corriere
      * @throws IllegalArgumentException
      */
-    void prendiInCaricoConsegna(int index, Corriere corriere) throws IllegalArgumentException;
+    void prendiInCaricoConsegna(int index, Corriere corriere) throws Exception;
 
     /**
      * used when a courier makes a delivery
@@ -73,7 +73,7 @@ public interface IGestoreConsegna {
      * @param corriere
      * @throws IllegalArgumentException
      */
-    void consegnaEffettuata(Consegna consegna, Corriere corriere) throws IllegalArgumentException;
+    void consegnaEffettuata(Consegna consegna, Corriere corriere) throws Exception;
 
     /**
      * used when a courier makes a delivery
@@ -81,7 +81,7 @@ public interface IGestoreConsegna {
      * @param corriere
      * @throws IllegalArgumentException
      */
-    void consegnaEffettuata(int index, Corriere corriere) throws IllegalArgumentException;
+    void consegnaEffettuata(int index, Corriere corriere) throws Exception;
 
     /**
      * used when a customer picks up a delivery

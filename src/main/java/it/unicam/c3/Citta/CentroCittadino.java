@@ -116,4 +116,5 @@ public class CentroCittadino {
     public void removeCorriere(Corriere corriere){
         this.corrieri.remove(corriere);
     }
+
 }

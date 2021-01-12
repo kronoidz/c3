@@ -1,7 +1,8 @@
 package it.unicam.c3.View;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 
 public interface View {
-    void start() throws IOException;
+    void start() throws IOException, MessagingException;
 }

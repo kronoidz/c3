@@ -37,7 +37,7 @@ public class ControllerCorriere {
      * Utilizzato per prendere in carico una consegna
      * @param consegna
      */
-    public void prendiInCarico(Consegna consegna){
+    public void prendiInCarico(Consegna consegna) throws Exception {
         GestoreConsegne.getInstance().prendiInCaricoConsegna(consegna,this.corriere);
     }
 
@@ -45,7 +45,7 @@ public class ControllerCorriere {
      * Utilizzato per prendere in carico una consegna
      * @param indexConsegna
      */
-    public void prendiInCarico(int indexConsegna){
+    public void prendiInCarico(int indexConsegna) throws Exception {
        this.prendiInCarico(this.getConsegneInAttesa().get(indexConsegna));
     }
 
@@ -53,7 +53,7 @@ public class ControllerCorriere {
      * Utilizzato quando la consegna è stata portata a termine
      * @param consegna
      */
-    public void effettuaConsegna(Consegna consegna) throws MessagingException {
+    public void effettuaConsegna(Consegna consegna) throws Exception {
         GestoreConsegne.getInstance().consegnaEffettuata(consegna,this.corriere);
         infoEmail.sendEmail(consegna.getOrdine().getCliente().getEmail(), "Consegna effettuata", "Si informa che la sua consegna \u00E8 stata effettuata presso un punto di ritiro.\nAppena l'ordine verr\u00E0 pagato presso il punto vendita"+
         ", sar\u00E0 disponibile per il ritiro.\nIl punto di ritiro e l'id di sblocco verranno resi disponibili " +
@@ -65,7 +65,7 @@ public class ControllerCorriere {
      * Utilizzato quando la consegna è stata portata a termine
      * @param indexConsegna
      */
-    public void effettuaConsegna(int indexConsegna) throws MessagingException {
+    public void effettuaConsegna(int indexConsegna) throws Exception {
         this.effettuaConsegna(this.getConsegneInCarico().get(indexConsegna));
     }
 

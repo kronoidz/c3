@@ -13,6 +13,7 @@ public class Ordine {
     private PuntoVendita pv;
     private List<Prodotto> prodotti;
 
+
     public Ordine() {
         prodotti = new LinkedList<>();
     }
@@ -51,6 +52,14 @@ public class Ordine {
 
     public void removeProdotto(int index) {
         prodotti.remove(index);
+    }
+
+    public double getPrice() {
+        double price = 0;
+        for (Prodotto p : prodotti) {
+            price += p.getPrezzo();
+        }
+        return price;
     }
 
     public String toString(){

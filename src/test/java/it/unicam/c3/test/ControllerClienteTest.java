@@ -18,7 +18,7 @@ public class ControllerClienteTest {
     @BeforeEach
     public void initControllerCorriereTest(){
 
-       commerciante1 = new Commerciante("Giulio", "Bianchi", "giuliob.1995@gmail.com", "prova");
+        commerciante1 = new Commerciante("Giulio", "Bianchi", "giuliob.1995@gmail.com", "prova");
         commerciante1.addPuntoVendita("Il magazzino del gusto", "Corso Cavour, 15");
         commerciante1.addPuntoVendita("La fabbrica di cioccolato", "via Roma, 22");
         commerciante1.getPuntiVendita().get(0).addProdotto("Salame (€/etto)", 10);
@@ -40,7 +40,7 @@ public class ControllerClienteTest {
         CentroCittadino.getInstance().addCommerciante(commerciante1);
         CentroCittadino.getInstance().addCommerciante(commerciante2);
 
-        CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Via Acquivive,35", 30));
+        CentroCittadino.getInstance().addPuntoRitiro("Via Acquivive,35", 30);
     }
 
     @Test

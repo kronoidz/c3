@@ -8,6 +8,7 @@ import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.Ordini.StatoOrdine;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
@@ -33,8 +34,8 @@ public class GestoreOrdiniTest {
         comm2=new Commerciante("Alessandro","Pecugi","alepec@gmail.com","prova");
         comm2.addPuntoVendita("Pescheria","Via Bonifazi 12");
 
-        CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Via Panfilo, 16", 10));
-        CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Corso Cavour, 18", 10));
+        CentroCittadino.getInstance().addPuntoRitiro("Via Panfilo, 16", 10);
+        CentroCittadino.getInstance().addPuntoRitiro("Corso Cavour, 18", 10);
         CentroCittadino.getInstance().addCommerciante(comm1);
         CentroCittadino.getInstance().addCommerciante(comm2);
         CentroCittadino.getInstance().addCliente(new Cliente("Paolo", "Rossi", "paolorossi@gmail.com", "prova"));
@@ -46,6 +47,7 @@ public class GestoreOrdiniTest {
     }
 
     @Test
+    @Order(1)
     public void changeStatoOrdine(){
 
         GestoreOrdini.getInstance().addOrdine(CentroCittadino.getInstance().getClienti().get(0),comm1.getPuntiVendita().get(0), carrello);
@@ -61,6 +63,7 @@ public class GestoreOrdiniTest {
     }
 
     @Test
+    @Order(2)
     public void numberOrdiniAggiunti(){
         GestoreOrdini.getInstance().addOrdine(CentroCittadino.getInstance().getClienti().get(0),CentroCittadino.getInstance().getPuntiVendita().get(0), carrello);
         assertEquals(5, GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0)).size());
@@ -68,6 +71,7 @@ public class GestoreOrdiniTest {
     }
 
     @Test
+    @Order(3)
     public void numberOrdiniCliente(){
         GestoreOrdini.getInstance().addOrdine(CentroCittadino.getInstance().getClienti().get(0),CentroCittadino.getInstance().getPuntiVendita().get(0), carrello);
         assertEquals(4,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0)).size());
@@ -75,6 +79,7 @@ public class GestoreOrdiniTest {
 
 
     @Test
+    @Order(4)
     public void numberOrdiniStatoCommerciante(){
        GestoreOrdini.getInstance().addOrdine(CentroCittadino.getInstance().getClienti().get(0),CentroCittadino.getInstance().getPuntiVendita().get(0), carrello);
         assertEquals(0,GestoreOrdini.getInstance().getOrdini(comm1,StatoOrdine.IN_ATTESA).size());
@@ -82,14 +87,15 @@ public class GestoreOrdiniTest {
     }
 
     @Test
+    @Order(5)
     public void numberOrdiniStatoCliente(){
-        // GestoreOrdini.getInstance().addOrdine(CentroCittadino.getInstance().getClienti().get(0),CentroCittadino.getInstance().getPuntiVendita().get(0), carrello);
         assertEquals(0,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0), StatoOrdine.IN_ATTESA).size());
         assertEquals(0,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0), StatoOrdine.ACCETTATO).size());
         assertEquals(1,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0), StatoOrdine.RIFIUTATO).size());
     }
 
     @Test
+    @Order(6)
     public void numberProdottiInOrdine(){
         GestoreOrdini.getInstance().addOrdine(CentroCittadino.getInstance().getClienti().get(0),CentroCittadino.getInstance().getPuntiVendita().get(0), carrello);
         assertEquals(3,GestoreOrdini.getInstance().getOrdini(CentroCittadino.getInstance().getClienti().get(0)).get(0).getProdotti().size());

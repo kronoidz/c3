@@ -3,6 +3,7 @@ package it.unicam.c3.View.Console;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Controller.ControllerCorriere;
 
+import javax.mail.MessagingException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +14,7 @@ public class ConsoleAccountCorriere {
     private BufferedReader br;
     private final String VISUALIZZA_CONSEGNE_IN_ATTESA = "0";
     private final String VISUALIZZA_CONSEGNE_PRESE_IN_CARICO = "1";
+    private final String CONSEGNA_EFFETTUATA = "0";
     private static final String RETURN = "u";
     private final String LOGOUT = "L";
 
@@ -40,6 +42,7 @@ public class ConsoleAccountCorriere {
             System.out.println("Nome Commerciante: "+controller.getConsegneInAttesa().get(i).getCommerciante().getNome()+" "+controller.getConsegneInAttesa().get(i).getCommerciante().getCognome());
             System.out.println("Email Commerciante: "+controller.getConsegneInAttesa().get(i).getCommerciante().getEmail());
             System.out.println("Punto Ritiro: "+controller.getConsegneInAttesa().get(i).getPuntoRitiro().getIndirizzo());
+            System.out.println("N. Slot Disponibili Punto Ritiro: "+controller.getConsegneInAttesa().get(i).getPuntoRitiro().getSlotDisponibili());
             System.out.println("Stato: "+controller.getConsegneInAttesa().get(i).getStato());
             System.out.println("Numero Prodotti: "+controller.getConsegneInAttesa().get(i).getOrdine().getProdotti().size());
             //Potrei mettere il visualizza dettaglio consegna in cui vedo i prodotti dell'ordine
@@ -69,18 +72,30 @@ public class ConsoleAccountCorriere {
         System.out.println("[u+enter to return]");
         line = br.readLine();
         if(!line.equals(RETURN)){
-            controller.prendiInCarico(Integer.parseInt(line));
+            try {
+                controller.prendiInCarico(Integer.parseInt(line));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void consegnePreseInCaricoView() throws IOException {
         String line;
         visualizzaConsegneInCarico();
+        System.out.println("[number+enter per segnalare che la consegna è stata effettuata]");
         System.out.println("[u+enter to return]");
         line = br.readLine();
+        if(!line.equals(RETURN)) {
+            try {
+                controller.effettuaConsegna(controller.getConsegneInCarico().get(Integer.parseInt(line)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void corriereView() throws IOException {
+    public void corriereView() throws IOException, MessagingException {
         String line;
         do {
             initChoice();

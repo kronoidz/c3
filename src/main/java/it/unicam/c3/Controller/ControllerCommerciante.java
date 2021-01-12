@@ -14,8 +14,10 @@ import it.unicam.c3.Ordini.Ordine;
 import it.unicam.c3.Ordini.StatoOrdine;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ControllerCommerciante {
     private Commerciante commerciante;
@@ -47,21 +49,21 @@ public class ControllerCommerciante {
                 .addProdotto(descrizione, prezzo);
     }
 
-    public void removeProdotto(PuntoVendita pv, Prodotto prodotto){
+    public void removeProdotto(PuntoVendita pv, Prodotto prodotto) throws Exception {
         if(this.commerciante.getPuntiVendita().contains(pv)){
             pv.removeProdotto(prodotto);
-        } else throw new IllegalArgumentException();
+        } else throw new Exception("Punto vendita non presente!");
     }
 
-    public void removeProdotto(int indexPv, Prodotto prodotto){
+    public void removeProdotto(int indexPv, Prodotto prodotto) throws Exception {
        this.removeProdotto(this.commerciante.getPuntiVendita().get(indexPv), prodotto);
     }
 
-    public void removeProdotto(PuntoVendita pv, int indexProdotto){
+    public void removeProdotto(PuntoVendita pv, int indexProdotto) throws Exception {
         this.removeProdotto(pv , pv.getProdotti().get(indexProdotto));
     }
 
-    public void removeProdotto(int indexPv, int indexProdotto){
+    public void removeProdotto(int indexPv, int indexProdotto) throws Exception {
         this.removeProdotto(this.commerciante.getPuntiVendita().get(indexPv) , this.commerciante.getPuntiVendita().get(indexPv).getProdotti().get(indexProdotto));
     }
 
@@ -95,6 +97,16 @@ public class ControllerCommerciante {
         return GestoreConsegne.getInstance().getConsegne(this.commerciante, stato);
     }
 
+    public List<Consegna> getConsegneDaAbilitareAlRitiro(){
+        List<Consegna> daAbilitare = new LinkedList<>();
+        daAbilitare.addAll(this.getConsegne(StatoConsegna.PRESA_IN_CARICO));
+        daAbilitare.addAll(this.getConsegne(StatoConsegna.EFFETTUATA));
+        for(Consegna c:daAbilitare){
+            if(c.isRitirabile()) daAbilitare.remove(c);
+        }
+        return daAbilitare;
+    }
+
     public void addOfferta(PuntoVendita pv, String descrizione, String importo){
         if (this.commerciante.getPuntiVendita().contains(pv)){
             pv.addOfferta(descrizione,importo);
@@ -111,6 +123,10 @@ public class ControllerCommerciante {
         if(this.commerciante.getPuntiVendita().contains(pv) && pv.getOfferte().contains(offerta)){
             pv.getOfferte().remove(offerta);
         } else throw new IllegalArgumentException();
+    }
+
+    public void abilitaRitiro(Consegna consegna){
+        GestoreConsegne.getInstance().abilitaRitiro(consegna);
     }
 
     public void removeOfferta(int indexPv, IOfferta offerta){

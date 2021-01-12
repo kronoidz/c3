@@ -3,11 +3,11 @@ package it.unicam.c3.test;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
-import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Consegne.GestoreConsegne;
 import it.unicam.c3.Consegne.StatoConsegna;
 import it.unicam.c3.Ordini.Ordine;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,8 +19,8 @@ public class GestoreConsegneTest {
 
     @BeforeEach
     public void initGestoreConsegne(){
-            CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Via Panfilo, 16", 10));
-            CentroCittadino.getInstance().addPuntoRitiro(new PuntoRitiro("Corso Cavour, 18", 10));
+            CentroCittadino.getInstance().addPuntoRitiro("Via Panfilo, 16", 10);
+            CentroCittadino.getInstance().addPuntoRitiro("Corso Cavour, 18", 10);
             CentroCittadino.getInstance().addCommerciante(new Commerciante("Paolo", "Rossi", "paolorossi@gmail.com", "prova"));
             CentroCittadino.getInstance().addCorriere(new Corriere());
             CentroCittadino.getInstance().addCorriere(new Corriere());
@@ -30,6 +30,7 @@ public class GestoreConsegneTest {
     }
 
     @Test
+    @Order(1)
     public void numberConsegneInAttesa(){
         GestoreConsegne.getInstance().addConsegna(ordine1,CentroCittadino.getInstance().getCommercianti().get(0),CentroCittadino.getInstance().getPuntiRitiro().get(0));
         GestoreConsegne.getInstance().addConsegna(ordine2,CentroCittadino.getInstance().getCommercianti().get(0),CentroCittadino.getInstance().getPuntiRitiro().get(0));
@@ -40,7 +41,8 @@ public class GestoreConsegneTest {
     }
 
     @Test
-    public void numberConsegnePresenInCarico(){
+    @Order(2)
+    public void numberConsegnePresenInCarico() throws Exception {
         GestoreConsegne.getInstance().prendiInCaricoConsegna(0,CentroCittadino.getInstance().getCorrieri().get(0));
         GestoreConsegne.getInstance().prendiInCaricoConsegna(2,CentroCittadino.getInstance().getCorrieri().get(0));
         assertEquals(1,GestoreConsegne.getInstance().getConsegne(StatoConsegna.IN_ATTESA).size());
@@ -50,7 +52,8 @@ public class GestoreConsegneTest {
 
 
     @Test
-    public void numberConsegnePresenInCaricoDa(){
+    @Order(3)
+    public void numberConsegnePresenInCaricoDa() throws Exception {
         GestoreConsegne.getInstance().prendiInCaricoConsegna(0,CentroCittadino.getInstance().getCorrieri().get(0));
         GestoreConsegne.getInstance().prendiInCaricoConsegna(2,CentroCittadino.getInstance().getCorrieri().get(0));
         assertEquals(2,GestoreConsegne.getInstance().getConsegnePreseInCaricoDa(CentroCittadino.getInstance().getCorrieri().get(0)).size());
@@ -59,7 +62,8 @@ public class GestoreConsegneTest {
 
 
     @Test
-    public void numberConsegneEffettuate(){
+    @Order(4)
+    public void numberConsegneEffettuate() throws Exception {
         GestoreConsegne.getInstance().prendiInCaricoConsegna(0,CentroCittadino.getInstance().getCorrieri().get(0));
         GestoreConsegne.getInstance().prendiInCaricoConsegna(2,CentroCittadino.getInstance().getCorrieri().get(0));
         GestoreConsegne.getInstance().consegnaEffettuata(0,CentroCittadino.getInstance().getCorrieri().get(0));
