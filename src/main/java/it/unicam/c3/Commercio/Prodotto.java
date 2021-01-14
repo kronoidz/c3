@@ -1,16 +1,33 @@
 package it.unicam.c3.Commercio;
 
+import java.util.UUID;
+
 public class Prodotto {
+    private String id;
     private String descrizione;
     private double prezzo;
     private boolean disponibilita;
 
-    public Prodotto() {this.disponibilita=true; }
+    public Prodotto() { }
 
-    public Prodotto(String descrizione, double prezzo) {
+    public Prodotto(String descrizione, double prezzo, String id) {
         this.descrizione = descrizione;
         this.prezzo = prezzo;
-        this.disponibilita=true;
+        this.disponibilita = true;
+        this.id = id;
+    }
+
+    public Prodotto(String descrizione, double prezzo) {
+        this(descrizione, prezzo, null);
+        this.id = UUID.randomUUID().toString();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getDescrizione() {

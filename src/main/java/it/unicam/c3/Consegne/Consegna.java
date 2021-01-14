@@ -8,24 +8,38 @@ import it.unicam.c3.Ordini.Ordine;
 import java.util.UUID;
 
 public class Consegna {
-    private StatoConsegna stato;
+    public String id;
+    private StatoConsegna stato = StatoConsegna.IN_ATTESA;
     private Ordine ordine;
     private Corriere corriere;
     private Commerciante commerciante;
     private PuntoRitiro puntoRitiro;
-    private final UUID id = UUID.randomUUID();
-    private boolean ritirabile;
+    private boolean ritirabile = false;
 
-    public Consegna(Commerciante commerciante, Ordine ordine, PuntoRitiro puntoRitiro){
-        this.commerciante=commerciante;
-        this.ordine=ordine;
-        this.puntoRitiro=puntoRitiro;
-        this.stato=StatoConsegna.IN_ATTESA;
-        ritirabile=false;
+    public Consegna() { }
+
+    // Se id == null, genera l'id
+    public Consegna(Commerciante commerciante, Ordine ordine, PuntoRitiro puntoRitiro,
+                    String id)
+    {
+        this.commerciante = commerciante;
+        this.ordine = ordine;
+        this.puntoRitiro = puntoRitiro;
+
+        this.id = id;
+    }
+
+    public Consegna(Commerciante commerciante, Ordine ordine, PuntoRitiro puntoRitiro) {
+        this(commerciante, ordine, puntoRitiro, null);
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId(){
         return this.id.toString();
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setStato(StatoConsegna stato){
@@ -73,9 +87,8 @@ public class Consegna {
     }
 
     public String toString(){
-        if(corriere!=null) {
+        if(corriere != null) {
             return "Commerciante: [" + commerciante.toString() + "] Ordine: [" + ordine.toString() + "] Stato: [" + stato.toString()+"] Corriere: ["+this.corriere.toString()+"] Punto Ritiro: [" + puntoRitiro.getIndirizzo() + "] ";
         } else return "Commerciante: [" + commerciante.toString() + "] Ordine: [" + ordine.toString() + "] Stato: [" + stato.toString() +"] Corriere: [NULL] Punto Ritiro: [" + puntoRitiro.getIndirizzo() + "] ";
-
     }
 }

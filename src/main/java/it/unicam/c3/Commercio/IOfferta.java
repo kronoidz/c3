@@ -2,11 +2,13 @@ package it.unicam.c3.Commercio;
 
 public interface IOfferta {
 
-     String getImporto();
+    String getId();
+    void setId(String id);
 
-     void setImporto(String importo);
+    String getImporto();
+    void setImporto(String importo);
 
-     String getDescrizione();
-
+    String getDescrizione();
     void setDescrizione(String descrizione);
+
 }
