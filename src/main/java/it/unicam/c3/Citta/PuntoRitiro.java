@@ -3,14 +3,31 @@ package it.unicam.c3.Citta;
 import java.util.UUID;
 
 public class PuntoRitiro {
+    private String id;
     private String indirizzo;
     private String id = UUID.randomUUID().toString();
     private int capienza;
     private int occupati;
 
+    public PuntoRitiro() { }
+
+    public PuntoRitiro(String indirizzo, int capienza, String id) {
+        this.indirizzo = indirizzo;
+        this.capienza = capienza;
+        this.id = id;
+    }
+
     public PuntoRitiro(String indirizzo, int capienza){
-        this.indirizzo=indirizzo;
-        this.capienza=capienza;
+        this(indirizzo, capienza, null);
+        this.id = UUID.randomUUID().toString();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public PuntoRitiro(String indirizzo){
@@ -54,5 +71,4 @@ public class PuntoRitiro {
     public String toString(){
         return this.indirizzo+" Capienza: ["+this.capienza+"] Slot Disponibili:["+getSlotDisponibili()+"]";
     }
-
 }

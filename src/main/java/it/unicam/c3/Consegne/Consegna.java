@@ -13,19 +13,31 @@ public class Consegna {
     private Corriere corriere;
     private Commerciante commerciante;
     private PuntoRitiro puntoRitiro;
-    private UUID id = UUID.randomUUID();
+    private String id;//
     private boolean ritirabile;
 
-    public Consegna(Commerciante commerciante, Ordine ordine, PuntoRitiro puntoRitiro){
+    public Consegna(Commerciante commerciante, Ordine ordine, PuntoRitiro puntoRitiro, String id){
         this.commerciante=commerciante;
         this.ordine=ordine;
         this.puntoRitiro=puntoRitiro;
         this.stato=StatoConsegna.IN_ATTESA;
+       if(id!=null) {
+           this.id=id;
+       } else  this.id = UUID.randomUUID().toString();
         ritirabile=false;
+    }
+
+    public Consegna(Commerciante commerciante, Ordine ordine, PuntoRitiro puntoRitiro) {
+        this(commerciante, ordine, puntoRitiro, null);
+        //this.id = UUID.randomUUID().toString();
     }
 
     public String getId(){
         return this.id.toString();
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setStato(StatoConsegna stato){

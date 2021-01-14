@@ -5,28 +5,33 @@ import it.unicam.c3.Anagrafica.Commerciante;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 public class PuntoVendita {
-    String nome;
-    String posizione;
-    Commerciante commerciante;
-    List<Prodotto> prodotti;
-    List<IOfferta> offerte;
+    private String id;
+    private String nome;
+    private String posizione;
+    private Commerciante commerciante;
+    private List<Prodotto> prodotti;
+    private List<IOfferta> offerte;
 
 
     public PuntoVendita(Commerciante commerciante) {
         this.commerciante=commerciante;
         prodotti = new LinkedList<>();
         offerte=new LinkedList<>();
+        this(commerciante,"null","null","null",null);
     }
 
-    public PuntoVendita(Commerciante commerciante, String nome, String posizione) {
+    public PuntoVendita(Commerciante commerciante, String nome, String posizione, String id) {
        this.commerciante=commerciante;
         this.nome = nome;
         this.posizione = posizione;
         this.prodotti = new LinkedList<>();
-        offerte=new LinkedList<>();
+        this.offerte=new LinkedList<>();
+        if(id!=null) {
+            this.id=id;
+        }else this.id= UUID.randomUUID().toString();
     }
 
     public String getPosizione() {
