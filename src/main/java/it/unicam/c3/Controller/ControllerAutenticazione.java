@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ControllerAutenticazione {
-
-    //public static boolean autenticazioneAbilitata = false;
-
     public Commerciante autenticaCommerciante(String email, String password) {
         List<Commerciante> commercianti = CentroCittadino.getInstance()
                 .getCommercianti()
@@ -86,10 +83,5 @@ public class ControllerAutenticazione {
                 );
                 break;
         }
-        // todo: invia email verifica
-    }
-
-    public void logout() {
-        // ?
     }
 }

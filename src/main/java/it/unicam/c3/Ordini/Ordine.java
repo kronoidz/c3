@@ -17,16 +17,17 @@ public class Ordine {
 
     public Ordine() { }
 
-    public Ordine(Cliente clienteOrdinante, List<Prodotto> prodotti, String id) {
+    public Ordine(Cliente clienteOrdinante, PuntoVendita pv, List<Prodotto> prodotti, String id) {
         this.clienteOrdinante = clienteOrdinante;
+        this.pv = pv;
         this.prodotti.addAll(prodotti);
 
         if (id == null) this.id = UUID.randomUUID().toString();
         else this.id = id;
     }
 
-    public Ordine(Cliente clienteOrdinante, List<Prodotto> prodotti) {
-        this(clienteOrdinante, prodotti, null);
+    public Ordine(Cliente clienteOrdinante, PuntoVendita pv, List<Prodotto> prodotti) {
+        this(clienteOrdinante, pv, prodotti, null);
     }
 
     public String getId() {

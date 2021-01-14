@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Commerciante</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .card {
+            min-width: 10em;
+            margin: .8em;
+        }
+        .card-text {
+            margin: .4em;
+        }
+        .card-details {
+            font-size: .8em;
+            font-family: sans-serif;
+            margin: .4em;
+        }
+        table {
+            border-spacing: 1em;
+        }
+        th {
+            text-align: left;
+        }
+        td {
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h3>Commerciante [<span th:text="${emailCommerciante}"></span>]</h3>
+
+    <h4>Punti vendita</h4>
+    <div class="card-container">
+        <div class="card" th:each="pv : ${puntiVendita}">
+            <a th:href="@{'/commerciante/puntoVendita'(id=${pv.id})}">
+                <p class="card-text" th:text="${pv.nome}"></p>
+            </a>
+            <p class="card-details" th:text="${pv.posizione}"></p>
+        </div>
+    </div>
+    <h4>Ordini in attesa</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Email</th>
+                <th>N. Prodotti</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ordine : ${ordiniInAttesa}">
+                <td th:text="${ordine.nomeCliente}"></td>
+                <td th:text="${ordine.emailCliente}"></td>
+                <td th:text="${ordine.numeroProdotti}"></td>
+                <td>
+                    <a th:href="@{'/commerciante/ordine'(id=${ordine.id})}">Vedi ordine</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

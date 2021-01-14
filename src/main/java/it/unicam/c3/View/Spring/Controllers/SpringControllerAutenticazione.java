@@ -1,15 +1,20 @@
 package it.unicam.c3.View.Spring.Controllers;
 
+import it.unicam.c3.Anagrafica.Cliente;
+import it.unicam.c3.Anagrafica.Commerciante;
+import it.unicam.c3.Anagrafica.Corriere;
+import it.unicam.c3.Anagrafica.Utente;
 import it.unicam.c3.Controller.ControllerAutenticazione;
+import it.unicam.c3.Controller.ControllerCliente;
+import it.unicam.c3.Controller.ControllerCommerciante;
+import it.unicam.c3.Controller.ControllerCorriere;
 import it.unicam.c3.View.Spring.FormModels.Credenziali;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -22,49 +27,43 @@ public class SpringControllerAutenticazione {
         return "auth";
     }
 
-    @PostMapping( value = "/do-auth")
-    public ModelAndView DoAuth(HttpSession session,
-                               Credenziali credenziali,
-                               BindingResult result,
-                               Model model )
+    @PostMapping("/auth")
+    public ModelAndView DoAuth(HttpSession session, Credenziali credenziali, Model model)
     {
-        if (result.hasErrors()) {
-            model.addAttribute("error", "Invalid request");
-            return new ModelAndView("/auth", HttpStatus.BAD_REQUEST);
+        ControllerAutenticazione auth = new ControllerAutenticazione();
+
+        String email = credenziali.getEmail();
+        String pwd = credenziali.getPassword();
+
+        Utente utente = null;
+        Object controller = null;
+
+        switch (credenziali.getTipoUtente()) {
+            case "cliente":
+              utente = auth.autenticaCliente(email, pwd);
+              if (utente != null)
+                controller = new ControllerCliente((Cliente) utente);
+              break;
+            case "commerciante":
+                utente = auth.autenticaCommerciante(email, pwd);
+                if (utente != null)
+                    controller = new ControllerCommerciante((Commerciante) utente);
+                break;
+            case "corriere":
+                utente = auth.autenticaCorriere(email, pwd);
+                if (utente != null)
+                    controller = new ControllerCorriere((Corriere) utente);
+                break;
         }
-        else {
-            ControllerAutenticazione auth;
-            if (session.isNew()) {
-                auth = new ControllerAutenticazione();
-                session.setAttribute("auth", auth);
-            }
-            else auth = (ControllerAutenticazione) session.getAttribute("auth");
 
-            String email = credenziali.getEmail();
-            String pwd = credenziali.getPassword();
-
-            Object controller = null;
-
-            switch (credenziali.getTipoUtente()) {
-                case "cliente":
-                  controller = auth.autenticaCliente(email, pwd);
-                  break;
-                case "commerciante":
-                    controller = auth.autenticaCommerciante(email, pwd);
-                    break;
-                case "corriere":
-                    controller = auth.autenticaCorriere(email, pwd);
-                    break;
-            }
-
-            session.setAttribute("controller", controller);
-
-            if (controller == null) {
-                model.addAttribute("error", "Credenziali invalide");
-                return new ModelAndView("/auth", HttpStatus.UNAUTHORIZED);
-            }
-
-            return new ModelAndView("/home-" + credenziali.getTipoUtente());
+        if (controller == null) {
+            model.addAttribute("error", "Credenziali invalide");
+            return new ModelAndView("/auth", HttpStatus.UNAUTHORIZED);
         }
+
+        session.setAttribute("utente", utente);
+        session.setAttribute("controller", controller);
+
+        return new ModelAndView("redirect:/" + credenziali.getTipoUtente());
     }
 }
