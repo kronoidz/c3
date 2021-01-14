@@ -13,7 +13,7 @@ public class ControllerAutenticazione {
 
     //public static boolean autenticazioneAbilitata = false;
 
-    public ControllerCommerciante autenticaCommerciante(String email, String password) {
+    public Commerciante autenticaCommerciante(String email, String password) {
         List<Commerciante> commercianti = CentroCittadino.getInstance()
                 .getCommercianti()
                 .stream()
@@ -24,10 +24,10 @@ public class ControllerAutenticazione {
         if (commercianti.size() < 1) {
             return null;
         }
-        return new ControllerCommerciante(commercianti.get(0));
+        return commercianti.get(0);
     }
 
-    public ControllerCliente autenticaCliente(String email, String password) {
+    public Cliente autenticaCliente(String email, String password) {
         List<Cliente> clienti = CentroCittadino.getInstance()
                 .getClienti()
                 .stream()
@@ -38,10 +38,10 @@ public class ControllerAutenticazione {
         if (clienti.size() < 1) {
             return null;
         }
-        return new ControllerCliente(clienti.get(0));
+        return clienti.get(0);
     }
 
-    public ControllerCorriere autenticaCorriere(String email, String password) {
+    public Corriere autenticaCorriere(String email, String password) {
         List<Corriere> corrieri = CentroCittadino.getInstance()
                 .getCorrieri()
                 .stream()
@@ -52,7 +52,7 @@ public class ControllerAutenticazione {
         if (corrieri.size() < 1) {
             return null;
         }
-        return new ControllerCorriere(corrieri.get(0));
+        return corrieri.get(0);
     }
 
     public ControllerGestore autenticaGestore(String password) {
