@@ -9,6 +9,7 @@ import javax.mail.MessagingException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 
 public class ConsoleAmministrazione {
     private ControllerGestore controller;
@@ -19,7 +20,7 @@ public class ConsoleAmministrazione {
     private final String LOGOUT = "L";
 
 
-    public ConsoleAmministrazione() {
+    public ConsoleAmministrazione() throws SQLException {
         controller = new ControllerGestore();
         br = new BufferedReader(new InputStreamReader(System.in));
     }
@@ -61,7 +62,7 @@ public class ConsoleAmministrazione {
         }
     }
 
-    private void aggiungiPuntoRitiroView() throws IOException {
+    private void aggiungiPuntoRitiroView() throws IOException, SQLException {
         String line;
         System.out.println("Immetti l'indirizzo del punto di ritiro: ");
         line = br.readLine();
@@ -84,7 +85,7 @@ public class ConsoleAmministrazione {
     }
 
 
-    public void amministrazioneView() throws IOException {
+    public void amministrazioneView() throws IOException, SQLException {
         String line;
         if(autenticazioneAmministrazione()==true) {
             do {

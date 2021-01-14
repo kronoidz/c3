@@ -1,7 +1,10 @@
 package it.unicam.c3.Citta;
 
+import java.util.UUID;
+
 public class PuntoRitiro {
     private String indirizzo;
+    private String id = UUID.randomUUID().toString();
     private int capienza;
     private int occupati;
 
@@ -38,6 +41,14 @@ public class PuntoRitiro {
 
     public void decrementOccupati(int amount){
         this.occupati=this.occupati-amount;
+    }
+
+    public void setId(String id){
+        this.id=id;
+    }
+
+    public String getId() {
+        return id.toString();
     }
 
     public String toString(){

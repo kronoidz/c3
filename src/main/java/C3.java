@@ -1,10 +1,16 @@
 
+import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Citta.PuntoRitiro;
+import it.unicam.c3.Commercio.Prodotto;
+import it.unicam.c3.Commercio.PuntoVendita;
 import it.unicam.c3.Consegne.GestoreConsegne;
+import it.unicam.c3.Controller.ControllerAutenticazione;
 import it.unicam.c3.Controller.ControllerCorriere;
+import it.unicam.c3.Controller.ControllerGestore;
 import it.unicam.c3.Ordini.GestoreOrdini;
+import it.unicam.c3.Persistence.DBCommerciante;
 import it.unicam.c3.View.Console.ConsoleView;
 import it.unicam.c3.View.Spring.SpringView;
 import it.unicam.c3.View.View;
@@ -15,25 +21,71 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.security.Security;
+import java.sql.*;
 import java.util.Date;
 import java.util.Properties;
 
 
 public class C3 {
 
-    public static void main(String[] args) throws MessagingException, IOException {
+    public static void main(String[] args) throws MessagingException, IOException, SQLException {
+        /* Commerciante commerciante = new Commerciante("Alessandro", "Pecugi", "alessandro.pecugi@gmail.com", "ciao");
+
+         PuntoVendita pv = new PuntoVendita(commerciante,"LA Fabbrica","Via L. Rossi, 12");
+
+
+        DBCommerciante db = new DBCommerciante(commerciante);
+       System.out.println(db.getIdPuntoVendita(pv));*/
+
+       /* ControllerAutenticazione controller = null;
+        try {
+            controller = new ControllerAutenticazione();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            System.out.println("ERROR: ERRORE ACCESSO DATABASE!");
+        }
+
+
+        String email = "lorenzose.1995@gmail.com";
+        String password = "prova";
+        if(controller.autenticaCommerciante(email,password) != null) {
+            Commerciante cliente = controller.autenticaCommerciante(email,password);
+            System.out.println(cliente.getNome());
+            System.out.println(cliente.getCognome());
+            System.out.println(cliente.getEmail());
+            System.out.println(cliente.getPassword());
+        }else System.out.println("ERROR: CREDENZIALI NON VALIDE!");
+
+      /*  try {
+            ControllerGestore controllerGestore = new ControllerGestore();
+            controllerGestore.autorizza("admin");
+            controllerGestore.addPuntoRitiro("Via Acquevive", 50);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }*/
+
+     /*   try {
+            ControllerGestore controllerGestore = new ControllerGestore();
+            controllerGestore.autorizza("admin");
+            System.out.println(controllerGestore.getPuntiRitiro().get(0).getId());
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }*/
+
         // proto1();
 
         // View consoleView = new ConsoleView();
         // consoleView.start();
 
-        View springView = new SpringView();
-        springView.start();
+       // View springView = new SpringView();
+       // springView.start();
+
+
     }
 
 
 
-    public static void proto1() throws IOException, MessagingException {
+    public static void proto1() throws IOException, MessagingException, SQLException {
         Commerciante commerciante1 = new Commerciante("Giulio", "Bianchi", "giuliob.1995@gmail.com", "prova");
         commerciante1.addPuntoVendita("Il magazzino del gusto", "Corso Cavour, 15");
         commerciante1.addPuntoVendita("La fabbrica di cioccolato", "via Roma, 22");

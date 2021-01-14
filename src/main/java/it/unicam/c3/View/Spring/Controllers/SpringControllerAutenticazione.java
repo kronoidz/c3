@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 
 @Controller
 public class SpringControllerAutenticazione {
@@ -26,8 +27,7 @@ public class SpringControllerAutenticazione {
     public ModelAndView DoAuth(HttpSession session,
                                Credenziali credenziali,
                                BindingResult result,
-                               Model model )
-    {
+                               Model model ) throws SQLException {
         if (result.hasErrors()) {
             model.addAttribute("error", "Invalid request");
             return new ModelAndView("/auth", HttpStatus.BAD_REQUEST);

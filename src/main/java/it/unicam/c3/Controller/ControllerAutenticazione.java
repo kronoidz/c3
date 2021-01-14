@@ -5,15 +5,30 @@ import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
+import it.unicam.c3.Persistence.DBAccounts;
+import it.unicam.c3.Persistence.DBPuntiRitiro;
+import it.unicam.c3.Persistence.IDBAccounts;
+import it.unicam.c3.Persistence.IDBPuntiRitiro;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ControllerAutenticazione {
+    private IDBAccounts dbAccounts;
 
     //public static boolean autenticazioneAbilitata = false;
 
-    public ControllerCommerciante autenticaCommerciante(String email, String password) {
+    public ControllerAutenticazione(IDBAccounts dbAccounts, IDBPuntiRitiro dbPuntiRitiro ) throws SQLException {
+        this.dbAccounts=dbAccounts;
+        CentroCittadino.getInstance(this.dbAccounts.getCommercianti(), this.dbAccounts.getClienti(), this.dbAccounts.getCorrieri(), dbPuntiRitiro.getPuntiRitiro());
+    }
+
+    public ControllerAutenticazione() throws SQLException {
+        this(new DBAccounts(), new DBPuntiRitiro());
+    }
+
+    public Commerciante autenticaCommerciante(String email, String password) {
         List<Commerciante> commercianti = CentroCittadino.getInstance()
                 .getCommercianti()
                 .stream()
@@ -24,10 +39,10 @@ public class ControllerAutenticazione {
         if (commercianti.size() < 1) {
             return null;
         }
-        return new ControllerCommerciante(commercianti.get(0));
+        return commercianti.get(0);
     }
 
-    public ControllerCliente autenticaCliente(String email, String password) {
+    public Cliente autenticaCliente(String email, String password) {
         List<Cliente> clienti = CentroCittadino.getInstance()
                 .getClienti()
                 .stream()
@@ -38,10 +53,10 @@ public class ControllerAutenticazione {
         if (clienti.size() < 1) {
             return null;
         }
-        return new ControllerCliente(clienti.get(0));
+        return clienti.get(0);
     }
 
-    public ControllerCorriere autenticaCorriere(String email, String password) {
+    public Corriere autenticaCorriere(String email, String password) {
         List<Corriere> corrieri = CentroCittadino.getInstance()
                 .getCorrieri()
                 .stream()
@@ -52,41 +67,40 @@ public class ControllerAutenticazione {
         if (corrieri.size() < 1) {
             return null;
         }
-        return new ControllerCorriere(corrieri.get(0));
+        return corrieri.get(0);
     }
 
-    public ControllerGestore autenticaGestore(String password) {
+  /*TODO:  public ControllerGestore autenticaGestore(String password) {
         if (!Amministrazione.checkPassword(password))
             return null;
-
-        return new ControllerGestore();
-    }
+        return new ControllerGestore(); LO METTIAMO QUI O NO?
+        IN QUESTO CASO NON SERVONO I COMANDI DI CONTROLLO
+        AUTORIZZAZIONE IN CONTROLLERGESTORE
+    }*/
 
     public enum TipoUtente {
         COMMERCIANTE, CLIENTE, CORRIERE
     }
 
     public void registra(String nome, String cognome, String email, String password,
-                         TipoUtente tipo)
-    {
+                         TipoUtente tipo) throws SQLException {
         switch (tipo) {
             case CLIENTE:
-                CentroCittadino.getInstance().addCliente(
-                        new Cliente(nome, cognome, email, password)
-                );
+                Cliente cliente =  new Cliente(nome, cognome, email, password);
+                CentroCittadino.getInstance().addCliente(cliente);
+                this.dbAccounts.registerCliente(cliente);
                 break;
             case COMMERCIANTE:
-                CentroCittadino.getInstance().addCommerciante(
-                        new Commerciante(nome, cognome, email, password)
-                );
+                Commerciante commerciante =  new Commerciante(nome, cognome, email, password);
+                CentroCittadino.getInstance().addCommerciante(commerciante);
+                this.dbAccounts.registerCommerciante(commerciante);
                 break;
             case CORRIERE:
-                CentroCittadino.getInstance().addCorriere(
-                        new Corriere(nome, cognome, email, password)
-                );
+                Corriere corriere = new Corriere(nome, cognome, email, password);
+                CentroCittadino.getInstance().addCorriere(corriere);
+                this.dbAccounts.registerCorriere(corriere);
                 break;
         }
-        // todo: invia email verifica
     }
 
     public void logout() {

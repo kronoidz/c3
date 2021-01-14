@@ -29,6 +29,8 @@ public class Prodotto {
         this.prezzo = prezzo;
     }
 
+    public void setDisponibilita(boolean disponibilita) {this.disponibilita=disponibilita; }
+
     public boolean getDisponibilita() {
         return this.disponibilita;
     }

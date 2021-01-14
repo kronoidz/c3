@@ -13,7 +13,7 @@ public class Consegna {
     private Corriere corriere;
     private Commerciante commerciante;
     private PuntoRitiro puntoRitiro;
-    private final UUID id = UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
     private boolean ritirabile;
 
     public Consegna(Commerciante commerciante, Ordine ordine, PuntoRitiro puntoRitiro){

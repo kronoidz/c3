@@ -61,8 +61,8 @@ public class ConsoleAccountCliente {
 
     private void mostraProdotti(PuntoVendita pv) {
         System.out.println("PRODOTTI DISPONIBILI:");
-        for (int i = 0; i < pv.getProdotti().size(); i++) {
-            System.out.println(i + ") " + pv.getProdotti().get(i));
+        for (int i = 0; i < pv.getProdottiDisponibili().size(); i++) {
+            System.out.println(i + ") " + pv.getProdottiDisponibili().get(i));
         }
     }
 
@@ -228,7 +228,7 @@ public class ConsoleAccountCliente {
                 System.out.println("[u+enter to return]");
                 line = br.readLine();
                 if (!line.equals("u")) {
-                    Prodotto prodotto = pv.getProdotti().get(Integer.parseInt(line));
+                    Prodotto prodotto = pv.getProdottiDisponibili().get(Integer.parseInt(line));
                     controller.addInCarrello(pv, prodotto);
                 }
             }while(!line.equals(RETURN));

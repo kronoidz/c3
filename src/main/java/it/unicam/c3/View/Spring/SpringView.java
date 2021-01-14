@@ -3,11 +3,13 @@ package it.unicam.c3.View.Spring;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
+import it.unicam.c3.Controller.ControllerAutenticazione;
 import it.unicam.c3.View.View;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @SpringBootApplication
 public class SpringView implements View {
@@ -21,7 +23,7 @@ public class SpringView implements View {
     }
 
     private void MakeTestData() {
-        CentroCittadino.getInstance().addCommerciante (
+       /* CentroCittadino.getInstance().addCommerciante (
                 new Commerciante (
                         "Alessandro",
                         "Pecugi",
@@ -35,6 +37,11 @@ public class SpringView implements View {
                         "Corrieri",
                         "c.corrieri@example.com",
                         "ciaone" )
-        );
+        );*/
+        try {
+            ControllerAutenticazione controller = new ControllerAutenticazione();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 }

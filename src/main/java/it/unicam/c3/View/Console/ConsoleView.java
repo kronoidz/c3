@@ -11,6 +11,7 @@ import javax.mail.MessagingException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 
 public class ConsoleView implements View {
     private static final String ACCOUNT_CLIENTE="1";
@@ -34,7 +35,7 @@ public class ConsoleView implements View {
     }
 
     @Override
-    public void start() throws IOException, MessagingException {
+    public void start() throws IOException, MessagingException, SQLException {
         ///////////// TODO: AGGIUNTA DA FAR FARE DURANTE LA REGISTRAZIONE (DA ELIMINARE QUI)!!
         CentroCittadino.getInstance().addCommerciante(commerciante);
         CentroCittadino.getInstance().addCliente(cliente);

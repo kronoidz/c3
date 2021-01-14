@@ -5,6 +5,7 @@ import it.unicam.c3.Anagrafica.Commerciante;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PuntoVendita {
     String nome;
@@ -50,6 +51,10 @@ public class PuntoVendita {
 
     public List<Prodotto> getProdotti() {
         return this.prodotti;
+    }
+
+    public List<Prodotto> getProdottiDisponibili(){
+        return this.prodotti.stream().filter(Prodotto::getDisponibilita).collect(Collectors.toList());
     }
 
     public void addProdotto(String descrizione, double prezzo) {
