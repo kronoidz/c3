@@ -12,6 +12,10 @@ public class Commerciante extends Utente {
         this.puntiVendita = new LinkedList<>();
     }
 
+    public Commerciante(List<PuntoVendita> puntiVendita) {
+        this.puntiVendita.addAll(puntiVendita);
+    }
+
     public Commerciante(String nome, String cognome, String email, String password) {
         this.setNome(nome);
         this.setCognome(cognome);
@@ -26,5 +30,9 @@ public class Commerciante extends Utente {
 
     public void addPuntoVendita(String nome, String posizione) {
         puntiVendita.add(new PuntoVendita(this,nome, posizione));
+    }
+
+    public void addPuntoVendita(String id, String nome, String posizione) {
+        puntiVendita.add(new PuntoVendita(this,nome, posizione,id));
     }
 }

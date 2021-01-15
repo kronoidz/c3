@@ -7,6 +7,7 @@ import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Commercio.PuntoVendita;
 import it.unicam.c3.Consegne.GestoreConsegne;
 import it.unicam.c3.Controller.ControllerAutenticazione;
+import it.unicam.c3.Controller.ControllerCommerciante;
 import it.unicam.c3.Controller.ControllerCorriere;
 import it.unicam.c3.Controller.ControllerGestore;
 import it.unicam.c3.Ordini.GestoreOrdini;
@@ -28,49 +29,7 @@ import java.util.Properties;
 
 public class C3 {
 
-    public static void main(String[] args) throws MessagingException, IOException, SQLException {
-        /* Commerciante commerciante = new Commerciante("Alessandro", "Pecugi", "alessandro.pecugi@gmail.com", "ciao");
-
-         PuntoVendita pv = new PuntoVendita(commerciante,"LA Fabbrica","Via L. Rossi, 12");
-
-
-        DBCommerciante db = new DBCommerciante(commerciante);
-       System.out.println(db.getIdPuntoVendita(pv));*/
-
-       /* ControllerAutenticazione controller = null;
-        try {
-            controller = new ControllerAutenticazione();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            System.out.println("ERROR: ERRORE ACCESSO DATABASE!");
-        }
-
-
-        String email = "lorenzose.1995@gmail.com";
-        String password = "prova";
-        if(controller.autenticaCommerciante(email,password) != null) {
-            Commerciante cliente = controller.autenticaCommerciante(email,password);
-            System.out.println(cliente.getNome());
-            System.out.println(cliente.getCognome());
-            System.out.println(cliente.getEmail());
-            System.out.println(cliente.getPassword());
-        }else System.out.println("ERROR: CREDENZIALI NON VALIDE!");
-
-      /*  try {
-            ControllerGestore controllerGestore = new ControllerGestore();
-            controllerGestore.autorizza("admin");
-            controllerGestore.addPuntoRitiro("Via Acquevive", 50);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }*/
-
-     /*   try {
-            ControllerGestore controllerGestore = new ControllerGestore();
-            controllerGestore.autorizza("admin");
-            System.out.println(controllerGestore.getPuntiRitiro().get(0).getId());
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }*/
+    public static void main(String[] args) throws Exception {
 
         // proto1();
 
@@ -79,6 +38,47 @@ public class C3 {
 
        // View springView = new SpringView();
        // springView.start();
+
+        ControllerAutenticazione ca = new ControllerAutenticazione();
+
+       //ca.registra("Alessandro","Pecugi", "alessandro@gmail.com","Prova", ControllerAutenticazione.TipoUtente.COMMERCIANTE);
+        Commerciante commercianteAutenticato = ca.autenticaCommerciante("lorenzose.1995@gmail.com","prova");
+
+        ControllerCommerciante controller = new ControllerCommerciante(commercianteAutenticato);
+
+        //controller.addPuntoVendita("PROVA","PROVAAAAA");
+
+       // View view = new ConsoleView();
+       // view.start();
+        //DBCommerciante commerciante = new DBCommerciante(commercianteAutenticato);
+        //PuntoVendita pv = new PuntoVendita(commercianteAutenticato,"PRVOA PPPPP","PIPIPIPI");
+        //commerciante.savePuntoVendita(pv);
+
+
+
+       // controller.addProdotto(0,"PROVA1",100);
+      //  controller.addProdotto(0,"PROVA2",200);
+      //  controller.addProdotto(0,"PROVA3",300);
+      //  controller.addPuntoVendita("VIA BOO", "P1");
+       // controller.addPuntoVendita("VIA BOO2", "P2");
+
+        //controller.addPuntoVendita("Via Roma,126", "La Fabbrica Del Gusto");
+        //controller.addProdotto(0,"Cioccolata",11);
+       // controller.addOfferta(controller.getPuntiVendita().get(0),"OFFERTA DI PROVA","20%");
+      //  db.removeProdotto(cm.getPuntiVendita().get(0).getProdotti().get(0));
+      // System.out.println(commercianteAutenticato.getPuntiVendita().get(0).getProdotti());
+
+       // PuntoVendita pv = new PuntoVendita(cm,"La fabbrica del gusto", "Corso cavour, 15");
+
+        //db.savePuntoVendita(pv);
+
+       // Prodotto p = new Prodotto("PRODOTTO TEST", 100.12);
+
+        //Prodotto p2 = new Prodotto("PRODOTTO TEST", 100.12);
+        //p2.setDisponibilita(false);
+
+        //db.saveProdotto(pv,p);
+        //db.saveProdotto(pv,p2);
 
 
     }

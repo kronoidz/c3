@@ -11,10 +11,16 @@ import java.sql.SQLException;
 
 public interface IDBCommerciante{
 
-    void savePuntoVendita(PuntoVendita pv) throws SQLException;
+    void savePuntoVendita(PuntoVendita pv) throws Exception;
 
-    void saveProdotto(PuntoVendita pv, Prodotto prodotto) throws SQLException;
+    void saveProdotto(PuntoVendita pv, Prodotto prodotto) throws Exception;
 
-    void saveOfferta(IOfferta offerta);
+    void saveOfferta(PuntoVendita pv, IOfferta offerta) throws Exception;
+
+    void removePuntoVendita(PuntoVendita pv) throws Exception;
+
+    void removeProdotto(Prodotto prodotto) throws  Exception;
+
+    void removeOfferta(IOfferta offerta) throws Exception;
 
 }

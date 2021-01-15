@@ -6,6 +6,10 @@ public class OffertaSemplice extends Offerta {
         super();
     }
 
+    public OffertaSemplice(String descrizione, String importo, String id) {
+        super(descrizione, importo,id);
+    }
+
     public OffertaSemplice(String descrizione, String importo) {
         super(descrizione, importo);
     }

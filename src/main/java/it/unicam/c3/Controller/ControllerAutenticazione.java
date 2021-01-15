@@ -5,15 +5,21 @@ import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
+import it.unicam.c3.Persistence.DBAccounts;
+import it.unicam.c3.Persistence.DBPuntiRitiro;
+import it.unicam.c3.Persistence.IDBAccounts;
+import it.unicam.c3.Persistence.IDBPuntiRitiro;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ControllerAutenticazione {
+    private IDBAccounts dbAccounts;
 
     //public static boolean autenticazioneAbilitata = false;
 
-    public ControllerAutenticazione(IDBAccounts dbAccounts, IDBPuntiRitiro dbPuntiRitiro ) throws SQLException {
+    public ControllerAutenticazione(IDBAccounts dbAccounts, IDBPuntiRitiro dbPuntiRitiro ) throws SQLException, SQLException {
         this.dbAccounts=dbAccounts;
         CentroCittadino.getInstance(this.dbAccounts.getCommercianti(), this.dbAccounts.getClienti(), this.dbAccounts.getCorrieri(), dbPuntiRitiro.getPuntiRitiro());
     }

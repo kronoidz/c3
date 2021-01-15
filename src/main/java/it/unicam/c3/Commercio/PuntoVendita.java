@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PuntoVendita {
     private String id;
@@ -16,12 +17,6 @@ public class PuntoVendita {
     private List<IOfferta> offerte;
 
 
-    public PuntoVendita(Commerciante commerciante) {
-        this.commerciante=commerciante;
-        prodotti = new LinkedList<>();
-        offerte=new LinkedList<>();
-        this(commerciante,"null","null","null",null);
-    }
 
     public PuntoVendita(Commerciante commerciante, String nome, String posizione, String id) {
        this.commerciante=commerciante;
@@ -32,6 +27,18 @@ public class PuntoVendita {
         if(id!=null) {
             this.id=id;
         }else this.id= UUID.randomUUID().toString();
+    }
+
+    public PuntoVendita(Commerciante commerciante, String nome, String posizione) {
+        this(commerciante,nome,posizione,null);
+    }
+
+    public void setId(String id){
+        this.id=id;
+    }
+
+    public String getId(){
+        return this.id;
     }
 
     public String getPosizione() {
@@ -66,6 +73,10 @@ public class PuntoVendita {
         this.prodotti.add(new Prodotto(descrizione, prezzo));
     }
 
+    public void addProdotto(String id, String descrizione, double prezzo) {
+        this.prodotti.add(new Prodotto(descrizione, prezzo, id));
+    }
+
     public void removeProdotto(Prodotto prodotto){
         this.prodotti.remove(prodotto);
     }
@@ -80,6 +91,10 @@ public class PuntoVendita {
 
     public void addOfferta(String descrizione, String importo) {
         this.offerte.add(new OffertaSemplice(descrizione, importo));
+    }
+
+    public void addOfferta(String id, String descrizione, String importo) {
+        this.offerte.add(new OffertaSemplice(descrizione, importo,id));
     }
 
     public void addOfferta(String descrizione, String importo, LocalDate scadenza) {

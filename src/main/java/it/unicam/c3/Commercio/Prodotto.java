@@ -14,12 +14,13 @@ public class Prodotto {
         this.descrizione = descrizione;
         this.prezzo = prezzo;
         this.disponibilita = true;
-        this.id = id;
+        if(id!=null){
+            this.id = id;
+        }else this.id= UUID.randomUUID().toString();
     }
 
     public Prodotto(String descrizione, double prezzo) {
         this(descrizione, prezzo, null);
-        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {

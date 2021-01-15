@@ -14,6 +14,7 @@ import it.unicam.c3.Ordini.StatoOrdine;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,7 +35,11 @@ public class ConsoleAccountCommerciante {
 
     public ConsoleAccountCommerciante(Commerciante commerciante) {
         this.commerciante = commerciante;
-        controller = new ControllerCommerciante(commerciante);
+        try {
+            controller = new ControllerCommerciante(commerciante);
+        } catch (SQLException exception) {
+            System.out.println("ERROR: Errore Database!");
+        }
         br = new BufferedReader(new InputStreamReader(System.in));
     }
 
@@ -205,7 +210,13 @@ public class ConsoleAccountCommerciante {
         System.out.println("[y+enter per crearlo]");
         System.out.println("[n+enter per annullare l'operaione]");
         line = br.readLine();
-        if(line.equals("y")) controller.addPuntoVendita(nameLine, positionLine);
+        if(line.equals("y")) {
+            try {
+                controller.addPuntoVendita(positionLine,nameLine);
+            } catch (Exception exception) {
+                System.out.println("ERROR: ERRORE SALVATAGGIO PUNTO VENDITA!!");
+            }
+        }
     }
 
     private void aggiungiProdotto(PuntoVendita pv) throws IOException {
@@ -218,7 +229,13 @@ public class ConsoleAccountCommerciante {
         System.out.println("[y+enter per aggiungere il prodotto]");
         System.out.println("[n+enter per annullare l'operazione]");
         line=br.readLine();
-        if(line.equals("y")) controller.addProdotto(pv,descriptionLine, Double.parseDouble(priceLine));
+        if(line.equals("y")) {
+            try {
+                controller.addProdotto(pv,descriptionLine, Double.parseDouble(priceLine));
+            } catch (Exception e) {
+                System.out.println("ERROR: ERRORE DATABASE!");
+            }
+        }
     }
 
     private void visualizzaProdotti(PuntoVendita pv){

@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 public class ControllerCommercianteTest {
     private Commerciante commerciante;
     private ControllerCommerciante controller;
@@ -22,13 +24,21 @@ public class ControllerCommercianteTest {
         commerciante.getPuntiVendita().get(1).addProdotto("Praline cioccolato bianco", 0.3);
         commerciante.getPuntiVendita().get(1).addProdotto("Torta 5 persone", 25);
 
-        controller = new ControllerCommerciante(commerciante);
+        try {
+            controller = new ControllerCommerciante(commerciante);
+        } catch (Exception exception) {
+            System.out.println("ERROR: ERRORE DATABASE!");
+        }
     }
 
     @Test
     public void testAddProdotto() {
         PuntoVendita pv = commerciante.getPuntiVendita().get(1);
-        controller.addProdotto(pv, "TEST", 999);
+        try {
+            controller.addProdotto(pv, "TEST", 999);
+        } catch (Exception e) {
+            System.out.println("ERROR: ERRORE DATABASE!");
+        }
         Assertions.assertEquals(4, pv.getProdotti().size());
         Assertions.assertEquals("TEST", pv.getProdotti().get(3).getDescrizione());
         Assertions.assertEquals(999, pv.getProdotti().get(3).getPrezzo());

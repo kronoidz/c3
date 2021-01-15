@@ -87,7 +87,7 @@ public class ConsoleAmministrazione {
 
     public void amministrazioneView() throws IOException, SQLException {
         String line;
-        if(autenticazioneAmministrazione()==true) {
+        if(autenticazioneAmministrazione()) {
             do {
                 initChoice();
                 line = br.readLine();

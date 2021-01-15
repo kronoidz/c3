@@ -5,7 +5,6 @@ import java.util.UUID;
 public class PuntoRitiro {
     private String id;
     private String indirizzo;
-    private String id = UUID.randomUUID().toString();
     private int capienza;
     private int occupati;
 
@@ -14,12 +13,13 @@ public class PuntoRitiro {
     public PuntoRitiro(String indirizzo, int capienza, String id) {
         this.indirizzo = indirizzo;
         this.capienza = capienza;
-        this.id = id;
+        if(id!=null) {
+            this.id = id;
+        } else this.id= UUID.randomUUID().toString();
     }
 
     public PuntoRitiro(String indirizzo, int capienza){
         this(indirizzo, capienza, null);
-        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
@@ -58,14 +58,6 @@ public class PuntoRitiro {
 
     public void decrementOccupati(int amount){
         this.occupati=this.occupati-amount;
-    }
-
-    public void setId(String id){
-        this.id=id;
-    }
-
-    public String getId() {
-        return id.toString();
     }
 
     public String toString(){
