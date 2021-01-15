@@ -101,10 +101,5 @@ public class ControllerAutenticazione {
                 this.dbAccounts.registerCorriere(corriere);
                 break;
         }
-        // todo: invia email verifica
-    }
-
-    public void logout() {
-        // ?
     }
 }

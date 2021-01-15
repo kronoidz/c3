@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ordine</title>
+    <style>
+        .right {
+            text-align: right;
+            padding-right: 2.5em;
+        }
+        .left {
+            text-align: left;
+        }
+        form {
+            margin-top: 2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dettagli ordine</h1>
+    <p><b>Ordine</b>: <code th:text="${ordine.id}"></code></p>
+    <p>
+        <b>Cliente</b>:
+        <th:block th:text="${ordine.cliente.nome} + ' ' + ${ordine.cliente.cognome}" />
+        (<code th:text="${ordine.cliente.email}"></code>)
+    </p>
+    <table>
+        <tr>
+            <th class="right">Prodotto</th>
+            <th class="left">Prezzo</th>
+        </tr>
+        <tr th:each="prod : ${ordine.prodotti}">
+            <td th:text="${prod.descrizione}" class="right"></td>
+            <td th:text="${prod.prezzo}"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><hr /></td>
+        </tr>
+        <tr>
+            <td><em>Totale</em></td>
+            <td><em th:text="${ordine.getPrice()}"></em></td>
+        </tr>
+    </table>
+    <form th:if="${ordine.stato.name() == 'IN_ATTESA'}"
+          action="ordine"
+          method="get">
+
+        <input type="hidden" name="id" th:value="${ordine.id}">
+
+        <label for="selPr">Punto di ritiro:</label>
+        <select id="selPr" name="puntoRitiro">
+            <option th:each="pr : ${puntiRitiro}"
+                    th:value="${pr.id}"
+                    th:text="${pr.indirizzo}"></option>
+        </select>
+        <br>
+
+        <button type="submit" value="a" name="action">Accetta</button>
+        <button type="submit" value="r" name="action">Rifiuta</button>
+    </form>
+</body>
+</html>

@@ -38,13 +38,7 @@ public class GestoreOrdini implements IGestoreOrdini{
 
     @Override
     public void addOrdine(Cliente cliente, PuntoVendita pv, List<Prodotto> prodotti) {
-        Ordine ordine = new Ordine();
-
-        ordine.setCliente(cliente);
-        ordine.setStato(StatoOrdine.IN_ATTESA);
-        ordine.setPuntoVendita(pv);
-        prodotti.forEach(ordine::addProdotto);
-
+        Ordine ordine = new Ordine(cliente, pv, prodotti);
         ordini.add(ordine);
     }
 
