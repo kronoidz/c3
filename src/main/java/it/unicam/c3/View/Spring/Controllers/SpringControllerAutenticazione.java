@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 
 @Controller
 public class SpringControllerAutenticazione {
@@ -30,24 +31,33 @@ public class SpringControllerAutenticazione {
     @PostMapping("/auth")
     public ModelAndView DoAuth(HttpSession session, Credenziali credenziali, Model model)
     {
-        ControllerAutenticazione auth = new ControllerAutenticazione();
+        ControllerAutenticazione auth = null;
+
+        try {
+            auth = new ControllerAutenticazione();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            System.out.println("ERROR: ERRORE DATABASE!");
+        }
+
 
         String email = credenziali.getEmail();
         String pwd = credenziali.getPassword();
 
         Utente utente = null;
         Object controller = null;
-
+    try {
         switch (credenziali.getTipoUtente()) {
             case "cliente":
-              utente = auth.autenticaCliente(email, pwd);
-              if (utente != null)
-                controller = new ControllerCliente((Cliente) utente);
-              break;
+                utente = auth.autenticaCliente(email, pwd);
+                if (utente != null)
+                    controller = new ControllerCliente((Cliente) utente);
+                break;
             case "commerciante":
                 utente = auth.autenticaCommerciante(email, pwd);
-                if (utente != null)
+                if (utente != null) {
                     controller = new ControllerCommerciante((Commerciante) utente);
+                }
                 break;
             case "corriere":
                 utente = auth.autenticaCorriere(email, pwd);
@@ -55,7 +65,10 @@ public class SpringControllerAutenticazione {
                     controller = new ControllerCorriere((Corriere) utente);
                 break;
         }
-
+    } catch (SQLException exception) {
+        exception.printStackTrace();
+        System.out.println("ERROR: ERRORE DATABASE!");
+    }
         if (controller == null) {
             model.addAttribute("error", "Credenziali invalide");
             return new ModelAndView("/auth", HttpStatus.UNAUTHORIZED);
