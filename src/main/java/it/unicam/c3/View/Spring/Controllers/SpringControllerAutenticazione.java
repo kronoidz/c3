@@ -12,7 +12,6 @@ import it.unicam.c3.View.Spring.FormModels.Credenziali;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,46 +28,48 @@ public class SpringControllerAutenticazione {
     }
 
     @PostMapping("/auth")
-    public ModelAndView DoAuth(HttpSession session, Credenziali credenziali, Model model)
-    {
+    public ModelAndView DoAuth(HttpSession session, Credenziali credenziali, Model model) {
         ControllerAutenticazione auth = null;
 
         try {
             auth = new ControllerAutenticazione();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            System.out.println("ERROR: ERRORE DATABASE!");
         }
-
+        catch (SQLException exception) {
+            exception.printStackTrace();
+            model.addAttribute("error", "Errore database");
+            return new ModelAndView("/auth", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
         String email = credenziali.getEmail();
         String pwd = credenziali.getPassword();
 
         Utente utente = null;
         Object controller = null;
-    try {
-        switch (credenziali.getTipoUtente()) {
-            case "cliente":
-                utente = auth.autenticaCliente(email, pwd);
-                if (utente != null)
-                    controller = new ControllerCliente((Cliente) utente);
-                break;
-            case "commerciante":
-                utente = auth.autenticaCommerciante(email, pwd);
-                if (utente != null) {
-                    controller = new ControllerCommerciante((Commerciante) utente);
-                }
-                break;
-            case "corriere":
-                utente = auth.autenticaCorriere(email, pwd);
-                if (utente != null)
-                    controller = new ControllerCorriere((Corriere) utente);
-                break;
+        try {
+            switch (credenziali.getTipoUtente()) {
+                case "cliente":
+                    utente = auth.autenticaCliente(email, pwd);
+                    if (utente != null)
+                        controller = new ControllerCliente((Cliente) utente);
+                    break;
+                case "commerciante":
+                    utente = auth.autenticaCommerciante(email, pwd);
+                    if (utente != null) {
+                        controller = new ControllerCommerciante((Commerciante) utente);
+                    }
+                    break;
+                case "corriere":
+                    utente = auth.autenticaCorriere(email, pwd);
+                    if (utente != null)
+                        controller = new ControllerCorriere((Corriere) utente);
+                    break;
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            model.addAttribute("error", "Errore database");
+            return new ModelAndView("/auth", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    } catch (SQLException exception) {
-        exception.printStackTrace();
-        System.out.println("ERROR: ERRORE DATABASE!");
-    }
+
         if (controller == null) {
             model.addAttribute("error", "Credenziali invalide");
             return new ModelAndView("/auth", HttpStatus.UNAUTHORIZED);
