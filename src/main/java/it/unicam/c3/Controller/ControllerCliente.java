@@ -12,17 +12,26 @@ import it.unicam.c3.Consegne.StatoConsegna;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.Ordini.Ordine;
 import it.unicam.c3.Ordini.StatoOrdine;
+import it.unicam.c3.Persistence.DBCliente;
+import it.unicam.c3.Persistence.IDBCliente;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ControllerCliente {
     private Cliente cliente;
     private Map<PuntoVendita, List<Prodotto>> carrello;
+    private IDBCliente database;
 
-    public ControllerCliente(Cliente cliente) {
+    public ControllerCliente(Cliente cliente) throws SQLException {
+       this(cliente, new DBCliente());
+    }
+
+    public ControllerCliente(Cliente cliente, IDBCliente persistence){
         this.cliente = cliente;
         this.carrello = new HashMap<>();
+        this.database=persistence;
     }
 
     /**
@@ -104,9 +113,10 @@ public class ControllerCliente {
     /**
      * Crea un ordine con i prodotti presenti nel carrello
      */
-    public void ordinaProdotti() {
+    public void ordinaProdotti() throws Exception {
         for (PuntoVendita pv : carrello.keySet()) {
             GestoreOrdini.getInstance().addOrdine(this.cliente, pv, carrello.get(pv));
+            database.saveOrdine(GestoreOrdini.getInstance().getOrdini(this.cliente).get(GestoreOrdini.getInstance().getOrdini(this.cliente).size()-1));
         }
         carrello.clear();
     }

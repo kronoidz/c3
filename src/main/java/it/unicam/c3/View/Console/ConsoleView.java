@@ -5,6 +5,7 @@ import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Controller.ControllerAutenticazione;
+import it.unicam.c3.Controller.ControllerGestore;
 import it.unicam.c3.View.View;
 
 import javax.mail.MessagingException;
@@ -22,54 +23,25 @@ public class ConsoleView implements View {
     private static final String LOGIN="2";
     private static final String CLOSE_APPLICATION="exit";
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    private ControllerAutenticazione controller;
+    private ControllerAutenticazione controllerAutenticazione;
+    private ControllerGestore controllerGestore;
     ConsoleAccountCliente clienteView;
     ConsoleAccountCorriere corriereView;
     ConsoleAccountCommerciante commercianteView;
     ConsoleAmministrazione amministrazioneView;
 
-    //////////TODO: OGGETTI TEST CONSOLE !!
-   private Cliente cliente = new Cliente("Lorenzo","Serini","lorenzose.1995@gmail.com","prova");
-   private Corriere corriere = new Corriere("Jhon","Doe","jn@gmail.com","prova");
-   private Commerciante commerciante = new Commerciante("Alessandro", "Pecugi", "alessandro.pecugi@gmail.com", "ciao");
-
-
     public ConsoleView() throws SQLException {
-        controller= new ControllerAutenticazione();
+        controllerAutenticazione= new ControllerAutenticazione();
+        controllerGestore=new ControllerGestore();
     }
 
     @Override
     public void start() throws IOException, MessagingException, SQLException {
-        ///////////// TODO: AGGIUNTA DA FAR FARE DURANTE LA REGISTRAZIONE (DA ELIMINARE QUI)!!
-        CentroCittadino.getInstance().addCommerciante(commerciante);
-        CentroCittadino.getInstance().addCliente(cliente);
-        CentroCittadino.getInstance().addCorriere(corriere);
-        ///////////////////////////
         String line;
         do {
             choiceInit();
             line= br.readLine();
-            switch(line){
-                case ACCOUNT_CLIENTE:
-                    choiceLoginOrRegistration(ACCOUNT_CLIENTE);
-                    clienteView = new ConsoleAccountCliente(cliente);
-                    clienteView.clienteView();
-                    break;
-                case ACCOUNT_COMMERCIANTE:
-                    choiceLoginOrRegistration(ACCOUNT_COMMERCIANTE);
-                    commercianteView = new ConsoleAccountCommerciante(commerciante);
-                    commercianteView.commercianteView();
-                    break;
-                case ACCOUNT_CORRIERE:
-                    choiceLoginOrRegistration(ACCOUNT_CORRIERE);
-                    corriereView=new ConsoleAccountCorriere(corriere);
-                    corriereView.corriereView();
-                    break;
-                case AMMINISTRAZIONE:
-                    amministrazioneView = new ConsoleAmministrazione();
-                    amministrazioneView.amministrazioneView();
-                    break;
-            }
+            choiceLoginOrRegistration(line);
         }while(!line.equals(CLOSE_APPLICATION));
         br.close();
     }
@@ -83,52 +55,96 @@ public class ConsoleView implements View {
         System.out.println("\n"+CLOSE_APPLICATION+") CLOSE APPLICATION");
     }
 
-    private void choiceLoginOrRegistration(String tipo) throws IOException, SQLException {
+    private void choiceLoginOrRegistration(String tipo) throws IOException, SQLException, MessagingException {
         String line;
         System.out.println(REGISTRAZIONE + ") Registrazione");
         System.out.println(LOGIN + ") Login");
         line = br.readLine();
         switch (line) {
             case REGISTRAZIONE:
-                System.out.println("Inserisci nome:");
-                String name = br.readLine();
-                System.out.println("Inserisci cognome:");
-                String cognome = br.readLine();
-                System.out.println("Inserisci una e-mail:");
-                String mail = br.readLine();
-                System.out.println("Inserisci una password:");
-                String password = br.readLine();
-                switch (tipo) {
-                    case ACCOUNT_CLIENTE:
-                        this.controller.registra(name, cognome, mail, password, ControllerAutenticazione.TipoUtente.CLIENTE);
-                        break;
-                    case ACCOUNT_COMMERCIANTE:
-                        this.controller.registra(name, cognome, mail, password, ControllerAutenticazione.TipoUtente.COMMERCIANTE);
-                        break;
-                    case ACCOUNT_CORRIERE:
-                        this.controller.registra(name, cognome, mail, password, ControllerAutenticazione.TipoUtente.CORRIERE);
-                        break;
-                }
+                registration(tipo);
                 break;
             case LOGIN:
                 System.out.println("Inserisci una e-mail:");
                 String email = br.readLine();
                 System.out.println("Inserisci una password:");
-                String key = br.readLine();
+                String password = br.readLine();
                 switch (tipo) {
                     case ACCOUNT_CLIENTE:
-                        this.controller.autenticaCliente(email, key);
+                        if(this.autenticaCliente(email, password)!=null){
+                            clienteView = new ConsoleAccountCliente(this.autenticaCliente(email,password));
+                            clienteView.clienteView();
+                        }else System.out.println("AUTENTICAZIONE FALLITA!");
                         break;
                     case ACCOUNT_COMMERCIANTE:
-                        this.controller.autenticaCommerciante(email, key);
+                        if(this.autenticaCommerciante(email, password)!=null){
+                            commercianteView = new ConsoleAccountCommerciante(this.autenticaCommerciante(email,password));
+                            commercianteView.commercianteView();
+                        }else System.out.println("AUTENTICAZIONE FALLITA!");
                         break;
                     case ACCOUNT_CORRIERE:
-                        this.controller.autenticaCorriere(email, key);
+                        if(this.autenticaCorriere(email, password)!=null){
+                            corriereView = new ConsoleAccountCorriere(this.autenticaCorriere(email,password));
+                            corriereView.corriereView();
+                        }else System.out.println("AUTENTICAZIONE FALLITA!");
                         break;
+                  /*  case AMMINISTRAZIONE:
+                        if(controllerGestore.autorizza()){
+                            corriereView = new ConsoleAccountCorriere(this.autenticaCorriere(email,password));
+                            corriereView.corriereView();
+                        }else System.out.println("AUTENTICAZIONE FALLITA!");
+                        break; *///TODO: LOGIN AMMINISTRAZIONE !!!
                 }
                 break;
 
         }
+    }
+
+    private void registration(String tipo) {
+        String name;
+        String cognome;
+        String mail;
+        String password;
+        try {
+            System.out.println("Inserisci nome:");
+            name = br.readLine();
+            System.out.println("Inserisci cognome:");
+            cognome = br.readLine();
+            System.out.println("Inserisci una e-mail:");
+            mail = br.readLine();
+            System.out.println("Inserisci una password:");
+            password = br.readLine();
+            try {
+                switch (tipo) {
+                    case ACCOUNT_CLIENTE:
+                        this.controllerAutenticazione.registra(name, cognome, mail, password, ControllerAutenticazione.TipoUtente.CLIENTE);
+                        break;
+                    case ACCOUNT_COMMERCIANTE:
+                        this.controllerAutenticazione.registra(name, cognome, mail, password, ControllerAutenticazione.TipoUtente.COMMERCIANTE);
+                        break;
+                    case ACCOUNT_CORRIERE:
+                        this.controllerAutenticazione.registra(name, cognome, mail, password, ControllerAutenticazione.TipoUtente.CORRIERE);
+                        break;
+                }
+            }catch (SQLException e){
+                System.out.println("ERROR: ERRORE DATABASE!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private Cliente autenticaCliente(String email, String password){
+       return this.controllerAutenticazione.autenticaCliente(email, password);
+    }
+
+    private Commerciante autenticaCommerciante(String email, String password){
+        return this.controllerAutenticazione.autenticaCommerciante(email,password);
+    }
+
+    private Corriere autenticaCorriere(String email, String password){
+        return this.controllerAutenticazione.autenticaCorriere(email,password);
     }
 
 

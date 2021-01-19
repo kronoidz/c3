@@ -10,24 +10,24 @@ import java.util.UUID;
 
 public class Ordine {
     private String id;
-    private StatoOrdine stato = StatoOrdine.IN_ATTESA;
+    private StatoOrdine stato;
     private Cliente clienteOrdinante;
     private PuntoVendita pv;
     private List<Prodotto> prodotti = new LinkedList<>();
 
     public Ordine() { }
 
-    public Ordine(Cliente clienteOrdinante, PuntoVendita pv, List<Prodotto> prodotti, String id) {
+    public Ordine(Cliente clienteOrdinante, PuntoVendita pv, List<Prodotto> prodotti, String id, StatoOrdine stato) {
         this.clienteOrdinante = clienteOrdinante;
         this.pv = pv;
-        this.prodotti.addAll(prodotti);
-
+        this.stato=stato;
+        if(prodotti!=null)  this.prodotti = prodotti;
         if (id == null) this.id = UUID.randomUUID().toString();
         else this.id = id;
     }
 
     public Ordine(Cliente clienteOrdinante, PuntoVendita pv, List<Prodotto> prodotti) {
-        this(clienteOrdinante, pv, prodotti, null);
+        this(clienteOrdinante, pv, prodotti, null, StatoOrdine.IN_ATTESA);
     }
 
     public String getId() {

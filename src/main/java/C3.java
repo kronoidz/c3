@@ -6,11 +6,9 @@ import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Commercio.PuntoVendita;
 import it.unicam.c3.Consegne.GestoreConsegne;
-import it.unicam.c3.Controller.ControllerAutenticazione;
-import it.unicam.c3.Controller.ControllerCommerciante;
-import it.unicam.c3.Controller.ControllerCorriere;
-import it.unicam.c3.Controller.ControllerGestore;
+import it.unicam.c3.Controller.*;
 import it.unicam.c3.Ordini.GestoreOrdini;
+import it.unicam.c3.Persistence.DBAccounts;
 import it.unicam.c3.Persistence.DBCommerciante;
 import it.unicam.c3.View.Console.ConsoleView;
 import it.unicam.c3.View.Spring.SpringView;
@@ -33,19 +31,30 @@ public class C3 {
 
         // proto1();
 
-        // View consoleView = new ConsoleView();
-        // consoleView.start();
+
+
+         View consoleView = new ConsoleView();
+         consoleView.start();
+
+
 
        // View springView = new SpringView();
        // springView.start();
 
-        ControllerAutenticazione ca = new ControllerAutenticazione();
+    //    ControllerAutenticazione ca = new ControllerAutenticazione();
 
        //ca.registra("Alessandro","Pecugi", "alessandro@gmail.com","Prova", ControllerAutenticazione.TipoUtente.COMMERCIANTE);
-        Commerciante commercianteAutenticato = ca.autenticaCommerciante("lorenzose.1995@gmail.com","prova");
+       //Commerciante commercianteAutenticato = ca.autenticaCommerciante("lorenzose.1995@gmail.com","prova");
+    //   Commerciante commercianteAutenticato = ca.autenticaCommerciante("alessandro@gmail.com","Prova");
 
-        ControllerCommerciante controller = new ControllerCommerciante(commercianteAutenticato);
+    //    ControllerCommerciante controller = new ControllerCommerciante(commercianteAutenticato);
 
+        //controller.addPuntoVendita("Via Acquevive,35","Punto Ale");
+     //   System.out.println(controller.getPuntiVendita().size());
+        /*
+        System.out.println(controller.getPuntiVendita().get(0).getId());
+        System.out.println(controller.getPuntiVendita().get(0).getNome());
+        System.out.println(controller.getPuntiVendita().get(0).getPosizione());*/
         //controller.addPuntoVendita("PROVA","PROVAAAAA");
 
        // View view = new ConsoleView();
