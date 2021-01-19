@@ -2,6 +2,7 @@ package it.unicam.c3.View.Spring.Controllers;
 
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Citta.CentroCittadino;
+import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Commercio.*;
 import it.unicam.c3.Controller.ControllerCommerciante;
 import it.unicam.c3.Ordini.GestoreOrdini;
@@ -18,7 +19,9 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -48,36 +51,6 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 controller.getOrdini(StatoOrdine.IN_ATTESA));
 
         return new ModelAndView("/commerciante/home");
-    }
-
-    @GetMapping("ordine")
-    public ModelAndView getOrdine (HttpSession session,
-                                   Model model,
-                                   @RequestParam("id") String id)
-    {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
-
-        List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
-        Ordine ordine = ordini.stream()
-                .filter(o -> o.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-
-        if (ordine == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
-
-        model.addAttribute("ordine", ordine);
-
-        if (ordine.getStato() == StatoOrdine.IN_ATTESA) {
-            model.addAttribute("puntiRitiro", CentroCittadino.getInstance()
-                    .getPuntiRitiro()
-                    .stream()
-                    .filter(puntoRitiro -> puntoRitiro.getSlotDisponibili() > 0)
-                    .collect(Collectors.toList()));
-        }
-
-        return new ModelAndView("/commerciante/ordine");
     }
 
     @GetMapping("puntoVendita")
@@ -332,5 +305,102 @@ public class SpringControllerCommerciante extends SpringControllerBase {
         }
 
         return new ModelAndView("redirect:/commerciante/puntoVendita?id=" + idPuntoVendita);
+    }
+
+    @GetMapping("ordini")
+    public ModelAndView getOrdini (HttpSession session,
+                                   Model model,
+                                   @RequestParam(value = "stato", required = false) String stato)
+    {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        List<Ordine> ordini;
+
+        if (stato != null && !stato.isEmpty()) {
+            ordini = controller.getOrdini(StatoOrdine.valueOf(stato));
+        }
+        else ordini = controller.getOrdini();
+
+        model.addAttribute("ordini", ordini);
+        return new ModelAndView("/commerciante/ordini");
+    }
+
+    @GetMapping("ordine")
+    public ModelAndView getOrdine (HttpSession session,
+                                   Model model,
+                                   @RequestParam("id") String id)
+    {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
+        Ordine ordine = ordini.stream()
+                .filter(o -> o.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (ordine == null)
+            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+
+        model.addAttribute("ordine", ordine);
+
+        if (ordine.getStato() == StatoOrdine.IN_ATTESA) {
+            model.addAttribute("puntiRitiro", controller.getPuntiRitiroDisponibili());
+        }
+
+        return new ModelAndView("/commerciante/ordine");
+    }
+
+    @GetMapping("ordine/accetta")
+    public ModelAndView accettaOrdine(HttpSession session,
+                                      Model model,
+                                      @RequestParam("id") String id,
+                                      @RequestParam("idPuntoRitiro") String idPuntoRitiro)
+    {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
+        Ordine ordine = ordini.stream()
+                .filter(o -> o.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (ordine == null)
+            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+
+        PuntoRitiro puntoRitiro = CentroCittadino.getInstance().getPuntiRitiro()
+                .stream()
+                .filter(pr -> pr.getId().equals(idPuntoRitiro))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoRitiro == null)
+            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+
+        controller.accettaOrdine(ordine, puntoRitiro);
+        return new ModelAndView("redirect:/commerciante/ordine?id=" + ordine.getId());
+    }
+
+    @GetMapping("ordine/rifiuta")
+    public ModelAndView rifiutaOrdine(HttpSession session,
+                                      Model model,
+                                      @RequestParam("id") String id)
+    {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
+        Ordine ordine = ordini.stream()
+                .filter(o -> o.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (ordine == null)
+            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+
+        controller.rifiutaOrdine(ordine);
+        return new ModelAndView("redirect:/commerciante/ordine?id=" + ordine.getId());
     }
 }

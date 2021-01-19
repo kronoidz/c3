@@ -18,12 +18,17 @@
     </style>
 </head>
 <body>
+    <a href="/commerciante">Home</a> | <a href="/commerciante/ordini">Tutti gli ordini</a>
     <h1>Dettagli ordine</h1>
     <p><b>Ordine</b>: <code th:text="${ordine.id}"></code></p>
     <p>
         <b>Cliente</b>:
         <th:block th:text="${ordine.cliente.nome} + ' ' + ${ordine.cliente.cognome}" />
         (<code th:text="${ordine.cliente.email}"></code>)
+    </p>
+    <p>
+        <b>Stato ordine</b>:
+        <code th:text="${ordine.stato.name()}"></code>
     </p>
     <table>
         <tr>
@@ -42,23 +47,22 @@
             <td><em th:text="${ordine.getPrice()}"></em></td>
         </tr>
     </table>
-    <!-- FIXME this form is completely wrong -->
-    <form th:if="${ordine.stato.name() == 'IN_ATTESA'}"
-          action="ordine"
-          method="get">
+    <th:block th:if="${ordine.stato.name() == 'IN_ATTESA'}">
+        <form action="/commerciante/ordine/accetta"
+              method="get">
 
-        <input type="hidden" name="id" th:value="${ordine.id}">
+            <input type="hidden" name="id" th:value="${ordine.id}">
 
-        <label for="selPr">Punto di ritiro:</label>
-        <select id="selPr" name="puntoRitiro">
-            <option th:each="pr : ${puntiRitiro}"
-                    th:value="${pr.id}"
-                    th:text="${pr.indirizzo}"></option>
-        </select>
-        <br>
+            <label for="selPr">Punto di ritiro:</label>
+            <select id="selPr" name="idPuntoRitiro">
+                <option th:each="pr : ${puntiRitiro}"
+                        th:value="${pr.id}"
+                        th:text="${pr.indirizzo}"></option>
+            </select>
 
-        <button type="submit" value="a" name="action">Accetta</button>
-        <button type="submit" value="r" name="action">Rifiuta</button>
-    </form>
+            <button type="submit">Accetta ordine</button>
+        </form>
+        <a th:href="@{/commerciante/ordine/rifiuta(id=${ordine.id})}">Rifiuta ordine</a>
+    </th:block>
 </body>
 </html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ordini</title>
+    <style>
+        table {
+            margin-top: 2em;
+        }
+        td {
+            padding: 0 2em;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+<a href="/commerciante">Home</a>
+<h1>Ordini</h1>
+<form action="/commerciante/ordini" method="get">
+    <label for="filtro">Stato:</label>
+    <select name="stato" id="filtro">
+        <option value="IN_ATTESA">In attesa</option>
+        <option value="ACCETTATO">Accettato</option>
+        <option value="RIFIUTATO">Rifiutato</option>
+        <option value="TERMINATO">Terminato</option>
+    </select>
+    <input type="submit" value="Applica filtro">
+</form>
+<table>
+    <thead>
+    <tr>
+        <th>Cliente</th>
+        <th>Stato</th>
+        <th>Numero prodotti</th>
+        <th>Punto vendita</th>
+        <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ordine : ${ordini}">
+        <td th:text="${ordine.cliente.nome} + ' ' +  ${ordine.cliente.cognome}"></td>
+        <td th:text="${ordine.stato}"></td>
+        <td th:text="${ordine.prodotti.size()}"></td>
+        <td th:text="${ordine.puntoVendita.nome}"></td>
+        <td>
+            <a th:href="@{'/commerciante/ordine'(id=${ordine.id})}">Vedi</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
