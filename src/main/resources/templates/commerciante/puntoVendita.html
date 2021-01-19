@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Punto vendita</title>
+    <style>
+        .error {
+            color: red;
+        }
+        td {
+            padding: 0 2em;
+            font-family: sans-serif;
+        }
+        .muted {
+            color: gray;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <a href="/commerciante">Home</a>
+
+    <h1 th:text="${puntoVendita.nome}"></h1>
+    <p><b>Codice punto vendita:</b> <code th:text="${puntoVendita.id}"></code></p>
+    <p>Situato in: <th:block th:text="${puntoVendita.posizione}"/></p>
+
+    <p>
+        <a th:href="@{'/commerciante/puntoVendita/elimina'(id=${puntoVendita.id})}">
+            Elimina punto vendita
+        </a>
+        |
+        <a th:href="@{'/commerciante/puntoVendita/aggiungiProdotto'(idPuntoVendita=${puntoVendita.id})}">
+            Aggiungi prodotto
+        </a>
+    </p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Prodotto</th>
+            <th>Prezzo</th>
+            <th>Disponibile</th>
+            <th>Azioni</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${puntoVendita.prodotti}" th:class="${p.disponibilita} ? '' : muted">
+            <td th:text="${p.descrizione}"></td>
+            <td th:text="'€ ' + ${p.prezzo}"></td>
+            <td th:text="${p.disponibilita} ? 'sì' : 'no'"></td>
+            <td>
+                <a th:href="@{'/commerciante/puntoVendita/eliminaProdotto'(idPuntoVendita=${puntoVendita.id},idProdotto=${p.id})}">
+                    Elimina
+                </a>
+                |
+                <a th:href="@{'/commerciante/puntoVendita/cambiaDisponibilita'(idPuntoVendita=${puntoVendita.id},idProdotto=${p.id})}"
+                   th:text="${p.disponibilita} ? 'Imposta non disponibile' : 'Imposta disponibile'">
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

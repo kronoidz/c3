@@ -8,13 +8,12 @@ import it.unicam.c3.Controller.ControllerAutenticazione;
 import it.unicam.c3.Controller.ControllerCliente;
 import it.unicam.c3.Controller.ControllerCommerciante;
 import it.unicam.c3.Controller.ControllerCorriere;
-import it.unicam.c3.View.Spring.FormModels.Credenziali;
-import it.unicam.c3.View.Spring.FormModels.DatiRegistrazione;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -23,16 +22,18 @@ import java.sql.SQLException;
 @Controller
 public class SpringControllerAutenticazione {
 
-    private static final String TEMPLATE_AUTH = "auth";
-    private static final String TEMPLATE_REG = "registrazione";
-
-    @GetMapping("/auth")
-    public String GetAuthForm() {
+    @GetMapping("auth")
+    public String getAuth() {
         return "auth";
     }
 
-    @PostMapping("/auth")
-    public ModelAndView DoAuth(HttpSession session, Credenziali credenziali, Model model) {
+    @PostMapping("auth")
+    public ModelAndView doAuth (HttpSession session,
+                                Model model,
+                                @RequestParam("email") String email,
+                                @RequestParam("password") String password,
+                                @RequestParam("tipoUtente") String tipoUtente)
+    {
         ControllerAutenticazione auth = null;
 
         try {
@@ -41,29 +42,26 @@ public class SpringControllerAutenticazione {
         catch (SQLException exception) {
             exception.printStackTrace();
             model.addAttribute("error", "Errore database");
-            return new ModelAndView(TEMPLATE_AUTH, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ModelAndView("/auth", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        String email = credenziali.getEmail();
-        String pwd = credenziali.getPassword();
 
         Utente utente = null;
         Object controller = null;
         try {
-            switch (credenziali.getTipoUtente()) {
+            switch (tipoUtente) {
                 case "cliente":
-                    utente = auth.autenticaCliente(email, pwd);
+                    utente = auth.autenticaCliente(email, password);
                     if (utente != null)
                         controller = new ControllerCliente((Cliente) utente);
                     break;
                 case "commerciante":
-                    utente = auth.autenticaCommerciante(email, pwd);
+                    utente = auth.autenticaCommerciante(email, password);
                     if (utente != null) {
                         controller = new ControllerCommerciante((Commerciante) utente);
                     }
                     break;
                 case "corriere":
-                    utente = auth.autenticaCorriere(email, pwd);
+                    utente = auth.autenticaCorriere(email, password);
                     if (utente != null)
                         controller = new ControllerCorriere((Corriere) utente);
                     break;
@@ -71,25 +69,31 @@ public class SpringControllerAutenticazione {
         } catch (SQLException exception) {
             exception.printStackTrace();
             model.addAttribute("error", "Errore database");
-            return new ModelAndView(TEMPLATE_AUTH, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ModelAndView("/auth", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (controller == null) {
             model.addAttribute("error", "Credenziali invalide");
-            return new ModelAndView(TEMPLATE_AUTH, HttpStatus.UNAUTHORIZED);
+            return new ModelAndView("/auth", HttpStatus.UNAUTHORIZED);
         }
 
         session.setAttribute("utente", utente);
         session.setAttribute("controller", controller);
 
-        return new ModelAndView("redirect:/" + credenziali.getTipoUtente());
+        return new ModelAndView("redirect:/" + tipoUtente);
     }
 
     @GetMapping("/registra")
-    public String getRegistra() { return TEMPLATE_REG; }
+    public String getRegistra() { return "/registrazione"; }
 
     @PostMapping("/registra")
-    public ModelAndView postRegistra(Model model, DatiRegistrazione data) {
+    public ModelAndView postRegistra (Model model,
+                                      @RequestParam("nome") String nome,
+                                      @RequestParam("cognome") String cognome,
+                                      @RequestParam("email") String email,
+                                      @RequestParam("password") String password,
+                                      @RequestParam("tipoUtente") String tipoUtente)
+    {
         ControllerAutenticazione auth = null;
 
         try {
@@ -98,12 +102,12 @@ public class SpringControllerAutenticazione {
         catch (SQLException exception) {
             exception.printStackTrace();
             model.addAttribute("error", "Errore database");
-            return new ModelAndView(TEMPLATE_REG, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ModelAndView("/registrazione", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         ControllerAutenticazione.TipoUtente tipo;
 
-        switch (data.getTipoUtente()) {
+        switch (tipoUtente) {
             case "cliente":
                 tipo = ControllerAutenticazione.TipoUtente.CLIENTE;
                 break;
@@ -115,24 +119,23 @@ public class SpringControllerAutenticazione {
                 break;
             default:
                 model.addAttribute("error", "Tipo utente non valido");
-                return new ModelAndView(TEMPLATE_REG, HttpStatus.BAD_REQUEST);
+                return new ModelAndView("/registrazione", HttpStatus.BAD_REQUEST);
         }
 
         try {
-            auth.registra ( data.getNome(),
-                            data.getCognome(),
-                            data.getEmail(),
-                            data.getPassword(),
+            auth.registra ( nome,
+                            cognome,
+                            email,
+                            password,
                             tipo );
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             model.addAttribute("error", "Errore database");
-            return new ModelAndView(TEMPLATE_REG, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ModelAndView("/registrazione", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         model.addAttribute("success",
-                String.format("Utente %s %s iscritto",
-                        data.getNome(), data.getCognome()));
-        return new ModelAndView(TEMPLATE_REG);
+                String.format("Utente %s %s iscritto", nome, cognome));
+        return new ModelAndView("/registrazione");
     }
 }
