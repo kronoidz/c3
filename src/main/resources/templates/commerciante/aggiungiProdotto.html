@@ -18,6 +18,9 @@
     </style>
 </head>
 <body>
+    <a href="/commerciante">Home</a> /
+    <a th:href="@{'/commerciante/puntoVendita'(id=${puntoVendita.id})}">Punto vendita</a>
+
     <h1>Aggiungi prodotto</h1>
     <p>Aggiungi nel punto vendita: <th:block th:text="${puntoVendita.nome}"/></p>
     <form action="/commerciante/puntoVendita/aggiungiProdotto" method="post">

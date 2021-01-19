@@ -2,12 +2,12 @@ package it.unicam.c3.View.Spring.Controllers;
 
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Citta.CentroCittadino;
-import it.unicam.c3.Commercio.Prodotto;
-import it.unicam.c3.Commercio.PuntoVendita;
+import it.unicam.c3.Commercio.*;
 import it.unicam.c3.Controller.ControllerCommerciante;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.Ordini.Ordine;
 import it.unicam.c3.Ordini.StatoOrdine;
+import it.unicam.c3.View.Spring.OffertaGenerica;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -96,6 +98,24 @@ public class SpringControllerCommerciante extends SpringControllerBase {
             return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
 
         model.addAttribute("puntoVendita", puntoVendita);
+        List<OffertaGenerica> offerte = puntoVendita.getOfferte()
+                .stream()
+                .filter(o -> !
+                            (o instanceof OffertaATempo &&
+                            ((OffertaATempo) o).getScadenza().isBefore(LocalDate.now()))
+                ) // (non è scaduta)
+                .map(o -> {
+                    OffertaGenerica res = new OffertaGenerica();
+                    res.setId(o.getId());
+                    res.setDescrizione(o.getDescrizione());
+                    res.setImporto(o.getImporto());
+                    if (o instanceof OffertaATempo) {
+                        res.setScadenza(((OffertaATempo) o).getScadenza());
+                    }
+                    return res;
+                })
+                .collect(Collectors.toList());
+        model.addAttribute("offerte", offerte);
         return new ModelAndView("/commerciante/puntoVendita");
     }
 
@@ -229,6 +249,88 @@ public class SpringControllerCommerciante extends SpringControllerBase {
             return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
 
         puntoVendita.addProdotto(nome, prezzo);
+        return new ModelAndView("redirect:/commerciante/puntoVendita?id=" + idPuntoVendita);
+    }
+
+    @GetMapping("puntoVendita/eliminaOfferta")
+    public ModelAndView eliminaOfferta   (HttpSession session,
+                                          @RequestParam("idPuntoVendita") String idPuntoVendita,
+                                          @RequestParam("idOfferta") String idOfferta)
+    {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(idPuntoVendita))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoVendita == null)
+            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+
+        IOfferta offerta = puntoVendita.getOfferte()
+                .stream()
+                .filter(o -> o.getId().equals(idOfferta))
+                .findFirst()
+                .orElse(null);
+
+        if (offerta == null)
+            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+
+        puntoVendita.getOfferte().remove(offerta);
+        return new ModelAndView("redirect:/commerciante/puntoVendita?id=" + idPuntoVendita);
+    }
+
+    @GetMapping("puntoVendita/aggiungiOfferta")
+    public ModelAndView getAggiungiOfferta  (HttpSession session,
+                                             Model model,
+                                             @RequestParam("idPuntoVendita") String idPuntoVendita)
+    {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(idPuntoVendita))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoVendita == null)
+            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+
+        model.addAttribute("puntoVendita", puntoVendita);
+        return new ModelAndView("/commerciante/aggiungiOfferta");
+    }
+
+    @PostMapping("puntoVendita/aggiungiOfferta")
+    public ModelAndView doAggiungiOfferta  (HttpSession session,
+                                            Model model,
+                                            @RequestParam("idPuntoVendita") String idPuntoVendita,
+                                            @RequestParam("descrizione") String descrizione,
+                                            @RequestParam("importo") String importo,
+                                            @RequestParam(value = "scadenza", required = false) String scadenza)
+    {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(idPuntoVendita))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoVendita == null)
+            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+
+        if (scadenza != null && !scadenza.isEmpty()) {
+            LocalDate date = LocalDate.parse(scadenza, DateTimeFormatter.ISO_DATE_TIME);
+            puntoVendita.addOfferta(descrizione, importo, date);
+        }
+        else {
+            puntoVendita.addOfferta(descrizione, importo);
+        }
+
         return new ModelAndView("redirect:/commerciante/puntoVendita?id=" + idPuntoVendita);
     }
 }

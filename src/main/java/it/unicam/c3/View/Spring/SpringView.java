@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import it.unicam.c3.Anagrafica.Commerciante;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootApplication
@@ -40,6 +41,7 @@ public class SpringView implements View {
         }
 
         pvs.get(0).addOfferta("Descrizione offerta", "-10%");
+        pvs.get(0).addOfferta("Descrizione offerta", "-10%", LocalDate.now().plusDays(7));
     }
 
 }

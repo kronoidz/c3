@@ -5,8 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Punto vendita</title>
     <style>
-        .error {
-            color: red;
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .card {
+            min-width: 10em;
+            margin: .8em;
+        }
+        .card-text {
+            margin: .4em;
+        }
+        .card-details {
+            font-size: .8em;
+            font-family: sans-serif;
+            margin: .4em;
         }
         td {
             padding: 0 2em;
@@ -26,14 +39,41 @@
     <p>Situato in: <th:block th:text="${puntoVendita.posizione}"/></p>
 
     <p>
-        <a th:href="@{'/commerciante/puntoVendita/elimina'(id=${puntoVendita.id})}">
+        <a th:href="@{'/commerciante/puntoVendita/elimina'(id=${puntoVendita.id})}"
+           onclick="return confirm('Eliminare il punto vendita?')">
             Elimina punto vendita
         </a>
         |
         <a th:href="@{'/commerciante/puntoVendita/aggiungiProdotto'(idPuntoVendita=${puntoVendita.id})}">
             Aggiungi prodotto
         </a>
+        |
+        <a th:href="@{'/commerciante/puntoVendita/aggiungiOfferta'(idPuntoVendita=${puntoVendita.id})}">
+            Aggiungi offerta
+        </a>
     </p>
+
+    <h3>Offerte</h3>
+    <div class="card-container">
+        <div class="card" th:each="offerta : ${offerte}">
+            <p class="card-text" th:text="${offerta.descrizione}"></p>
+            <code class="card-text" th:text="${offerta.importo}"></code>
+            <p class="card-details" th:if="${offerta.scadenza != null}">
+                Scade il
+                <th:block th:text="${offerta.scadenza}"/>
+            </p>
+            <p class="card-details">
+                <a th:href="@{'/commerciante/puntoVendita/eliminaOfferta'(idPuntoVendita=${puntoVendita.id},idOfferta=${offerta.id})}"
+                    onclick="return confirm('Eliminare l\'offerta?')">
+                    Elimina
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <hr>
+
+    <h3>Prodotti</h3>
 
     <table>
         <thead>
@@ -50,7 +90,8 @@
             <td th:text="'€ ' + ${p.prezzo}"></td>
             <td th:text="${p.disponibilita} ? 'sì' : 'no'"></td>
             <td>
-                <a th:href="@{'/commerciante/puntoVendita/eliminaProdotto'(idPuntoVendita=${puntoVendita.id},idProdotto=${p.id})}">
+                <a th:href="@{'/commerciante/puntoVendita/eliminaProdotto'(idPuntoVendita=${puntoVendita.id},idProdotto=${p.id})}"
+                    onclick="return confirm('Eliminare prodotto dal punto vendita?')">
                     Elimina
                 </a>
                 |
