@@ -46,6 +46,10 @@
         .error {
             color: red;
         }
+
+        .success {
+            color: green;
+        }
     </style>
 </head>
 <script>
@@ -58,7 +62,7 @@
 <body>
 <h2>C3</h2>
 <h3>Registrazione</h3>
-<form action="/auth" method="post" onsubmit="return clientValidate();">
+<form action="/registra" method="post" onsubmit="return clientValidate();">
     <label for="nome">Nome</label>
     <input id="nome" name="nome" type="text" placeholder="Mario" required>
 
@@ -83,9 +87,10 @@
         </select>
     </div>
 
-    <input type="submit" value="Accedi">
+    <input type="submit" value="Registra utente">
 </form>
-<a href="/registrazione">Registrati</a>
+<p>Hai già un account? <a href="/auth">Accedi</a></p>
+<p th:text="${success}" class="success"></p>
 <p th:text="${error}" class="error"></p>
 </body>
 </html>

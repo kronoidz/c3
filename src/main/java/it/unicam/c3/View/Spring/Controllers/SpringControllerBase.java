@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 public class SpringControllerBase {
 
-    // Attenzione: metodo orrendo e pericoloso, lasciare privato
     @SuppressWarnings("unchecked")
     private static <T> T getSessionAttribute (
             HttpSession session,
