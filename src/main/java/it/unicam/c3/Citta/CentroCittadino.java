@@ -48,7 +48,7 @@ public class CentroCittadino {
     public List<PuntoVendita> getPuntiVendita() {
         List<PuntoVendita> puntiVendita = new LinkedList<>();
         for (Commerciante c:commercianti) {
-            c.getPuntiVendita().stream().forEach(puntiVendita::add);
+            puntiVendita.addAll(c.getPuntiVendita());
         }
         return puntiVendita;
     }

@@ -36,7 +36,7 @@ public class ControllerCommerciante {
     }
 
     public void addPuntoVendita(String posizione, String nome) throws Exception {
-        this.commerciante.addPuntoVendita(posizione, nome);
+        this.commerciante.addPuntoVendita(nome,posizione);
         this.database.savePuntoVendita(this.getPuntiVendita().get(this.getPuntiVendita().size()-1));
     }
 

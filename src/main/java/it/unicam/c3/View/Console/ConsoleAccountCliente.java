@@ -10,6 +10,7 @@ import it.unicam.c3.Ordini.Ordine;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 
 public class ConsoleAccountCliente {
     private Cliente cliente;
@@ -31,7 +32,11 @@ public class ConsoleAccountCliente {
 
     public ConsoleAccountCliente(Cliente cliente){
         this.cliente=cliente;
-        this.controller=new ControllerCliente(cliente);
+        try {
+            this.controller=new ControllerCliente(cliente);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
         br = new BufferedReader(new InputStreamReader(System.in));
     }
 
@@ -107,7 +112,12 @@ public class ConsoleAccountCliente {
         System.out.println("Vuoi davvero creare un ordine con gli oggetti del carrello?\n[y+enter per creare l'ordine]\n[n+enter per annullare l'operazione]");
         line=br.readLine();
         if(line.equals("y")) {
-            controller.ordinaProdotti();
+            try {
+                controller.ordinaProdotti();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("ERROR: DataBase Error!");
+            }
         }
     }
 

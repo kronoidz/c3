@@ -3,6 +3,7 @@ package it.unicam.c3.Persistence;
 import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
+import it.unicam.c3.Commercio.PuntoVendita;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -11,47 +12,61 @@ import java.util.List;
 
 public class DBAccounts extends DBConnection implements IDBAccounts{
     private String sql;
+    private static List<Commerciante> commercianti;
+    private static List<Cliente> clienti;
+    private static List<Corriere> corrieri;
 
     public DBAccounts() throws SQLException {
         super();
+        commercianti = new LinkedList<>();
+        clienti = new LinkedList<>();
+        corrieri = new LinkedList<>();
     }
 
     public DBAccounts(String connectionString, String username, String password) throws SQLException {
         super(connectionString,username,password);
+        commercianti = new LinkedList<>();
+        clienti = new LinkedList<>();
+        corrieri = new LinkedList<>();
     }
 
 
     @Override
     public List<Commerciante> getCommercianti() throws SQLException {
-        List<Commerciante> accountsList= new LinkedList<>();
-        String sql = "Select * from Commercianti";
-        setData(sql);
-        while(getData().next()){
-                accountsList.add( new Commerciante(getData().getString("Nome"), getData().getString("Cognome"), getData().getString("Email"), getData().getString("Password")));
+        if(commercianti.isEmpty()) {
+            String sql = "Select * from Commercianti";
+            setData(sql);
+            while (getData().next()) {
+                commercianti.add(new Commerciante(getData().getString("Nome"), getData().getString("Cognome"), getData().getString("Email"), getData().getString("Password")));
+            }
+            returnAll(commercianti);
         }
-        return accountsList;
+        return commercianti;
     }
+
 
     @Override
     public List<Cliente> getClienti() throws SQLException {
-        List<Cliente> accountsList= new LinkedList<>();
-        sql = "Select * from Clienti";
-        setData(sql);
-        while(getData().next()){
-            accountsList.add( new Cliente(getData().getString("Nome"), getData().getString("Cognome"), getData().getString("Email"), getData().getString("Password")));
+        if(clienti.isEmpty()) {
+            sql = "Select * from Clienti";
+            setData(sql);
+            while (getData().next()) {
+                clienti.add(new Cliente(getData().getString("Nome"), getData().getString("Cognome"), getData().getString("Email"), getData().getString("Password")));
+            }
         }
-        return accountsList;
+        return clienti;
     }
 
     @Override
     public List<Corriere> getCorrieri() throws SQLException {
-        List<Corriere> accountsList= new LinkedList<>();
-        String sql = "Select * from Corrieri";
-        setData(sql);
-        while(getData().next()){
-            accountsList.add( new Corriere(getData().getString("Nome"), getData().getString("Cognome"), getData().getString("Email"), getData().getString("Password")));
-        }
-        return accountsList;
+       if(corrieri.isEmpty()) {
+           String sql = "Select * from Corrieri";
+           setData(sql);
+           while (getData().next()) {
+               corrieri.add(new Corriere(getData().getString("Nome"), getData().getString("Cognome"), getData().getString("Email"), getData().getString("Password")));
+           }
+       }
+        return corrieri;
     }
 
     @Override
@@ -86,4 +101,40 @@ public class DBAccounts extends DBConnection implements IDBAccounts{
         prepStat.setString(4, corriere.getPassword());
         prepStat.executeUpdate();
     }
+
+    private void returnAll(List<Commerciante> commList) throws SQLException {
+        for(Commerciante c:commList){
+            this.putPuntiVendita(c);
+            for(PuntoVendita pv:c.getPuntiVendita()){
+                this.putProdotti(pv);
+                this.putOfferte(pv);
+            }
+        }
+    }
+
+    private void  putPuntiVendita(Commerciante commerciante) throws SQLException {
+        String sql = "Select * from PuntiVendita where Commerciante='"+commerciante.getEmail()+"'";
+        setData(sql);
+        while (getData().next()) {
+            commerciante.addPuntoVendita(getData().getString("Id"), getData().getString("Nome"), getData().getString("Posizione"));
+        }
+    }
+
+
+    private void putProdotti(PuntoVendita pv) throws SQLException {
+        String sql = "Select * from Prodotti where PuntoVendita='"+pv.getId()+"'";
+        setData(sql);
+        while (getData().next()) {
+            pv.addProdotto(getData().getString("Id"), getData().getString("Descrizione"), getData().getDouble("Prezzo"));
+        }
+    }
+
+    private void putOfferte(PuntoVendita pv) throws SQLException {
+        String sql = "Select * from Offerte where PuntoVendita='"+pv.getId()+"'";
+        setData(sql);
+        while (getData().next()) {
+            pv.addOfferta(getData().getString("Id"), getData().getString("Descrizione"), getData().getString("Importo"));
+        }
+    }
+
 }

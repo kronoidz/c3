@@ -5,10 +5,8 @@ import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
-import it.unicam.c3.Persistence.DBAccounts;
-import it.unicam.c3.Persistence.DBPuntiRitiro;
-import it.unicam.c3.Persistence.IDBAccounts;
-import it.unicam.c3.Persistence.IDBPuntiRitiro;
+import it.unicam.c3.Ordini.GestoreOrdini;
+import it.unicam.c3.Persistence.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,13 +17,14 @@ public class ControllerAutenticazione {
 
     //public static boolean autenticazioneAbilitata = false;
 
-    public ControllerAutenticazione(IDBAccounts dbAccounts, IDBPuntiRitiro dbPuntiRitiro ) throws SQLException, SQLException {
+    public ControllerAutenticazione(IDBAccounts dbAccounts, IDBPuntiRitiro dbPuntiRitiro, IDBOrdini dbOrdini ) throws SQLException, SQLException {
         this.dbAccounts=dbAccounts;
         CentroCittadino.getInstance(this.dbAccounts.getCommercianti(), this.dbAccounts.getClienti(), this.dbAccounts.getCorrieri(), dbPuntiRitiro.getPuntiRitiro());
+        GestoreOrdini.getInstance(dbOrdini.getOrdini());
     }
 
     public ControllerAutenticazione() throws SQLException {
-        this(new DBAccounts(), new DBPuntiRitiro());
+        this(new DBAccounts(), new DBPuntiRitiro(), new DBOrdini());
     }
 
     public Commerciante autenticaCommerciante(String email, String password) {

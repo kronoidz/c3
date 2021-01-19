@@ -7,10 +7,7 @@ import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Commercio.PuntoVendita;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 
 public class DBCommerciante extends DBConnection implements IDBCommerciante {
     private Commerciante commerciante;
@@ -19,13 +16,11 @@ public class DBCommerciante extends DBConnection implements IDBCommerciante {
     public DBCommerciante(Commerciante commerciante) throws SQLException {
         super();
         this.commerciante = commerciante;
-        this.putPuntiVendita();
     }
 
     public DBCommerciante(Commerciante commerciante, String connectionString, String username, String password) throws SQLException {
         super(connectionString,username,password);
         this.commerciante = commerciante;
-        this.putPuntiVendita();
     }
 
     @Override
@@ -83,33 +78,6 @@ public class DBCommerciante extends DBConnection implements IDBCommerciante {
         PreparedStatement prepStat = getConnection().prepareStatement(sql);
         prepStat.setString(1, offerta.getId());
         prepStat.executeUpdate();
-    }
-
-    private void  putPuntiVendita() throws SQLException {
-        String sql = "Select * from PuntiVendita where Commerciante='"+this.commerciante.getEmail()+"'";
-        setData(sql);
-            while (getData().next()) {
-                this.commerciante.addPuntoVendita(getData().getString("Id"), getData().getString("Nome"), getData().getString("Posizione"));
-                this.putProdotti(this.commerciante.getPuntiVendita().get(this.commerciante.getPuntiVendita().size() - 1));
-                this.putOfferte(this.commerciante.getPuntiVendita().get(this.commerciante.getPuntiVendita().size() - 1));
-            }
-        }
-
-
-    private void putProdotti(PuntoVendita pv) throws SQLException {
-        String sql = "Select * from Prodotti where PuntoVendita='"+pv.getId()+"'";
-        setData(sql);
-        while (getData().next()) {
-            pv.addProdotto(getData().getString("Id"), getData().getString("Descrizione"), getData().getDouble("Prezzo"));
-        }
-    }
-
-    private void putOfferte(PuntoVendita pv) throws SQLException {
-        String sql = "Select * from Offerte where PuntoVendita='"+pv.getId()+"'";
-        setData(sql);
-        while (getData().next()) {
-            pv.addOfferta(getData().getString("Id"), getData().getString("Descrizione"), getData().getString("Importo"));
-        }
     }
 
 }

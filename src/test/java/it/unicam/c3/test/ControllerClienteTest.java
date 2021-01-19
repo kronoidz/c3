@@ -7,13 +7,24 @@ import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Controller.ControllerCliente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ControllerClienteTest {
     private Commerciante commerciante1;
     private Commerciante commerciante2;
     private Cliente cliente = new Cliente("Lorenzo","Serini","lose@gmail.com","prova");
-    private ControllerCliente controller = new ControllerCliente(cliente);
+    private ControllerCliente controller;
+
+    {
+        try {
+            controller = new ControllerCliente(cliente);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
 
     @BeforeEach
     public void initControllerCorriereTest(){
@@ -64,7 +75,11 @@ public class ControllerClienteTest {
         controller.addInCarrello(controller.getPuntiVendita().get(0), controller.getPuntiVendita().get(0).getProdotti().get(0));
         controller.addInCarrello(controller.getPuntiVendita().get(0), controller.getPuntiVendita().get(0).getProdotti().get(1));
         controller.addInCarrello(controller.getPuntiVendita().get(1), controller.getPuntiVendita().get(0).getProdotti().get(1));
-        controller.ordinaProdotti();
+        try {
+            controller.ordinaProdotti();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertEquals(2,controller.getOrdini().size());
     }
 
