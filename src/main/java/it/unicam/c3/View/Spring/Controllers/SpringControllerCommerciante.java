@@ -403,4 +403,30 @@ public class SpringControllerCommerciante extends SpringControllerBase {
         controller.rifiutaOrdine(ordine);
         return new ModelAndView("redirect:/commerciante/ordine?id=" + ordine.getId());
     }
+
+    @GetMapping("aggiungiPuntoVendita")
+    public ModelAndView getAggiungiPuntoVendita(HttpSession session, Model model) {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        model.addAttribute("commerciante", commerciante);
+        return new ModelAndView("commerciante/aggiungiPuntoVendita");
+    }
+
+    @PostMapping("aggiungiPuntoVendita")
+    public ModelAndView doAggiungiPuntoVendita(HttpSession session,
+                                               @RequestParam("nome") String nome,
+                                               @RequestParam("posizione") String posizione)
+    {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        try {
+            controller.addPuntoVendita(posizione, nome);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ModelAndView("redirect:/commerciante");
+    }
 }

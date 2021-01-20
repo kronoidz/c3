@@ -35,7 +35,7 @@
 <body>
     <h3>Commerciante [<span th:text="${emailCommerciante}"></span>] &mdash; Home</h3>
 
-    <h4>Punti vendita</h4>
+    <h4>Punti vendita &mdash; [<a href="/commerciante/aggiungiPuntoVendita">Aggiungi punto vendita</a>]</h4>
     <div class="card-container">
         <div class="card" th:each="pv : ${puntiVendita}">
             <a th:href="@{'/commerciante/puntoVendita'(id=${pv.id})}">
