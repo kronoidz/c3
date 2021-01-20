@@ -20,10 +20,11 @@
 <form action="/commerciante/ordini" method="get">
     <label for="filtro">Stato:</label>
     <select name="stato" id="filtro">
-        <option value="IN_ATTESA">In attesa</option>
-        <option value="ACCETTATO">Accettato</option>
-        <option value="RIFIUTATO">Rifiutato</option>
-        <option value="TERMINATO">Terminato</option>
+        <option value="QUALSIASI" th:selected="${filtro == 'QUALSIASI'}">Qualsiasi</option>
+        <option value="IN_ATTESA" th:selected="${filtro == 'IN_ATTESA'}">In attesa</option>
+        <option value="ACCETTATO" th:selected="${filtro == 'ACCETTATO'}">Accettato</option>
+        <option value="RIFIUTATO" th:selected="${filtro == 'RIFIUTATO'}">Rifiutato</option>
+        <option value="TERMINATO" th:selected="${filtro == 'TERMINATO'}">Terminato</option>
     </select>
     <input type="submit" value="Applica filtro">
 </form>

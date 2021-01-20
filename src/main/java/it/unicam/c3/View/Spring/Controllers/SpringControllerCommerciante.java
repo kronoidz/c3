@@ -317,12 +317,13 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         List<Ordine> ordini;
 
-        if (stato != null && !stato.isEmpty()) {
+        if (stato != null && !stato.isEmpty() && !stato.equals("QUALSIASI")) {
             ordini = controller.getOrdini(StatoOrdine.valueOf(stato));
         }
         else ordini = controller.getOrdini();
 
         model.addAttribute("ordini", ordini);
+        model.addAttribute("filtro", stato);
         return new ModelAndView("/commerciante/ordini");
     }
 
