@@ -1,10 +1,15 @@
 package it.unicam.c3.View.Spring;
 
 import it.unicam.c3.Anagrafica.Cliente;
+import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Commercio.PuntoVendita;
+import it.unicam.c3.Consegne.Consegna;
+import it.unicam.c3.Consegne.GestoreConsegne;
+import it.unicam.c3.Consegne.StatoConsegna;
 import it.unicam.c3.Ordini.GestoreOrdini;
+import it.unicam.c3.Ordini.Ordine;
 import it.unicam.c3.Ordini.StatoOrdine;
 import it.unicam.c3.View.View;
 import org.springframework.boot.SpringApplication;
@@ -57,7 +62,16 @@ public class SpringView implements View {
         GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(0), pvs.get(0).getProdotti().subList(2, 9));
         GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(0), pvs.get(0).getProdotti().subList(1, 2));
 
-        GestoreOrdini.getInstance().getOrdini(cliente1).get(1).setStato(StatoOrdine.TERMINATO);
+        Corriere corriere1 = new Corriere("Elton", "John", "e.john@gmail.com", "p");
+        CentroCittadino.getInstance().addCorriere(corriere1);
+        GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(1), pvs.get(1).getProdotti().subList(1, 10));
+        Ordine ord = GestoreOrdini.getInstance().getOrdini(pvs.get(1).getCommerciante()).get(0);
+        ord.setStato(StatoOrdine.ACCETTATO);
+        GestoreConsegne.getInstance().addConsegna(ord, pvs.get(1).getCommerciante(),
+                CentroCittadino.getInstance().getPuntiRitiro().get(2));
+        Consegna consegna = GestoreConsegne.getInstance().getConsegne().get(0);
+        consegna.setStato(StatoConsegna.PRESA_IN_CARICO);
+        consegna.setCorriere(corriere1);
     }
 
 }

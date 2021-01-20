@@ -30,12 +30,24 @@
         td {
             font-family: sans-serif;
         }
+        .menu a {
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
-    <h3>Commerciante [<span th:text="${emailCommerciante}"></span>] &mdash; Home</h3>
+    <h2>Commerciante (<span th:text="${emailCommerciante}"></span>) &mdash; Home</h2>
 
-    <h4>Punti vendita &mdash; [<a href="/commerciante/aggiungiPuntoVendita">Aggiungi punto vendita</a>]</h4>
+    <p class="menu">
+    [ &nbsp;
+        <a href="/commerciante/aggiungiPuntoVendita">Aggiungi punto vendita</a> &nbsp; | &nbsp;
+        <a href="/commerciante/ordini">Visualizza tutti gli ordini</a> &nbsp; | &nbsp;
+        <a href="/commerciante/abilitaRitiroConsegna">Abilita ritiro consegna</a>&nbsp;| &nbsp;
+        <a href="/disconnetti">Disconnetti</a> &nbsp;
+        ]
+    </p>
+
+    <h4>Punti vendita</h4>
     <div class="card-container">
         <div class="card" th:each="pv : ${puntiVendita}">
             <a th:href="@{'/commerciante/puntoVendita'(id=${pv.id})}">
@@ -44,8 +56,8 @@
             <p class="card-details" th:text="${pv.posizione}"></p>
         </div>
     </div>
+
     <h4>Ordini in attesa</h4>
-    <a th:href="@{'/commerciante/ordini'}">Visualizza tutti gli ordini</a>
     <table>
         <thead>
             <tr>

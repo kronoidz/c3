@@ -4,6 +4,7 @@ import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Commercio.*;
+import it.unicam.c3.Consegne.Consegna;
 import it.unicam.c3.Controller.ControllerCommerciante;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.Ordini.Ordine;
@@ -429,5 +430,35 @@ public class SpringControllerCommerciante extends SpringControllerBase {
         }
 
         return new ModelAndView("redirect:/commerciante");
+    }
+
+    @GetMapping("abilitaRitiroConsegna")
+    public ModelAndView getAbilitaRitiroConsegna(HttpSession session, Model model) {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        List<Consegna> consegne = controller.getConsegneDaAbilitareAlRitiro();
+        model.addAttribute("consegne", consegne);
+        return new ModelAndView("/commerciante/abilitaRitiroConsegna");
+    }
+
+    @PostMapping("abilitaRitiroConsegna")
+    public ModelAndView doAbilitaRitiroConsegna(HttpSession session,
+                                                @RequestParam("id") String id)
+    {
+        if (!authorize(session))
+            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+
+        List<Consegna> consegne = controller.getConsegneDaAbilitareAlRitiro();
+        Consegna consegna = consegne.stream()
+                .filter(c -> c.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (consegna == null)
+            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+
+        controller.abilitaRitiro(consegna);
+        return new ModelAndView("redirect:/commerciante/abilitaRitiroConsegna");
     }
 }
