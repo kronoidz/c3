@@ -4,66 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Abilita ritiro consegna</title>
-    <style>
-        table {
-            border-spacing: 1em;
-        }
-        th {
-            text-align: left;
-        }
-        td {
-            font-family: sans-serif;
-        }
-        td p {
-            margin: .2em 0;
-        }
-        .ordine {
-            display: flex;
-            flex-flow: column nowrap;
-            align-items: flex-start;
-        }
-        .ordine :not(:first-child) {
-            font-size: .8em;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <a href="/commerciante">Home</a>
 
 <h2>Abilita ritiro consegna</h2>
-<h3>Consegna prese in carico o effettuate</h3>
+<h3>Consegne prese in carico o effettuate</h3>
 
-<table>
-    <thead>
-    <tr>
-        <th>Ordine</th>
-        <th>Stato</th>
-        <th>Corriere</th>
-        <th>Punto ritiro</th>
-        <th>Ritirabile</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="consegna : ${consegne}">
-        <td class="ordine">
-            <p th:text="${consegna.ordine.cliente.nome} + ' ' + ${consegna.ordine.cliente.cognome}"></p>
-            <p><th:block th:text="${consegna.ordine.prodotti.size()}"/> prodotti</p>
-            <a th:href="@{/commerciante/ordine(id=${consegna.ordine.id})}">Vai all'ordine</a>
-        </td>
-        <td th:text="${consegna.stato.name()}"></td>
-        <td th:text="${consegna.corriere == null ? '&mdash;' : consegna.corriere.nome + ' ' + consegna.corriere.cognome}"></td>
-        <td th:text="${consegna.puntoRitiro == null ? '&mdash;' : consegna.puntoRitiro.indirizzo}"></td>
-        <td>
-            <th:block th:text="${consegna.ritirabile ? 'sì' : 'no'}"/>
-            <th:block th:if="${!consegna.ritirabile}">
-                <form action="/commerciante/abilitaRitiroConsegna" method="post">
-                    <input type="hidden" name="id" th:value="${consegna.id}">
-                    <input type="submit" value="Abilita">
-                </form>
-            </th:block>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="card-container">
+    <div class="card" th:each="consegna : ${consegne}">
+        <p class="card-details">
+            Cliente:
+            <th:block th:text="${consegna.ordine.cliente.nome} + ' ' + ${consegna.ordine.cliente.cognome}"/>
+        </p>
+        <p class="card-details">
+            <th:block th:text="${consegna.ordine.prodotti.size()}"/> prodotti
+            <a class="card-details"
+               th:href="@{/commerciante/ordine(id=${consegna.ordine.id})}">
+                Vai all'ordine
+            </a>
+        </p>
+        <p class="card-details">
+            Stato:
+            <b th:text="${consegna.stato.name()}"></b>
+        </p>
+        <th:block th:if="${consegna.corriere != null}">
+            <p class="card-details">
+                Corriere:
+                <th:block th:text="${consegna.corriere.nome} + ' ' + ${consegna.corriere.cognome}"/>
+            </p>
+            <p class="card-details">
+                Punto ritiro:
+                <th:block th:text="${consegna.puntoRitiro.indirizzo}"/>
+            </p>
+        </th:block>
+        <p class="card-details">
+            Ritirabile: <th:block th:text="${consegna.ritirabile ? 'sì' : 'no'}"/>
+            <form action="/commerciante/abilitaRitiroConsegna" method="post"
+                th:if="${!consegna.ritirabile}">
+                <input type="hidden" name="id" th:value="${consegna.id}">
+                <input type="submit" value="Abilita ritiro">
+            </form>
+        </p>
+    </div>
+</div>
 </body>
 </html>

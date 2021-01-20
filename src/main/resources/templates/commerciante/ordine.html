@@ -4,18 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ordine</title>
-    <style>
-        .right {
-            text-align: right;
-            padding-right: 2.5em;
-        }
-        .left {
-            text-align: left;
-        }
-        form {
-            margin-top: 2em;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <a href="/commerciante">Home</a> | <a href="/commerciante/ordini">Tutti gli ordini</a>
@@ -32,8 +21,8 @@
     </p>
     <table>
         <tr>
-            <th class="right">Prodotto</th>
-            <th class="left">Prezzo</th>
+            <th>Prodotto</th>
+            <th>Prezzo</th>
         </tr>
         <tr th:each="prod : ${ordine.prodotti}">
             <td th:text="${prod.descrizione}" class="right"></td>
@@ -48,8 +37,8 @@
         </tr>
     </table>
     <th:block th:if="${ordine.stato.name() == 'IN_ATTESA'}">
-        <form action="/commerciante/ordine/accetta"
-              method="get">
+        <form action="/commerciante/ordine/accetta" method="get"
+            class="form-horizontal">
 
             <input type="hidden" name="id" th:value="${ordine.id}">
 
@@ -62,7 +51,9 @@
 
             <button type="submit">Accetta ordine</button>
         </form>
-        <a th:href="@{/commerciante/ordine/rifiuta(id=${ordine.id})}">Rifiuta ordine</a>
+        <a th:href="@{/commerciante/ordine/rifiuta(id=${ordine.id})}">
+            <button type="button">Rifiuta ordine</button>
+        </a>
     </th:block>
 </body>
 </html>

@@ -4,20 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ordini</title>
-    <style>
-        table {
-            margin-top: 2em;
-        }
-        td {
-            padding: 0 2em;
-            font-family: sans-serif;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <a href="/commerciante">Home</a>
 <h1>Ordini</h1>
-<form action="/commerciante/ordini" method="get">
+<form action="/commerciante/ordini" method="get" class="form-horizontal">
     <label for="filtro">Stato:</label>
     <select name="stato" id="filtro">
         <option value="QUALSIASI" th:selected="${filtro == 'QUALSIASI'}">Qualsiasi</option>

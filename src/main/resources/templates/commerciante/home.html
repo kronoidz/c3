@@ -4,47 +4,16 @@
     <meta charset="UTF-8">
     <title>Commerciante</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        .card-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .card {
-            min-width: 10em;
-            margin: .8em;
-        }
-        .card-text {
-            margin: .4em;
-        }
-        .card-details {
-            font-size: .8em;
-            font-family: sans-serif;
-            margin: .4em;
-        }
-        table {
-            border-spacing: 1em;
-        }
-        th {
-            text-align: left;
-        }
-        td {
-            font-family: sans-serif;
-        }
-        .menu a {
-            white-space: nowrap;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <h2>Commerciante (<span th:text="${emailCommerciante}"></span>) &mdash; Home</h2>
 
     <p class="menu">
-    [ &nbsp;
-        <a href="/commerciante/aggiungiPuntoVendita">Aggiungi punto vendita</a> &nbsp; | &nbsp;
-        <a href="/commerciante/ordini">Visualizza tutti gli ordini</a> &nbsp; | &nbsp;
-        <a href="/commerciante/abilitaRitiroConsegna">Abilita ritiro consegna</a>&nbsp;| &nbsp;
-        <a href="/disconnetti">Disconnetti</a> &nbsp;
-        ]
+        <a class="text-nowrap" href="/commerciante/aggiungiPuntoVendita">Aggiungi punto vendita</a> &nbsp; | &nbsp;
+        <a class="text-nowrap" href="/commerciante/ordini">Visualizza tutti gli ordini</a> &nbsp; | &nbsp;
+        <a class="text-nowrap" href="/commerciante/abilitaRitiroConsegna">Abilita ritiro consegna</a>&nbsp;| &nbsp;
+        <a class="text-nowrap" href="/disconnetti">Disconnetti</a>
     </p>
 
     <h4>Punti vendita</h4>
