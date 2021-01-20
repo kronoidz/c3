@@ -1,13 +1,7 @@
 package it.unicam.c3.View.Spring.Controllers;
 
-import it.unicam.c3.Anagrafica.Cliente;
-import it.unicam.c3.Anagrafica.Commerciante;
-import it.unicam.c3.Anagrafica.Corriere;
-import it.unicam.c3.Anagrafica.Utente;
-import it.unicam.c3.Controller.ControllerAutenticazione;
-import it.unicam.c3.Controller.ControllerCliente;
-import it.unicam.c3.Controller.ControllerCommerciante;
-import it.unicam.c3.Controller.ControllerCorriere;
+import it.unicam.c3.Anagrafica.*;
+import it.unicam.c3.Controller.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -144,5 +138,41 @@ public class SpringControllerAutenticazione {
         session.removeAttribute("utente");
         session.removeAttribute("controller");
         return "redirect:/auth";
+    }
+
+    @GetMapping("/authAdmin")
+    public String getAuthAdmin() {
+        return "/authAdmin";
+    }
+
+    @PostMapping("/authAdmin")
+    public ModelAndView getAuthAdmin(HttpSession session,
+                                     Model model,
+                                     @RequestParam("password") String password)
+    {
+        ControllerGestore controller;
+
+        try {
+            controller = new ControllerGestore();
+            controller.autorizza(password);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            model.addAttribute("error", "Errore database");
+            return new ModelAndView("/authAdmin", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (!controller.isAutorizzato()) {
+            model.addAttribute("error", "Password errata");
+            return new ModelAndView("/authAdmin", HttpStatus.UNAUTHORIZED);
+        }
+
+        session.setAttribute("controllerAdmin", controller);
+        return new ModelAndView("redirect:/gestore");
+    }
+
+    @GetMapping("/authAdmin/disconnetti")
+    public String disconnettiGestore(HttpSession session) {
+        session.removeAttribute("controllerAdmin");
+        return "redirect:/authAdmin";
     }
 }
