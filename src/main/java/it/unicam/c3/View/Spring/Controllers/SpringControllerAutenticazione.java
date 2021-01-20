@@ -138,4 +138,11 @@ public class SpringControllerAutenticazione {
                 String.format("Utente %s %s iscritto", nome, cognome));
         return new ModelAndView("/registrazione");
     }
+
+    @GetMapping("/disconnetti")
+    public String disconnetti(HttpSession session) {
+        session.removeAttribute("utente");
+        session.removeAttribute("controller");
+        return "redirect:/auth";
+    }
 }
