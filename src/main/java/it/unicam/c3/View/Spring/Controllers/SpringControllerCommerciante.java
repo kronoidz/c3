@@ -3,28 +3,30 @@ package it.unicam.c3.View.Spring.Controllers;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Citta.PuntoRitiro;
-import it.unicam.c3.Commercio.*;
+import it.unicam.c3.Commercio.IOfferta;
+import it.unicam.c3.Commercio.OffertaATempo;
+import it.unicam.c3.Commercio.Prodotto;
+import it.unicam.c3.Commercio.PuntoVendita;
 import it.unicam.c3.Consegne.Consegna;
 import it.unicam.c3.Controller.ControllerCommerciante;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.Ordini.Ordine;
 import it.unicam.c3.Ordini.StatoOrdine;
 import it.unicam.c3.View.Spring.OffertaGenerica;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+@SuppressWarnings({"DuplicatedCode", "SpringMVCViewInspection"})
 @Controller
 @RequestMapping("commerciante")
 public class SpringControllerCommerciante extends SpringControllerBase {
@@ -32,35 +34,31 @@ public class SpringControllerCommerciante extends SpringControllerBase {
     private Commerciante commerciante;
     private ControllerCommerciante controller;
 
-    private boolean authorize(HttpSession session) {
+    private boolean isUnauthorized(HttpSession session) {
         commerciante = getCommerciante(session);
         controller = getControllerCommerciante(session);
 
-        return commerciante != null && controller != null;
+        return commerciante == null || controller == null;
     }
 
     @GetMapping
-    public ModelAndView getHomeCommerciante (HttpSession session,
-                                             Model model)
+    public String getHomeCommerciante (HttpSession session, Model model)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         model.addAttribute("emailCommerciante", commerciante.getEmail());
         model.addAttribute("puntiVendita", controller.getPuntiVendita());
         model.addAttribute("ordiniInAttesa",
                 controller.getOrdini(StatoOrdine.IN_ATTESA));
 
-        return new ModelAndView("/commerciante/home");
+        return "/commerciante/home";
     }
 
     @GetMapping("puntoVendita")
-    public ModelAndView getPuntoVendita (HttpSession session,
-                                         Model model,
-                                         @RequestParam("id") String id)
+    public String getPuntoVendita (HttpSession session, Model model,
+                                   @RequestParam("id") String id)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         PuntoVendita puntoVendita = controller.getPuntiVendita()
                 .stream()
@@ -69,28 +67,26 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .orElse(null);
 
         if (puntoVendita == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+            return "/not-found";
 
         model.addAttribute("puntoVendita", puntoVendita);
         List<OffertaGenerica> offerte = puntoVendita.getOfferte()
                 .stream()
                 .filter(o -> !
-                            (o instanceof OffertaATempo &&
-                            ((OffertaATempo) o).getScadenza().isBefore(LocalDate.now()))
+                        (o instanceof OffertaATempo &&
+                                ((OffertaATempo) o).getScadenza().isBefore(LocalDate.now()))
                 ) // (non è scaduta)
                 .map(OffertaGenerica::new)
                 .collect(Collectors.toList());
         model.addAttribute("offerte", offerte);
-        return new ModelAndView("/commerciante/puntoVendita");
+        return "/commerciante/puntoVendita";
     }
 
     @GetMapping("puntoVendita/elimina")
-    public ModelAndView eliminaPuntoVendita (HttpSession session,
-                                             Model model,
-                                             @RequestParam("id") String id)
+    public String eliminaPuntoVendita (HttpSession session,
+                                       @RequestParam("id") String id)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         PuntoVendita puntoVendita = controller.getPuntiVendita()
                 .stream()
@@ -99,7 +95,7 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .orElse(null);
 
         if (puntoVendita == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+            return "/not-found";
 
         try {
             controller.removePuntoVendita(puntoVendita);
@@ -107,17 +103,15 @@ public class SpringControllerCommerciante extends SpringControllerBase {
             e.printStackTrace();
         }
 
-        return new ModelAndView("redirect:/commerciante");
+        return "redirect:/commerciante";
     }
 
     @GetMapping("puntoVendita/eliminaProdotto")
-    public ModelAndView eliminaProdotto     (HttpSession session,
-                                             Model model,
-                                             @RequestParam("idPuntoVendita") String idPuntoVendita,
-                                             @RequestParam("idProdotto") String idProdotto)
+    public String eliminaProdotto(HttpSession session,
+                                  @RequestParam("idPuntoVendita") String idPuntoVendita,
+                                  @RequestParam("idProdotto") String idProdotto)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         PuntoVendita puntoVendita = controller.getPuntiVendita()
                 .stream()
@@ -125,8 +119,7 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (puntoVendita == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (puntoVendita == null) return "/not-found";
 
         Prodotto prodotto = puntoVendita.getProdotti()
                 .stream()
@@ -134,22 +127,19 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (prodotto == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (prodotto == null) return "/not-found";
 
         puntoVendita.removeProdotto(prodotto);
-        return new ModelAndView("redirect:/commerciante/puntoVendita?id=" + idPuntoVendita);
+        return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
     }
 
     @GetMapping("puntoVendita/cambiaDisponibilita")
-    public ModelAndView cambiaDisponibilitaProdotto (
-                                             HttpSession session,
-                                             Model model,
-                                             @RequestParam("idPuntoVendita") String idPuntoVendita,
-                                             @RequestParam("idProdotto") String idProdotto)
+    public String cambiaDisponibilitaProdotto (
+            HttpSession session,
+            @RequestParam("idPuntoVendita") String idPuntoVendita,
+            @RequestParam("idProdotto") String idProdotto)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         PuntoVendita puntoVendita = controller.getPuntiVendita()
                 .stream()
@@ -157,8 +147,7 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (puntoVendita == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (puntoVendita == null) return "/not-found";
 
         Prodotto prodotto = puntoVendita.getProdotti()
                 .stream()
@@ -166,20 +155,18 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (prodotto == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (prodotto == null) return "/not-found";
 
         prodotto.setDisponibilita(!prodotto.getDisponibilita());
-        return new ModelAndView("redirect:/commerciante/puntoVendita?id=" + idPuntoVendita);
+        return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
     }
 
     @GetMapping("puntoVendita/aggiungiProdotto")
-    public ModelAndView getAggiungiProdotto (HttpSession session,
+    public String getAggiungiProdotto (HttpSession session,
                                        Model model,
                                        @RequestParam("idPuntoVendita") String idPuntoVendita)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         PuntoVendita puntoVendita = controller.getPuntiVendita()
                 .stream()
@@ -187,22 +174,19 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (puntoVendita == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (puntoVendita == null) return "/not-found";
 
         model.addAttribute("puntoVendita", puntoVendita);
-        return new ModelAndView("/commerciante/aggiungiProdotto");
+        return "/commerciante/aggiungiProdotto";
     }
 
     @PostMapping("puntoVendita/aggiungiProdotto")
-    public ModelAndView doAggiungiProdotto  (HttpSession session,
-                                             Model model,
-                                             @RequestParam("idPuntoVendita") String idPuntoVendita,
-                                             @RequestParam("nome") String nome,
-                                             @RequestParam("prezzo") double prezzo)
+    public String doAggiungiProdotto  (HttpSession session,
+                                       @RequestParam("idPuntoVendita") String idPuntoVendita,
+                                       @RequestParam("nome") String nome,
+                                       @RequestParam("prezzo") double prezzo)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         PuntoVendita puntoVendita = controller.getPuntiVendita()
                 .stream()
@@ -211,19 +195,18 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .orElse(null);
 
         if (puntoVendita == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+            return "/not-found";
 
         puntoVendita.addProdotto(nome, prezzo);
-        return new ModelAndView("redirect:/commerciante/puntoVendita?id=" + idPuntoVendita);
+        return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
     }
 
     @GetMapping("puntoVendita/eliminaOfferta")
-    public ModelAndView eliminaOfferta   (HttpSession session,
-                                          @RequestParam("idPuntoVendita") String idPuntoVendita,
-                                          @RequestParam("idOfferta") String idOfferta)
+    public String eliminaOfferta   (HttpSession session,
+                                    @RequestParam("idPuntoVendita") String idPuntoVendita,
+                                    @RequestParam("idOfferta") String idOfferta)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         PuntoVendita puntoVendita = controller.getPuntiVendita()
                 .stream()
@@ -231,8 +214,7 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (puntoVendita == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (puntoVendita == null) return "/not-found";
 
         IOfferta offerta = puntoVendita.getOfferte()
                 .stream()
@@ -240,20 +222,18 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (offerta == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (offerta == null) return "/not-found";
 
         puntoVendita.getOfferte().remove(offerta);
-        return new ModelAndView("redirect:/commerciante/puntoVendita?id=" + idPuntoVendita);
+        return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
     }
 
     @GetMapping("puntoVendita/aggiungiOfferta")
-    public ModelAndView getAggiungiOfferta  (HttpSession session,
-                                             Model model,
-                                             @RequestParam("idPuntoVendita") String idPuntoVendita)
+    public String getAggiungiOfferta  (HttpSession session,
+                                       Model model,
+                                       @RequestParam("idPuntoVendita") String idPuntoVendita)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         PuntoVendita puntoVendita = controller.getPuntiVendita()
                 .stream()
@@ -261,23 +241,20 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (puntoVendita == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (puntoVendita == null) return "/not-found";
 
         model.addAttribute("puntoVendita", puntoVendita);
-        return new ModelAndView("/commerciante/aggiungiOfferta");
+        return "/commerciante/aggiungiOfferta";
     }
 
     @PostMapping("puntoVendita/aggiungiOfferta")
-    public ModelAndView doAggiungiOfferta  (HttpSession session,
-                                            Model model,
-                                            @RequestParam("idPuntoVendita") String idPuntoVendita,
-                                            @RequestParam("descrizione") String descrizione,
-                                            @RequestParam("importo") String importo,
-                                            @RequestParam(value = "scadenza", required = false) String scadenza)
+    public String doAggiungiOfferta  (HttpSession session,
+                                      @RequestParam("idPuntoVendita") String idPuntoVendita,
+                                      @RequestParam("descrizione") String descrizione,
+                                      @RequestParam("importo") String importo,
+                                      @RequestParam(value = "scadenza", required = false) String scadenza)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         PuntoVendita puntoVendita = controller.getPuntiVendita()
                 .stream()
@@ -285,8 +262,7 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (puntoVendita == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (puntoVendita == null) return "/not-found";
 
         if (scadenza != null && !scadenza.isEmpty()) {
             LocalDate date = LocalDate.parse(scadenza, DateTimeFormatter.ISO_DATE_TIME);
@@ -296,16 +272,15 @@ public class SpringControllerCommerciante extends SpringControllerBase {
             puntoVendita.addOfferta(descrizione, importo);
         }
 
-        return new ModelAndView("redirect:/commerciante/puntoVendita?id=" + idPuntoVendita);
+        return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
     }
 
     @GetMapping("ordini")
-    public ModelAndView getOrdini (HttpSession session,
-                                   Model model,
-                                   @RequestParam(value = "stato", required = false) String stato)
+    public String getOrdini (HttpSession session,
+                             Model model,
+                             @RequestParam(value = "stato", required = false) String stato)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         List<Ordine> ordini;
 
@@ -316,16 +291,15 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         model.addAttribute("ordini", ordini);
         model.addAttribute("filtro", stato);
-        return new ModelAndView("/commerciante/ordini");
+        return "/commerciante/ordini";
     }
 
     @GetMapping("ordine")
-    public ModelAndView getOrdine (HttpSession session,
-                                   Model model,
-                                   @RequestParam("id") String id)
+    public String getOrdine (HttpSession session,
+                             Model model,
+                             @RequestParam("id") String id)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
         Ordine ordine = ordini.stream()
@@ -333,8 +307,7 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (ordine == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (ordine == null) return "/not-found";
 
         model.addAttribute("ordine", ordine);
 
@@ -342,17 +315,15 @@ public class SpringControllerCommerciante extends SpringControllerBase {
             model.addAttribute("puntiRitiro", controller.getPuntiRitiroDisponibili());
         }
 
-        return new ModelAndView("/commerciante/ordine");
+        return "/commerciante/ordine";
     }
 
     @GetMapping("ordine/accetta")
-    public ModelAndView accettaOrdine(HttpSession session,
-                                      Model model,
-                                      @RequestParam("id") String id,
-                                      @RequestParam("idPuntoRitiro") String idPuntoRitiro)
+    public String accettaOrdine(HttpSession session,
+                                @RequestParam("id") String id,
+                                @RequestParam("idPuntoRitiro") String idPuntoRitiro)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
         Ordine ordine = ordini.stream()
@@ -360,8 +331,7 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (ordine == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (ordine == null) return "/not-found";
 
         PuntoRitiro puntoRitiro = CentroCittadino.getInstance().getPuntiRitiro()
                 .stream()
@@ -369,20 +339,17 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (puntoRitiro == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (puntoRitiro == null) return "/not-found";
 
         controller.accettaOrdine(ordine, puntoRitiro);
-        return new ModelAndView("redirect:/commerciante/ordine?id=" + ordine.getId());
+        return "redirect:/commerciante/ordine?id=" + ordine.getId();
     }
 
     @GetMapping("ordine/rifiuta")
-    public ModelAndView rifiutaOrdine(HttpSession session,
-                                      Model model,
-                                      @RequestParam("id") String id)
+    public String rifiutaOrdine(HttpSession session,
+                                @RequestParam("id") String id)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
         Ordine ordine = ordini.stream()
@@ -390,29 +357,26 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (ordine == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (ordine == null) return "/not-found";
 
         controller.rifiutaOrdine(ordine);
-        return new ModelAndView("redirect:/commerciante/ordine?id=" + ordine.getId());
+        return "redirect:/commerciante/ordine?id=" + ordine.getId();
     }
 
     @GetMapping("aggiungiPuntoVendita")
-    public ModelAndView getAggiungiPuntoVendita(HttpSession session, Model model) {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+    public String getAggiungiPuntoVendita(HttpSession session, Model model) {
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         model.addAttribute("commerciante", commerciante);
-        return new ModelAndView("commerciante/aggiungiPuntoVendita");
+        return "commerciante/aggiungiPuntoVendita";
     }
 
     @PostMapping("aggiungiPuntoVendita")
-    public ModelAndView doAggiungiPuntoVendita(HttpSession session,
-                                               @RequestParam("nome") String nome,
-                                               @RequestParam("posizione") String posizione)
+    public String doAggiungiPuntoVendita(HttpSession session,
+                                         @RequestParam("nome") String nome,
+                                         @RequestParam("posizione") String posizione)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         try {
             controller.addPuntoVendita(posizione, nome);
@@ -420,25 +384,23 @@ public class SpringControllerCommerciante extends SpringControllerBase {
             e.printStackTrace();
         }
 
-        return new ModelAndView("redirect:/commerciante");
+        return "redirect:/commerciante";
     }
 
     @GetMapping("abilitaRitiroConsegna")
-    public ModelAndView getAbilitaRitiroConsegna(HttpSession session, Model model) {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+    public String getAbilitaRitiroConsegna(HttpSession session, Model model) {
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         List<Consegna> consegne = controller.getConsegneDaAbilitareAlRitiro();
         model.addAttribute("consegne", consegne);
-        return new ModelAndView("/commerciante/abilitaRitiroConsegna");
+        return "/commerciante/abilitaRitiroConsegna";
     }
 
     @PostMapping("abilitaRitiroConsegna")
-    public ModelAndView doAbilitaRitiroConsegna(HttpSession session,
-                                                @RequestParam("id") String id)
+    public String doAbilitaRitiroConsegna(HttpSession session,
+                                          @RequestParam("id") String id)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         List<Consegna> consegne = controller.getConsegneDaAbilitareAlRitiro();
         Consegna consegna = consegne.stream()
@@ -446,10 +408,9 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .findFirst()
                 .orElse(null);
 
-        if (consegna == null)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        if (consegna == null) return "/not-found";
 
         controller.abilitaRitiro(consegna);
-        return new ModelAndView("redirect:/commerciante/abilitaRitiroConsegna");
+        return "redirect:/commerciante/abilitaRitiroConsegna";
     }
 }
