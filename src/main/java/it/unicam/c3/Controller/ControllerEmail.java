@@ -29,10 +29,8 @@ import com.sun.mail.smtp.SMTPTransport;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
 
@@ -41,7 +39,7 @@ public class ControllerEmail {
     private static final String PASSWORD = "C3infoSystem";
 
     public void sendEmail(String from, String password, String toEmail, String ccEmail, String emailTitle, String emailMessage) throws MessagingException {
-        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+        //Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
         final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 
         // Get a Properties object
