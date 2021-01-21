@@ -26,89 +26,415 @@ package it.unicam.c3.View.Spring.Controllers;
 
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Citta.CentroCittadino;
+import it.unicam.c3.Citta.PuntoRitiro;
+import it.unicam.c3.Commercio.IOfferta;
+import it.unicam.c3.Commercio.OffertaATempo;
+import it.unicam.c3.Commercio.Prodotto;
+import it.unicam.c3.Commercio.PuntoVendita;
+import it.unicam.c3.Consegne.Consegna;
 import it.unicam.c3.Controller.ControllerCommerciante;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.Ordini.Ordine;
 import it.unicam.c3.Ordini.StatoOrdine;
-import it.unicam.c3.View.Spring.FormModels.CommercianteOrdineInAttesa;
-import it.unicam.c3.View.Spring.FormModels.CommerciantePuntoVendita;
-import org.springframework.http.HttpStatus;
+import it.unicam.c3.View.Spring.OffertaGenerica;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@SuppressWarnings({"DuplicatedCode", "SpringMVCViewInspection"})
 @Controller
-@RequestMapping("/commerciante")
+@RequestMapping("commerciante")
 public class SpringControllerCommerciante extends SpringControllerBase {
 
     private Commerciante commerciante;
     private ControllerCommerciante controller;
 
-    private boolean authorize(HttpSession session) {
+    private boolean isUnauthorized(HttpSession session) {
         commerciante = getCommerciante(session);
         controller = getControllerCommerciante(session);
-        return commerciante != null && controller != null;
+
+        return commerciante == null || controller == null;
     }
 
     @GetMapping
-    public ModelAndView GetHomeCommerciante (HttpSession session,
-                                             Model model)
+    public String getHomeCommerciante (HttpSession session, Model model)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
         model.addAttribute("emailCommerciante", commerciante.getEmail());
-        model.addAttribute("puntiVendita",
-                controller.getPuntiVendita()
-                        .stream()
-                        .map(CommerciantePuntoVendita::new)
-                        .collect(Collectors.toList())
-        );
+        model.addAttribute("puntiVendita", controller.getPuntiVendita());
         model.addAttribute("ordiniInAttesa",
-                controller.getOrdini(StatoOrdine.IN_ATTESA)
-                        .stream()
-                        .map(CommercianteOrdineInAttesa::new)
-                        .collect(Collectors.toList())
-        );
+                controller.getOrdini(StatoOrdine.IN_ATTESA));
 
-        return new ModelAndView("commerciante-home");
+        return "/commerciante/home";
     }
 
-    @GetMapping("/ordine")
-    public ModelAndView GetOrdine (HttpSession session,
-                                   Model model,
+    @GetMapping("puntoVendita")
+    public String getPuntoVendita (HttpSession session, Model model,
                                    @RequestParam("id") String id)
     {
-        if (!authorize(session))
-            return new ModelAndView("redirect:/auth", HttpStatus.UNAUTHORIZED);
+        if (isUnauthorized(session)) return "redirect:/auth";
 
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(id))
+                .findFirst()
+                .orElse(null);
 
-        List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
-        ordini = ordini.stream()
-                .filter(ordine -> ordine.getId().equals(id))
+        if (puntoVendita == null)
+            return "/not-found";
+
+        model.addAttribute("puntoVendita", puntoVendita);
+        List<OffertaGenerica> offerte = puntoVendita.getOfferte()
+                .stream()
+                .filter(o -> !
+                        (o instanceof OffertaATempo &&
+                                ((OffertaATempo) o).getScadenza().isBefore(LocalDate.now()))
+                ) // (non è scaduta)
+                .map(OffertaGenerica::new)
                 .collect(Collectors.toList());
+        model.addAttribute("offerte", offerte);
+        return "/commerciante/puntoVendita";
+    }
 
+    @GetMapping("puntoVendita/elimina")
+    public String eliminaPuntoVendita (HttpSession session,
+                                       @RequestParam("id") String id)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
 
-        if (ordini.size() == 0)
-            return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(id))
+                .findFirst()
+                .orElse(null);
 
-        model.addAttribute("ordine", ordini.get(0));
+        if (puntoVendita == null)
+            return "/not-found";
 
-        if (ordini.get(0).getStato() == StatoOrdine.IN_ATTESA) {
-            model.addAttribute("puntiRitiro", CentroCittadino.getInstance()
-                    .getPuntiRitiro().stream()
-                    .filter(puntoRitiro -> puntoRitiro.getSlotDisponibili() > 0)
-                    .collect(Collectors.toList()));
+        try {
+            controller.removePuntoVendita(puntoVendita);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        return new ModelAndView("commerciante-ordine");
+        return "redirect:/commerciante";
+    }
+
+    @GetMapping("puntoVendita/eliminaProdotto")
+    public String eliminaProdotto(HttpSession session,
+                                  @RequestParam("idPuntoVendita") String idPuntoVendita,
+                                  @RequestParam("idProdotto") String idProdotto)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(idPuntoVendita))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoVendita == null) return "/not-found";
+
+        Prodotto prodotto = puntoVendita.getProdotti()
+                .stream()
+                .filter(p -> p.getId().equals(idProdotto))
+                .findFirst()
+                .orElse(null);
+
+        if (prodotto == null) return "/not-found";
+
+        puntoVendita.removeProdotto(prodotto);
+        return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
+    }
+
+    @GetMapping("puntoVendita/cambiaDisponibilita")
+    public String cambiaDisponibilitaProdotto (
+            HttpSession session,
+            @RequestParam("idPuntoVendita") String idPuntoVendita,
+            @RequestParam("idProdotto") String idProdotto)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(idPuntoVendita))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoVendita == null) return "/not-found";
+
+        Prodotto prodotto = puntoVendita.getProdotti()
+                .stream()
+                .filter(p -> p.getId().equals(idProdotto))
+                .findFirst()
+                .orElse(null);
+
+        if (prodotto == null) return "/not-found";
+
+        prodotto.setDisponibilita(!prodotto.getDisponibilita());
+        return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
+    }
+
+    @GetMapping("puntoVendita/aggiungiProdotto")
+    public String getAggiungiProdotto (HttpSession session,
+                                       Model model,
+                                       @RequestParam("idPuntoVendita") String idPuntoVendita)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(idPuntoVendita))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoVendita == null) return "/not-found";
+
+        model.addAttribute("puntoVendita", puntoVendita);
+        return "/commerciante/aggiungiProdotto";
+    }
+
+    @PostMapping("puntoVendita/aggiungiProdotto")
+    public String doAggiungiProdotto  (HttpSession session,
+                                       @RequestParam("idPuntoVendita") String idPuntoVendita,
+                                       @RequestParam("nome") String nome,
+                                       @RequestParam("prezzo") double prezzo)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(idPuntoVendita))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoVendita == null)
+            return "/not-found";
+
+        puntoVendita.addProdotto(nome, prezzo);
+        return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
+    }
+
+    @GetMapping("puntoVendita/eliminaOfferta")
+    public String eliminaOfferta   (HttpSession session,
+                                    @RequestParam("idPuntoVendita") String idPuntoVendita,
+                                    @RequestParam("idOfferta") String idOfferta)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(idPuntoVendita))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoVendita == null) return "/not-found";
+
+        IOfferta offerta = puntoVendita.getOfferte()
+                .stream()
+                .filter(o -> o.getId().equals(idOfferta))
+                .findFirst()
+                .orElse(null);
+
+        if (offerta == null) return "/not-found";
+
+        puntoVendita.getOfferte().remove(offerta);
+        return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
+    }
+
+    @GetMapping("puntoVendita/aggiungiOfferta")
+    public String getAggiungiOfferta  (HttpSession session,
+                                       Model model,
+                                       @RequestParam("idPuntoVendita") String idPuntoVendita)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(idPuntoVendita))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoVendita == null) return "/not-found";
+
+        model.addAttribute("puntoVendita", puntoVendita);
+        return "/commerciante/aggiungiOfferta";
+    }
+
+    @PostMapping("puntoVendita/aggiungiOfferta")
+    public String doAggiungiOfferta  (HttpSession session,
+                                      @RequestParam("idPuntoVendita") String idPuntoVendita,
+                                      @RequestParam("descrizione") String descrizione,
+                                      @RequestParam("importo") String importo,
+                                      @RequestParam(value = "scadenza", required = false) String scadenza)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        PuntoVendita puntoVendita = controller.getPuntiVendita()
+                .stream()
+                .filter(pv -> pv.getId().equals(idPuntoVendita))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoVendita == null) return "/not-found";
+
+        if (scadenza != null && !scadenza.isEmpty()) {
+            LocalDate date = LocalDate.parse(scadenza, DateTimeFormatter.ISO_DATE_TIME);
+            puntoVendita.addOfferta(descrizione, importo, date);
+        }
+        else {
+            puntoVendita.addOfferta(descrizione, importo);
+        }
+
+        return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
+    }
+
+    @GetMapping("ordini")
+    public String getOrdini (HttpSession session,
+                             Model model,
+                             @RequestParam(value = "stato", required = false) String stato)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        List<Ordine> ordini;
+
+        if (stato != null && !stato.isEmpty() && !stato.equals("QUALSIASI")) {
+            ordini = controller.getOrdini(StatoOrdine.valueOf(stato));
+        }
+        else ordini = controller.getOrdini();
+
+        model.addAttribute("ordini", ordini);
+        model.addAttribute("filtro", stato);
+        return "/commerciante/ordini";
+    }
+
+    @GetMapping("ordine")
+    public String getOrdine (HttpSession session,
+                             Model model,
+                             @RequestParam("id") String id)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
+        Ordine ordine = ordini.stream()
+                .filter(o -> o.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (ordine == null) return "/not-found";
+
+        model.addAttribute("ordine", ordine);
+
+        if (ordine.getStato() == StatoOrdine.IN_ATTESA) {
+            model.addAttribute("puntiRitiro", controller.getPuntiRitiroDisponibili());
+        }
+
+        return "/commerciante/ordine";
+    }
+
+    @GetMapping("ordine/accetta")
+    public String accettaOrdine(HttpSession session,
+                                @RequestParam("id") String id,
+                                @RequestParam("idPuntoRitiro") String idPuntoRitiro)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
+        Ordine ordine = ordini.stream()
+                .filter(o -> o.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (ordine == null) return "/not-found";
+
+        PuntoRitiro puntoRitiro = CentroCittadino.getInstance().getPuntiRitiro()
+                .stream()
+                .filter(pr -> pr.getId().equals(idPuntoRitiro))
+                .findFirst()
+                .orElse(null);
+
+        if (puntoRitiro == null) return "/not-found";
+
+        controller.accettaOrdine(ordine, puntoRitiro);
+        return "redirect:/commerciante/ordine?id=" + ordine.getId();
+    }
+
+    @GetMapping("ordine/rifiuta")
+    public String rifiutaOrdine(HttpSession session,
+                                @RequestParam("id") String id)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        List<Ordine> ordini = GestoreOrdini.getInstance().getOrdini(commerciante);
+        Ordine ordine = ordini.stream()
+                .filter(o -> o.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (ordine == null) return "/not-found";
+
+        controller.rifiutaOrdine(ordine);
+        return "redirect:/commerciante/ordine?id=" + ordine.getId();
+    }
+
+    @GetMapping("aggiungiPuntoVendita")
+    public String getAggiungiPuntoVendita(HttpSession session, Model model) {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        model.addAttribute("commerciante", commerciante);
+        return "commerciante/aggiungiPuntoVendita";
+    }
+
+    @PostMapping("aggiungiPuntoVendita")
+    public String doAggiungiPuntoVendita(HttpSession session,
+                                         @RequestParam("nome") String nome,
+                                         @RequestParam("posizione") String posizione)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        try {
+            controller.addPuntoVendita(posizione, nome);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/commerciante";
+    }
+
+    @GetMapping("abilitaRitiroConsegna")
+    public String getAbilitaRitiroConsegna(HttpSession session, Model model) {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        List<Consegna> consegne = controller.getConsegneDaAbilitareAlRitiro();
+        model.addAttribute("consegne", consegne);
+        return "/commerciante/abilitaRitiroConsegna";
+    }
+
+    @PostMapping("abilitaRitiroConsegna")
+    public String doAbilitaRitiroConsegna(HttpSession session,
+                                          @RequestParam("id") String id)
+    {
+        if (isUnauthorized(session)) return "redirect:/auth";
+
+        List<Consegna> consegne = controller.getConsegneDaAbilitareAlRitiro();
+        Consegna consegna = consegne.stream()
+                .filter(c -> c.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (consegna == null) return "/not-found";
+
+        controller.abilitaRitiro(consegna);
+        return "redirect:/commerciante/abilitaRitiroConsegna";
     }
 }

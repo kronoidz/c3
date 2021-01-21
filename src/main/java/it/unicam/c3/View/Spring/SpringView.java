@@ -28,90 +28,85 @@ import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
-import it.unicam.c3.Commercio.Prodotto;
-import it.unicam.c3.Controller.ControllerAutenticazione;
+import it.unicam.c3.Commercio.PuntoVendita;
+import it.unicam.c3.Consegne.Consegna;
+import it.unicam.c3.Consegne.GestoreConsegne;
+import it.unicam.c3.Consegne.StatoConsegna;
 import it.unicam.c3.Ordini.GestoreOrdini;
+import it.unicam.c3.Ordini.Ordine;
+import it.unicam.c3.Ordini.StatoOrdine;
 import it.unicam.c3.View.View;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.time.LocalDate;
+import java.util.List;
 
 @SpringBootApplication
 public class SpringView implements View {
+
     @SuppressWarnings("RedundantThrows")
     @Override
     public void start() throws IOException {
-
-        MakeTestData(); // todo: DEBUG ONLY
+        makeDevData();
 
         SpringApplication.run(SpringView.class);
     }
 
-    private void MakeTestData() {
+    private void makeDevData() {
+        Commerciante c1 = new Commerciante("Joni", "Mitchell", "a", "a");
+        CentroCittadino.getInstance().addCommerciante(c1);
 
-        try {
-            ControllerAutenticazione c = new ControllerAutenticazione();
-        } catch (Exception e) {
-            e.printStackTrace();
+        c1.addPuntoVendita("Punto Vendita 1", "Via dei Punti Vendita, 1");
+        c1.addPuntoVendita("Punto Vendita 2", "Via dei Punti Vendita, 2");
+
+        List<PuntoVendita> pvs = c1.getPuntiVendita();
+
+        for (int i = 1; i <= 85; i++) {
+            pvs.get(0).addProdotto("Prodotto " + i, i * 0.05);
         }
 
-        Commerciante ale = new Commerciante (
-                "Alessandro",
-                "Pecugi",
-                "a",
-                "a" );
-
-        ale.addPuntoVendita("La Bottega di Ale", "Corso Vannucci, 22");
-        ale.addPuntoVendita("Libreria di Ale", "Via agostino 62");
-        ale.addPuntoVendita("Conad", "Strada della Vencaia, 25, 06089 Torgiano");
-
-        CentroCittadino.getInstance().addCommerciante (ale);
-
-        CentroCittadino.getInstance().addCorriere (
-                new Corriere(
-                        "Corriere",
-                        "Corrieri",
-                        "c.corrieri@example.com",
-                        "ciaone" )
-        );
-
-        Cliente cliente = new Cliente(
-                "Cliente",
-                "Clienti",
-                "c3.cliente@example.com",
-                "ciaone"
-        );
-
-        CentroCittadino.getInstance().addCliente(cliente);
-
-        ale.getPuntiVendita().get(0).addProdotto("Prodotto 1 descrizione blablabla", 15.99);
-        ale.getPuntiVendita().get(0).addProdotto("Prodotto 2 descrizione", 1.90);
-        ale.getPuntiVendita().get(0).addProdotto("Lorem ipsum dolor sit amet", 0.01);
-
-        GestoreOrdini.getInstance().addOrdine(cliente, ale.getPuntiVendita().get(0),
-                ale.getPuntiVendita().get(0).getProdotti());
-
-        Cliente cliente2 = new Cliente(
-                "Ricky",
-                "Gervais",
-                "ricky.gervais@example.com",
-                "ciaone"
-        );
-
-        CentroCittadino.getInstance().addCliente(cliente);
-
-        ale.getPuntiVendita().get(1).addProdotto("Prodotto 1 descrizione blablabla", 15.99);
-        ale.getPuntiVendita().get(1).addProdotto("Prodotto 2 descrizione", 1.90);
-
-        GestoreOrdini.getInstance().addOrdine(cliente2, ale.getPuntiVendita().get(1),
-                ale.getPuntiVendita().get(1).getProdotti());
-
-        for (int i = 1; i < 13; i++) {
-            CentroCittadino.getInstance().addPuntoRitiro(
-                    "Via Rossi, " + i, i * 10
-            );
+        for (int i = 1; i <= 11; i++) {
+            pvs.get(1).addProdotto("Prodotto " + i, i);
         }
+
+        pvs.get(0).addOfferta("Descrizione offerta", "-10%");
+        pvs.get(0).addOfferta("Descrizione offerta", "-10%", LocalDate.now().plusDays(7));
+
+        Cliente cliente1 = new Cliente("Bruno", "Mars", "b", "b");
+        CentroCittadino.getInstance().addCliente(cliente1);
+
+        for (int i = 1; i < 8; i++) {
+            CentroCittadino.getInstance().addPuntoRitiro("Via dei Punti Ritiro, " + i, i);
+        }
+
+        GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(0), pvs.get(0).getProdotti().subList(2, 9));
+        GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(0), pvs.get(0).getProdotti().subList(1, 2));
+
+        Corriere corriere1 = new Corriere("Elton", "John", "c", "c");
+        CentroCittadino.getInstance().addCorriere(corriere1);
+
+        GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(1), pvs.get(1).getProdotti().subList(1, 10));
+        Ordine ord = GestoreOrdini.getInstance().getOrdini(pvs.get(1).getCommerciante()).get(0);
+        ord.setStato(StatoOrdine.ACCETTATO);
+
+        GestoreConsegne.getInstance().addConsegna(ord, pvs.get(1).getCommerciante(),
+                CentroCittadino.getInstance().getPuntiRitiro().get(2));
+        Consegna consegna = GestoreConsegne.getInstance().getConsegne().get(0);
+        consegna.setStato(StatoConsegna.PRESA_IN_CARICO);
+        consegna.setCorriere(corriere1);
+
+        GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(1), pvs.get(1).getProdotti().subList(4, 5));
+        Ordine ord2 = GestoreOrdini.getInstance().getOrdini(pvs.get(1).getCommerciante()).get(1);
+        ord2.setStato(StatoOrdine.ACCETTATO);
+
+        GestoreConsegne.getInstance().addConsegna(ord2, pvs.get(1).getCommerciante(),
+                CentroCittadino.getInstance().getPuntiRitiro().get(3));
+        Consegna consegna2 = GestoreConsegne.getInstance().getConsegne().get(1);
+        consegna2.setStato(StatoConsegna.EFFETTUATA);
+        consegna.setCorriere(corriere1);
+        consegna.setRitirabile(true);
     }
+
 }

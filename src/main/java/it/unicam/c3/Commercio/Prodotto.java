@@ -84,7 +84,7 @@ public class Prodotto {
      * @return price
      */
     public double getPrezzo() {
-        return prezzo;
+        return Math.round(prezzo * 100.0) / 100.0;
     }
 
     /**
