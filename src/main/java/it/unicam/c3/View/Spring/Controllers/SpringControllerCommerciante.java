@@ -78,16 +78,7 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                             (o instanceof OffertaATempo &&
                             ((OffertaATempo) o).getScadenza().isBefore(LocalDate.now()))
                 ) // (non è scaduta)
-                .map(o -> {
-                    OffertaGenerica res = new OffertaGenerica();
-                    res.setId(o.getId());
-                    res.setDescrizione(o.getDescrizione());
-                    res.setImporto(o.getImporto());
-                    if (o instanceof OffertaATempo) {
-                        res.setScadenza(((OffertaATempo) o).getScadenza());
-                    }
-                    return res;
-                })
+                .map(OffertaGenerica::new)
                 .collect(Collectors.toList());
         model.addAttribute("offerte", offerte);
         return new ModelAndView("/commerciante/puntoVendita");

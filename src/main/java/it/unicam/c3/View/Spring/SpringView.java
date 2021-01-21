@@ -64,14 +64,27 @@ public class SpringView implements View {
 
         Corriere corriere1 = new Corriere("Elton", "John", "e.john@gmail.com", "p");
         CentroCittadino.getInstance().addCorriere(corriere1);
+
         GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(1), pvs.get(1).getProdotti().subList(1, 10));
         Ordine ord = GestoreOrdini.getInstance().getOrdini(pvs.get(1).getCommerciante()).get(0);
         ord.setStato(StatoOrdine.ACCETTATO);
+
         GestoreConsegne.getInstance().addConsegna(ord, pvs.get(1).getCommerciante(),
                 CentroCittadino.getInstance().getPuntiRitiro().get(2));
         Consegna consegna = GestoreConsegne.getInstance().getConsegne().get(0);
         consegna.setStato(StatoConsegna.PRESA_IN_CARICO);
         consegna.setCorriere(corriere1);
+
+        GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(1), pvs.get(1).getProdotti().subList(4, 5));
+        Ordine ord2 = GestoreOrdini.getInstance().getOrdini(pvs.get(1).getCommerciante()).get(1);
+        ord2.setStato(StatoOrdine.ACCETTATO);
+
+        GestoreConsegne.getInstance().addConsegna(ord2, pvs.get(1).getCommerciante(),
+                CentroCittadino.getInstance().getPuntiRitiro().get(3));
+        Consegna consegna2 = GestoreConsegne.getInstance().getConsegne().get(1);
+        consegna2.setStato(StatoConsegna.EFFETTUATA);
+        consegna.setCorriere(corriere1);
+        consegna.setRitirabile(true);
     }
 
 }
