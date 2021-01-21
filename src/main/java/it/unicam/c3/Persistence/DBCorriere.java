@@ -24,64 +24,73 @@
 
 package it.unicam.c3.Persistence;
 
-import it.unicam.c3.Anagrafica.Commerciante;
+
 import it.unicam.c3.Citta.PuntoRitiro;
-import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Consegne.Consegna;
 import it.unicam.c3.Consegne.StatoConsegna;
-import it.unicam.c3.Ordini.Ordine;
 
+import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class DBCliente extends DBConnection implements IDBCliente{
+public class DBCorriere extends DBConnection implements IDBCorriere{
     private String sql;
 
-    public DBCliente() throws SQLException {
+    public DBCorriere() throws SQLException {
         super();
     }
 
-    public DBCliente(String connectionString, String username, String password) throws SQLException {
+    public DBCorriere(String connectionString, String username, String password) throws SQLException {
         super(connectionString,username,password);
     }
 
     @Override
-    public void saveOrdine(Ordine ordine) throws SQLException {
-        sql = "insert into Ordini(Id,Cliente, PuntoVendita, Stato) values (?,?,?,?)";
+    public void updateConsegnaInCarico(Consegna consegna) throws SQLException {
+        sql = "update Consegne set Stato=? where Id='"+consegna.getId()+"'";
         PreparedStatement prepStat = getConnection().prepareStatement(sql);
-        prepStat.setString(1, ordine.getId());
-        prepStat.setString(2, ordine.getCliente().getEmail());
-        prepStat.setString(3, ordine.getPuntoVendita().getId());
-        prepStat.setString(4, ordine.getStato().toString());
+        prepStat.setString(1, StatoConsegna.PRESA_IN_CARICO.toString());
         prepStat.executeUpdate();
-        this.saveProdottiOrdine(ordine);
-    }
 
-    private void saveProdottiOrdine(Ordine ordine) throws SQLException {
-        sql="insert into ListaProdottiOrdine(IdOrdine,IdProdotto) values (?,?)";
-        PreparedStatement prepStat = getConnection().prepareStatement(sql);
-        for(Prodotto p:ordine.getProdotti()) {
-            prepStat.setString(1, ordine.getId());
-            prepStat.setString(2, p.getId());
-            prepStat.executeUpdate();
-        }
     }
 
     @Override
-    public void updateConsegnaRitirata(Consegna consegna) throws Exception {
+    public void updateCorriere(Consegna consegna)throws SQLException {
+        sql = "update Consegne set Corriere=? where Id='" + consegna.getId() + "'";
+        PreparedStatement prepStat = getConnection().prepareStatement(sql);
+        prepStat.setString(1, consegna.getCorriere().getEmail());
+        prepStat.executeUpdate();
+    }
+
+    @Override
+    public void updateConsegnaEffettuata(Consegna consegna) throws SQLException {
         sql = "update Consegne set Stato=? where Id='"+consegna.getId()+"'";
         PreparedStatement prepStat = getConnection().prepareStatement(sql);
-        prepStat.setString(1, StatoConsegna.RITIRATA.toString());
+        prepStat.setString(1, StatoConsegna.EFFETTUATA.toString());
+        prepStat.executeUpdate();
+    }
+
+    @Override
+    public void updateConsegnaInAttesa(Consegna consegna) throws SQLException {
+        sql = "update Consegne set Stato=? where Id='"+consegna.getId()+"'";
+        PreparedStatement prepStat = getConnection().prepareStatement(sql);
+        prepStat.setString(1, StatoConsegna.IN_ATTESA.toString());
+        prepStat.executeUpdate();
+    }
+
+    @Override
+    public void updateCorriereNullo(Consegna consegna) throws SQLException {
+        sql = "update Consegne set Corriere=? where Id='"+consegna.getId()+"'";
+        PreparedStatement prepStat = getConnection().prepareStatement(sql);
+        prepStat.setNull(1,  19);
         prepStat.executeUpdate();
     }
 
     @Override
     public void updateDisponibilita(PuntoRitiro pr) throws SQLException {
-        sql = "update Prodotti set SlotDisponibili=? where Id='"+pr.getId()+"'";
+        sql = "update PuntiRitiro set SlotDisponibili=? where Id='"+pr.getId()+"'";
         PreparedStatement prepStat = getConnection().prepareStatement(sql);
         prepStat.setInt(1, pr.getSlotDisponibili());
         prepStat.executeUpdate();
     }
-
 
 }

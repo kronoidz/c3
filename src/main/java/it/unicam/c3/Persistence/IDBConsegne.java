@@ -22,76 +22,20 @@
  *
  */
 
+package it.unicam.c3.Persistence;
 
-package it.unicam.c3.Anagrafica;
+import it.unicam.c3.Consegne.Consegna;
 
-public abstract class Utente {
+import java.util.List;
 
-    private String nome;
-    private String cognome;
-    private String email;
-    private String password;
-
-    /**
-     *
-     * @return name
-     */
-    public String getNome() {
-        return nome;
-    }
-
-    /**
-     * set name
-     * @param nome
-     */
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+@FunctionalInterface
+public interface IDBConsegne {
 
     /**
      *
-     * @return surname
+     * @return Lista delle consegne
+     * @throws Exception
      */
-    public String getCognome() {
-        return cognome;
-    }
+    List<Consegna> getConsegne() throws Exception;
 
-    /**
-     * set surname
-     */
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
-    }
-
-    /**
-     *
-     * @return email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * set email
-     * @param email
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     *
-     * @return password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String toString(){
-        return this.nome+" "+this.cognome+" "+this.email;
-    }
 }

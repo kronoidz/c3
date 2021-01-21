@@ -22,76 +22,57 @@
  *
  */
 
+package it.unicam.c3.Persistence;
 
-package it.unicam.c3.Anagrafica;
+import it.unicam.c3.Citta.PuntoRitiro;
+import it.unicam.c3.Consegne.Consegna;
 
-public abstract class Utente {
+import java.sql.SQLException;
 
-    private String nome;
-    private String cognome;
-    private String email;
-    private String password;
 
-    /**
-     *
-     * @return name
-     */
-    public String getNome() {
-        return nome;
-    }
+public interface IDBCorriere {
 
     /**
-     * set name
-     * @param nome
+     * Aggiorna il fatto che la consegna è stata presa in carico
+     * @param consegna
+     * @throws Exception
      */
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    void updateConsegnaInCarico(Consegna consegna) throws Exception;
 
     /**
-     *
-     * @return surname
+     * Aggiorna il corriere della consegna
+     * @param consegna
+     * @throws Exception
      */
-    public String getCognome() {
-        return cognome;
-    }
+    void updateCorriere(Consegna consegna)throws Exception;
 
     /**
-     * set surname
+     * Aggiorna il fatto che la consegna è stata effettuata
+     * @param consegna
+     * @throws Exception
      */
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
-    }
+    void updateConsegnaEffettuata(Consegna consegna) throws Exception;
 
     /**
-     *
-     * @return email
+     * Aggiorna il fatto che la consegna è in attesa
+     * @param consegna
+     * @throws Exception
      */
-    public String getEmail() {
-        return email;
-    }
+    void updateConsegnaInAttesa(Consegna consegna) throws Exception;
 
     /**
-     * set email
-     * @param email
+     * Aggiorna il fatto che il corriere ha annullato la presa in carico della
+     * consegna (set corriere a null)
+     * @param consegna
+     * @throws Exception
      */
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    void updateCorriereNullo(Consegna consegna) throws Exception;
 
     /**
-     *
-     * @return password
+     * Aggiorna slot disponibili
+     * @param pr
+     * @throws SQLException
      */
-    public String getPassword() {
-        return password;
-    }
+    void updateDisponibilita(PuntoRitiro pr) throws SQLException;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String toString(){
-        return this.nome+" "+this.cognome+" "+this.email;
-    }
 }

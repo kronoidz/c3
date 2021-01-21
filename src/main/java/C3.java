@@ -1,100 +1,49 @@
+/*******************************************************************************
+ * MIT License
 
-import it.unicam.c3.Anagrafica.Cliente;
-import it.unicam.c3.Anagrafica.Commerciante;
-import it.unicam.c3.Citta.CentroCittadino;
-import it.unicam.c3.Citta.PuntoRitiro;
-import it.unicam.c3.Commercio.Prodotto;
-import it.unicam.c3.Commercio.PuntoVendita;
-import it.unicam.c3.Consegne.GestoreConsegne;
-import it.unicam.c3.Controller.*;
-import it.unicam.c3.Ordini.GestoreOrdini;
-import it.unicam.c3.Persistence.DBAccounts;
-import it.unicam.c3.Persistence.DBCommerciante;
+ * Copyright (c) 2021 Lorenzo Serini and Alessandro Pecugi
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *******************************************************************************/
+/**
+ *
+ */
+
+
 import it.unicam.c3.View.Console.ConsoleView;
-import it.unicam.c3.View.Spring.SpringView;
 import it.unicam.c3.View.View;
 
-import com.sun.mail.smtp.SMTPTransport;
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.security.Security;
-import java.sql.*;
-import java.util.Date;
-import java.util.Properties;
 
 
 public class C3 {
 
     public static void main(String[] args) throws Exception {
 
-        // proto1();
-
-
-
          View consoleView = new ConsoleView();
          consoleView.start();
-
 
 
        // View springView = new SpringView();
        // springView.start();
 
-    //    ControllerAutenticazione ca = new ControllerAutenticazione();
-
-       //ca.registra("Alessandro","Pecugi", "alessandro@gmail.com","Prova", ControllerAutenticazione.TipoUtente.COMMERCIANTE);
-       //Commerciante commercianteAutenticato = ca.autenticaCommerciante("lorenzose.1995@gmail.com","prova");
-    //   Commerciante commercianteAutenticato = ca.autenticaCommerciante("alessandro@gmail.com","Prova");
-
-    //    ControllerCommerciante controller = new ControllerCommerciante(commercianteAutenticato);
-
-        //controller.addPuntoVendita("Via Acquevive,35","Punto Ale");
-     //   System.out.println(controller.getPuntiVendita().size());
-        /*
-        System.out.println(controller.getPuntiVendita().get(0).getId());
-        System.out.println(controller.getPuntiVendita().get(0).getNome());
-        System.out.println(controller.getPuntiVendita().get(0).getPosizione());*/
-        //controller.addPuntoVendita("PROVA","PROVAAAAA");
-
-       // View view = new ConsoleView();
-       // view.start();
-        //DBCommerciante commerciante = new DBCommerciante(commercianteAutenticato);
-        //PuntoVendita pv = new PuntoVendita(commercianteAutenticato,"PRVOA PPPPP","PIPIPIPI");
-        //commerciante.savePuntoVendita(pv);
-
-
-
-       // controller.addProdotto(0,"PROVA1",100);
-      //  controller.addProdotto(0,"PROVA2",200);
-      //  controller.addProdotto(0,"PROVA3",300);
-      //  controller.addPuntoVendita("VIA BOO", "P1");
-       // controller.addPuntoVendita("VIA BOO2", "P2");
-
-        //controller.addPuntoVendita("Via Roma,126", "La Fabbrica Del Gusto");
-        //controller.addProdotto(0,"Cioccolata",11);
-       // controller.addOfferta(controller.getPuntiVendita().get(0),"OFFERTA DI PROVA","20%");
-      //  db.removeProdotto(cm.getPuntiVendita().get(0).getProdotti().get(0));
-      // System.out.println(commercianteAutenticato.getPuntiVendita().get(0).getProdotti());
-
-       // PuntoVendita pv = new PuntoVendita(cm,"La fabbrica del gusto", "Corso cavour, 15");
-
-        //db.savePuntoVendita(pv);
-
-       // Prodotto p = new Prodotto("PRODOTTO TEST", 100.12);
-
-        //Prodotto p2 = new Prodotto("PRODOTTO TEST", 100.12);
-        //p2.setDisponibilita(false);
-
-        //db.saveProdotto(pv,p);
-        //db.saveProdotto(pv,p2);
-
-
     }
 
 
 
-    public static void proto1() throws IOException, MessagingException, SQLException {
+  /*  public static void proto1() throws IOException, MessagingException, Exception {
         Commerciante commerciante1 = new Commerciante("Giulio", "Bianchi", "giuliob.1995@gmail.com", "prova");
         commerciante1.addPuntoVendita("Il magazzino del gusto", "Corso Cavour, 15");
         commerciante1.addPuntoVendita("La fabbrica di cioccolato", "via Roma, 22");
@@ -130,7 +79,7 @@ public class C3 {
         GestoreConsegne.getInstance().addConsegna(GestoreOrdini.getInstance().getOrdini(commerciante1).get(1), commerciante1, CentroCittadino.getInstance().getPuntiRitiro().get(0));
 
         consoleView.start();
-    }
+    }*/
 
 }
 

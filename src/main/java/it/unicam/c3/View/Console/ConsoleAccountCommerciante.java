@@ -1,3 +1,27 @@
+/*******************************************************************************
+ * MIT License
+
+ * Copyright (c) 2021 Lorenzo Serini and Alessandro Pecugi
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *******************************************************************************/
+/**
+ *
+ */
+
 package it.unicam.c3.View.Console;
 
 
@@ -45,11 +69,11 @@ public class ConsoleAccountCommerciante {
 
     public void initChoice() {
         System.out.println("COSA VUOI FARE:");
-        System.out.println("(" + VISUALIZZA_PUNTI_VENDITA + ") Visualizza punti vendita");
-        System.out.println("(" + AGGIUNGI_PUNTO_VENDITA + ") Aggiungi punto vendita");
-        System.out.println("(" + VISUALIZZA_ORDINI_IN_ATTESA + ") Visualizza ordini in attesa");
-        System.out.println("(" + ABILITA_RITIRO_CONSEGNA + ") Abilita ritiro consegna");
-        System.out.println("(" + LOGOUT + ") Logout");
+        System.out.println(VISUALIZZA_PUNTI_VENDITA + ") Visualizza punti vendita");
+        System.out.println(AGGIUNGI_PUNTO_VENDITA + ") Aggiungi punto vendita");
+        System.out.println(VISUALIZZA_ORDINI_IN_ATTESA + ") Visualizza ordini in attesa");
+        System.out.println(ABILITA_RITIRO_CONSEGNA + ") Abilita ritiro consegna");
+        System.out.println(LOGOUT + ") Logout");
     }
 
     public void commercianteView() throws IOException {
@@ -85,7 +109,7 @@ public class ConsoleAccountCommerciante {
             System.out.println("-------- CONSEGNA "+i+" --------");
             System.out.println("--------------------------------");
             System.out.println("Id Consegna: "+controller.getConsegneDaAbilitareAlRitiro().get(i).getId());
-            System.out.println("Nome Ordine Cliente: "+controller.getConsegneDaAbilitareAlRitiro().get(i).getOrdine().getCliente().getNome()+" "+controller.getConsegneDaAbilitareAlRitiro().get(i).getOrdine().getCliente());
+            System.out.println("Nome Ordine Cliente: "+controller.getConsegneDaAbilitareAlRitiro().get(i).getOrdine().getCliente());
             System.out.println("Email Ordine Cliente: "+controller.getConsegneDaAbilitareAlRitiro().get(i).getOrdine().getCliente().getEmail());
             System.out.println("N. Prodotti Ordinati: "+controller.getConsegneDaAbilitareAlRitiro().get(i).getOrdine().getProdotti().size());
         }
@@ -130,7 +154,13 @@ public class ConsoleAccountCommerciante {
             System.out.println("[y+enter per abilitare la consegna al ritiro]");
             System.out.println("[n+enter per annullare l'operazione]");
             String lineChoice =br.readLine();
-            if(lineChoice.equals("y")) controller.abilitaRitiro(controller.getConsegneDaAbilitareAlRitiro().get(Integer.parseInt(line)));
+            if(lineChoice.equals("y")) {
+                try {
+                    controller.abilitaRitiro(controller.getConsegneDaAbilitareAlRitiro().get(Integer.parseInt(line)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -165,9 +195,9 @@ public class ConsoleAccountCommerciante {
                 System.out.println("Posizione: "+controller.getPuntiRitiroDisponibili().get(i).getIndirizzo());
                 System.out.println("Slot Disponibili: "+controller.getPuntiRitiroDisponibili().get(i).getSlotDisponibili());
             }
-            System.out.println("\n Scegli il punto di ritiro dove verrà effettuata la consegna:");
+            System.out.println("\nScegli il punto di ritiro dove verr\u00E0 effettuata la consegna:");
             System.out.println("[number+enter per scegliere il punto di ritiro]");
-            System.out.println("[" + RETURN + "enter per annullare l'operazione]");
+            System.out.println("[" + RETURN + "+enter per annullare l'operazione]");
             line = br.readLine();
             if (!line.equals(RETURN)) return controller.getPuntiRitiroDisponibili().get(Integer.parseInt(line));
         } else{
@@ -194,9 +224,21 @@ public class ConsoleAccountCommerciante {
             String lineChoice=br.readLine();
             if(lineChoice.equals("y")) {
                 PuntoRitiro pv =  this.scegliPuntoRitiroView();
-                if(!pv.equals(null))controller.accettaOrdine(controller.getOrdini(StatoOrdine.IN_ATTESA).get(Integer.parseInt(line)), pv);
+                if(!pv.equals(null)) {
+                    try {
+                        controller.accettaOrdine(controller.getOrdini(StatoOrdine.IN_ATTESA).get(Integer.parseInt(line)), pv);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-            else if(lineChoice.equals("n")) controller.rifiutaOrdine(controller.getOrdini(StatoOrdine.IN_ATTESA).get(Integer.parseInt(line)));
+            else if(lineChoice.equals("n")) {
+                try {
+                    controller.rifiutaOrdine(controller.getOrdini(StatoOrdine.IN_ATTESA).get(Integer.parseInt(line)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -208,7 +250,7 @@ public class ConsoleAccountCommerciante {
         String positionLine = br.readLine();
         System.out.println("Vuoi davvero creare il nuovo punto vendita?");
         System.out.println("[y+enter per crearlo]");
-        System.out.println("[n+enter per annullare l'operaione]");
+        System.out.println("[n+enter per annullare l'operazione]");
         line = br.readLine();
         if(line.equals("y")) {
             try {
@@ -239,10 +281,11 @@ public class ConsoleAccountCommerciante {
     }
 
     private void visualizzaProdotti(PuntoVendita pv){
-        System.out.println("PRODOTTI VENDUTI:");
+        System.out.println("PRODOTTI:");
         System.out.println("------------------");
         for(int i=0; i<pv.getProdotti().size();i++){
             System.out.println(pv.getProdotti().get(i).getDescrizione());
+            System.out.println("Disponibilit\u00E0: "+pv.getProdotti().get(i).getDisponibilita());
             System.out.println("Prezzo: "+pv.getProdotti().get(i).getPrezzo());
             System.out.println();
         }

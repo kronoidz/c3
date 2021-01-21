@@ -16,54 +16,49 @@ import java.util.List;
 public class DBOrdini extends DBConnection implements IDBOrdini{
     private String sql;
     private IDBAccounts accounts;
-    //sdprivate List<Commerciante> commercianti;
-   // private List<Cliente> clienti;
+    private static List<Ordine> ordini;
 
 
     public DBOrdini() throws SQLException {
         super();
         this.accounts=new DBAccounts();
-     //   this.commercianti=accounts.getCommercianti();
-      //  this.clienti=accounts.getClienti();
+        ordini = new LinkedList<>();
     }
 
     public DBOrdini(String connectionString, String username, String password) throws SQLException {
         super(connectionString,username,password);
         this.accounts=new DBAccounts();
-       // this.commercianti=accounts.getCommercianti();
-       // this.clienti=accounts.getClienti();
+        ordini = new LinkedList<>();
     }
 
 
     public DBOrdini(IDBAccounts dbAccounts, String connectionString, String username, String password) throws SQLException {
         super(connectionString,username,password);
         this.accounts=dbAccounts;
-    //    this.commercianti=accounts.getCommercianti();
-    //    this.clienti=accounts.getClienti();
+        ordini = new LinkedList<>();
     }
 
     public DBOrdini(IDBAccounts dbAccounts) throws SQLException {
         super();
         this.accounts=dbAccounts;
-    //    this.commercianti=accounts.getCommercianti();
-     //   this.clienti=accounts.getClienti();
+        ordini = new LinkedList<>();
     }
-
 
 
     @Override
     public List<Ordine> getOrdini() throws SQLException {
-        List<Ordine> ordini= new LinkedList<>();
-        sql = "Select * from Ordini";
-        setData(sql);
-        while(getData().next()){
-            Cliente cliente = this.getCliente(getData().getString("Cliente"));
-            PuntoVendita pv = this.getPV(getData().getString("PuntoVendita"));
-            StatoOrdine stato = StatoOrdine.valueOf(getData().getString("Stato"));
-            String idOrdine = getData().getString("Id");
-            ordini.add(new Ordine(cliente,pv,null,idOrdine,stato));
+        if(ordini.isEmpty()) {
+            sql = "Select * from Ordini";
+            setData(sql);
+            while (getData().next()) {
+                Cliente cliente = this.getCliente(getData().getString("Cliente"));
+                PuntoVendita pv = this.getPV(getData().getString("PuntoVendita"));
+                StatoOrdine stato = StatoOrdine.valueOf(getData().getString("Stato"));
+                String idOrdine = getData().getString("Id");
+                ordini.add(new Ordine(cliente, pv, null, idOrdine, stato));
+            }
+            for (Ordine o : ordini) putProdotti(o);
         }
-         for(Ordine o:ordini) putProdotti(o);
         return ordini;
     }
 

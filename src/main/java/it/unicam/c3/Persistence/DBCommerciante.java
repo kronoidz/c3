@@ -1,3 +1,27 @@
+/*******************************************************************************
+ * MIT License
+
+ * Copyright (c) 2021 Lorenzo Serini and Alessandro Pecugi
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *******************************************************************************/
+/**
+ *
+ */
+
 package it.unicam.c3.Persistence;
 
 import it.unicam.c3.Anagrafica.Commerciante;
@@ -5,6 +29,9 @@ import it.unicam.c3.Commercio.IOfferta;
 import it.unicam.c3.Commercio.Offerta;
 import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Commercio.PuntoVendita;
+import it.unicam.c3.Consegne.Consegna;
+import it.unicam.c3.Ordini.Ordine;
+import it.unicam.c3.Ordini.StatoOrdine;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -36,6 +63,14 @@ public class DBCommerciante extends DBConnection implements IDBCommerciante {
     }
 
     @Override
+    public void updateDisponibilitaProdotto(Prodotto prodotto) throws SQLException {
+        sql = "update Prodotti set Disponibilita=? where Id='"+prodotto.getId()+"'";
+        PreparedStatement prepStat = getConnection().prepareStatement(sql);
+        prepStat.setBoolean(1, prodotto.getDisponibilita());
+        prepStat.executeUpdate();
+    }
+
+    @Override
     public void saveOfferta(PuntoVendita pv, IOfferta offerta) throws SQLException {
         sql = "insert into Offerte(Id,Descrizione, Importo, PuntoVendita) values (?,?,?,?)";
         PreparedStatement prepStat = getConnection().prepareStatement(sql);
@@ -57,6 +92,7 @@ public class DBCommerciante extends DBConnection implements IDBCommerciante {
         prepStat.executeUpdate();
     }
 
+    @Override
     public void removePuntoVendita(PuntoVendita pv) throws SQLException {
         for(Prodotto p:pv.getProdotti()) removeProdotto(p);
         for(IOfferta o:pv.getOfferte()) removeOfferta(o);
@@ -66,6 +102,7 @@ public class DBCommerciante extends DBConnection implements IDBCommerciante {
         prepStat.executeUpdate();
     }
 
+    @Override
     public void removeProdotto(Prodotto prodotto) throws SQLException {
         String sql = "delete from Prodotti where Id=?";
         PreparedStatement prepStat = getConnection().prepareStatement(sql);
@@ -73,11 +110,42 @@ public class DBCommerciante extends DBConnection implements IDBCommerciante {
         prepStat.executeUpdate();
     }
 
+    @Override
     public void removeOfferta(IOfferta offerta) throws SQLException {
         String sql = "delete from Offerte where Id=?";
         PreparedStatement prepStat = getConnection().prepareStatement(sql);
         prepStat.setString(1, offerta.getId());
         prepStat.executeUpdate();
     }
+
+    @Override
+    public void updateStatoOrdine(Ordine ordine, StatoOrdine stato) throws SQLException {
+        String sql = "update Ordini set Stato=? where Id='"+ordine.getId()+"'";
+        PreparedStatement prepStat = getConnection().prepareStatement(sql);
+        prepStat.setString(1, stato.toString());
+        prepStat.executeUpdate();
+    }
+
+    @Override
+    public void saveConsegna(Consegna consegna) throws SQLException {
+        sql = "insert into Consegne(Id, Ordine, PuntoRitiro, Stato, Ritirabile) values (?,?,?,?,?)";
+        PreparedStatement prepStat = getConnection().prepareStatement(sql);
+        prepStat.setString(1, consegna.getId());
+        prepStat.setString(2, consegna.getOrdine().getId());
+        prepStat.setString(3, consegna.getPuntoRitiro().getId());
+        prepStat.setString(4, consegna.getStato().toString());
+        prepStat.setBoolean(5, consegna.isRitirabile());
+        prepStat.executeUpdate();
+    }
+
+    @Override
+    public void updateConsegnaRitirabile(Consegna consegna) throws SQLException {
+        sql = "update Consegne set Ritirabile=? where Id='" + consegna.getId() + "'";
+        PreparedStatement prepStat = getConnection().prepareStatement(sql);
+        prepStat.setBoolean(1, consegna.isRitirabile());
+        prepStat.executeUpdate();
+    }
+
+
 
 }

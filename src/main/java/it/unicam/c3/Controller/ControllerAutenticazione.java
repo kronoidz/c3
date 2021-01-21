@@ -1,3 +1,27 @@
+/*******************************************************************************
+ * MIT License
+
+ * Copyright (c) 2021 Lorenzo Serini and Alessandro Pecugi
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *******************************************************************************/
+/**
+ *
+ */
+
 package it.unicam.c3.Controller;
 
 import it.unicam.c3.Anagrafica.Amministrazione;
@@ -5,6 +29,7 @@ import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
+import it.unicam.c3.Consegne.GestoreConsegne;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.Persistence.*;
 
@@ -17,14 +42,15 @@ public class ControllerAutenticazione {
 
     //public static boolean autenticazioneAbilitata = false;
 
-    public ControllerAutenticazione(IDBAccounts dbAccounts, IDBPuntiRitiro dbPuntiRitiro, IDBOrdini dbOrdini ) throws SQLException, SQLException {
+    public ControllerAutenticazione(IDBAccounts dbAccounts, IDBPuntiRitiro dbPuntiRitiro, IDBOrdini dbOrdini, IDBConsegne dbConsegne ) throws Exception {
         this.dbAccounts=dbAccounts;
         CentroCittadino.getInstance(this.dbAccounts.getCommercianti(), this.dbAccounts.getClienti(), this.dbAccounts.getCorrieri(), dbPuntiRitiro.getPuntiRitiro());
         GestoreOrdini.getInstance(dbOrdini.getOrdini());
+        GestoreConsegne.getInstance(dbConsegne.getConsegne());
     }
 
-    public ControllerAutenticazione() throws SQLException {
-        this(new DBAccounts(), new DBPuntiRitiro(), new DBOrdini());
+    public ControllerAutenticazione() throws Exception {
+        this(new DBAccounts(), new DBPuntiRitiro(), new DBOrdini(), new DBConsegne());
     }
 
     public Commerciante autenticaCommerciante(String email, String password) {
@@ -69,13 +95,6 @@ public class ControllerAutenticazione {
         return corrieri.get(0);
     }
 
-  /*TODO:  public ControllerGestore autenticaGestore(String password) {
-        if (!Amministrazione.checkPassword(password))
-            return null;
-        return new ControllerGestore(); LO METTIAMO QUI O NO?
-        IN QUESTO CASO NON SERVONO I COMANDI DI CONTROLLO
-        AUTORIZZAZIONE IN CONTROLLERGESTORE
-    }*/
 
     public enum TipoUtente {
         COMMERCIANTE, CLIENTE, CORRIERE
