@@ -24,17 +24,17 @@
 
 package it.unicam.c3.Persistence;
 
+
 import it.unicam.c3.Anagrafica.Commerciante;
-import it.unicam.c3.Commercio.IOfferta;
-import it.unicam.c3.Commercio.Offerta;
-import it.unicam.c3.Commercio.Prodotto;
-import it.unicam.c3.Commercio.PuntoVendita;
+import it.unicam.c3.Commercio.*;
 import it.unicam.c3.Consegne.Consegna;
 import it.unicam.c3.Ordini.Ordine;
 import it.unicam.c3.Ordini.StatoOrdine;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class DBCommerciante extends DBConnection implements IDBCommerciante {
     private Commerciante commerciante;
@@ -72,12 +72,25 @@ public class DBCommerciante extends DBConnection implements IDBCommerciante {
 
     @Override
     public void saveOfferta(PuntoVendita pv, IOfferta offerta) throws SQLException {
-        sql = "insert into Offerte(Id,Descrizione, Importo, PuntoVendita) values (?,?,?,?)";
+        sql = "insert into Offerte(Id,Descrizione, Importo, PuntoVendita, Scadenza) values (?,?,?,?,?)";
         PreparedStatement prepStat = getConnection().prepareStatement(sql);
         prepStat.setString(1, offerta.getId());
         prepStat.setString(2, offerta.getDescrizione());
         prepStat.setString(3, offerta.getImporto());
         prepStat.setString(4, pv.getId());
+        prepStat.setNull(5,  19);
+        prepStat.executeUpdate();
+    }
+
+    @Override
+    public void saveOfferta(PuntoVendita pv, IOfferta offerta, LocalDate date) throws SQLException {
+        sql = "insert into Offerte(Id,Descrizione, Importo, PuntoVendita, Scadenza) values (?,?,?,?,?)";
+        PreparedStatement prepStat = getConnection().prepareStatement(sql);
+        prepStat.setString(1, offerta.getId());
+        prepStat.setString(2, offerta.getDescrizione());
+        prepStat.setString(3, offerta.getImporto());
+        prepStat.setString(4, pv.getId());
+        prepStat.setDate(5, Date.valueOf(date));
         prepStat.executeUpdate();
     }
 

@@ -77,7 +77,7 @@ public class DBCliente extends DBConnection implements IDBCliente{
 
     @Override
     public void updateDisponibilita(PuntoRitiro pr) throws SQLException {
-        sql = "update Prodotti set SlotDisponibili=? where Id='"+pr.getId()+"'";
+        sql = "update PuntiRitiro set SlotDisponibili=? where Id='"+pr.getId()+"'";
         PreparedStatement prepStat = getConnection().prepareStatement(sql);
         prepStat.setInt(1, pr.getSlotDisponibili());
         prepStat.executeUpdate();

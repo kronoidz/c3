@@ -23,7 +23,11 @@
  */
 
 
+import it.unicam.c3.Commercio.IOfferta;
+import it.unicam.c3.Commercio.OffertaATempo;
+import it.unicam.c3.Commercio.OffertaSemplice;
 import it.unicam.c3.View.Console.ConsoleView;
+import it.unicam.c3.View.Spring.SpringView;
 import it.unicam.c3.View.View;
 
 
@@ -33,26 +37,24 @@ import java.sql.SQLException;
 
 public class C3 {
 
-    public static void main(String[] args)
-            throws MessagingException, IOException, SQLException
-    {
+    public static void main(String[] args) throws Exception {
+
         View view;
+            if (args.length > 0) {
+                if (args[0].equalsIgnoreCase("console")) {
+                        view = new ConsoleView();
+                }
 
-        if (args.length > 0) {
-            if (args[0].equalsIgnoreCase("console"))
-                view = new ConsoleView();
+                else if (args[0].equalsIgnoreCase("spring"))
+                    view = new SpringView();
 
-            else if (args[0].equalsIgnoreCase("spring"))
-                view = new SpringView();
+                else {
+                    System.err.println("Argument " + args[0] + " is invalid");
+                    return;
+                }
+            } else view = new SpringView(); // Default view
 
-            else {
-                System.err.println("Argument " + args[0] + " is invalid");
-                return;
-            }
-        }
-        else view = new SpringView(); // Default view
-
-        view.start();
+            view.start();
     }
 
 }

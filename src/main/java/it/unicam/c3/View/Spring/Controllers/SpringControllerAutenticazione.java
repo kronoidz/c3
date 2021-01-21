@@ -61,6 +61,8 @@ public class SpringControllerAutenticazione {
             exception.printStackTrace();
             model.addAttribute("error", "Errore database");
             return new ModelAndView("/auth", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         Utente utente = null;
@@ -88,6 +90,8 @@ public class SpringControllerAutenticazione {
             exception.printStackTrace();
             model.addAttribute("error", "Errore database");
             return new ModelAndView("/auth", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (controller == null) {
@@ -121,6 +125,8 @@ public class SpringControllerAutenticazione {
             exception.printStackTrace();
             model.addAttribute("error", "Errore database");
             return new ModelAndView("/registrazione", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         ControllerAutenticazione.TipoUtente tipo;

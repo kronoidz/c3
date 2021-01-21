@@ -153,7 +153,19 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         if (prodotto == null) return "/not-found";
 
-        puntoVendita.removeProdotto(prodotto);
+        /*TODO:  puntoVendita.removeProdotto(prodotto);
+            ho sostituito questa riga di codice a quella sottostante
+            (quella chiusa nel blocco try catch)
+            perche se non passo per il controller non mi aggiorna
+            il database
+         */
+
+        try {
+            controller.removeProdotto(puntoVendita,prodotto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
     }
 
@@ -181,7 +193,18 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         if (prodotto == null) return "/not-found";
 
-        prodotto.setDisponibilita(!prodotto.getDisponibilita());
+        /*TODO: prodotto.setDisponibilita(!prodotto.getDisponibilita());
+            ho sostituito questa riga di codice a quella sottostante
+            (quella chiusa nel blocco try catch)
+            perche se non passo per il controller non mi aggiorna
+            il database
+         */
+
+        try {
+            controller.cambiaDisponibilitaProdotto(prodotto, !prodotto.getDisponibilita());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
     }
 
@@ -221,7 +244,18 @@ public class SpringControllerCommerciante extends SpringControllerBase {
         if (puntoVendita == null)
             return "/not-found";
 
-        puntoVendita.addProdotto(nome, prezzo);
+         /*TODO: puntoVendita.addProdotto(nome, prezzo);
+            ho sostituito questa riga di codice a quella sottostante
+            (quella chiusa nel blocco try catch)
+            perche se non passo per il controller non mi aggiorna
+            il database
+         */
+        try {
+            controller.addProdotto(puntoVendita,nome,prezzo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
     }
 
@@ -248,7 +282,19 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         if (offerta == null) return "/not-found";
 
-        puntoVendita.getOfferte().remove(offerta);
+
+        /*TODO: puntoVendita.getOfferte().remove(offerta);
+            ho sostituito questa riga di codice a quella sottostante
+            (quella chiusa nel blocco try catch)
+            perche se non passo per il controller non mi aggiorna
+            il database
+         */
+        try {
+            controller.removeOfferta(puntoVendita,offerta);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
     }
 
@@ -290,10 +336,32 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         if (scadenza != null && !scadenza.isEmpty()) {
             LocalDate date = LocalDate.parse(scadenza, DateTimeFormatter.ISO_DATE_TIME);
-            puntoVendita.addOfferta(descrizione, importo, date);
+
+            /*TODO:  puntoVendita.addOfferta(descrizione, importo, date);
+                    ho sostituito questa riga di codice a quella sottostante
+                    (quella chiusa nel blocco try catch)
+                 perche se non passo per il controller non mi aggiorna
+                 il database
+         */
+            try {
+                controller.addOfferta(puntoVendita,descrizione,importo, date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
         else {
-            puntoVendita.addOfferta(descrizione, importo);
+            /*TODO:   puntoVendita.addOfferta(descrizione, importo);
+                    ho sostituito questa riga di codice a quella sottostante
+                    (quella chiusa nel blocco try catch)
+                 perche se non passo per il controller non mi aggiorna
+                 il database
+         */
+            try {
+                controller.addOfferta(puntoVendita,descrizione,importo);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return "redirect:/commerciante/puntoVendita?id=" + idPuntoVendita;
@@ -365,7 +433,11 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         if (puntoRitiro == null) return "/not-found";
 
-        controller.accettaOrdine(ordine, puntoRitiro);
+        try {
+            controller.accettaOrdine(ordine, puntoRitiro);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "redirect:/commerciante/ordine?id=" + ordine.getId();
     }
 
@@ -383,7 +455,11 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         if (ordine == null) return "/not-found";
 
-        controller.rifiutaOrdine(ordine);
+        try {
+            controller.rifiutaOrdine(ordine);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "redirect:/commerciante/ordine?id=" + ordine.getId();
     }
 
@@ -434,7 +510,11 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         if (consegna == null) return "/not-found";
 
-        controller.abilitaRitiro(consegna);
+        try {
+            controller.abilitaRitiro(consegna);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "redirect:/commerciante/abilitaRitiroConsegna";
     }
 }

@@ -52,7 +52,11 @@ public class SpringControllerGestore {
         if (puntoRitiro == null)
             return new ModelAndView("/not-found", HttpStatus.NOT_FOUND);
 
-        controller.removePuntoRitiro(puntoRitiro);
+        try {
+            controller.removePuntoRitiro(puntoRitiro);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
         return new ModelAndView("redirect:/gestore");
     }
 
