@@ -1,9 +1,9 @@
 package it.unicam.c3.View.Spring;
 
 import it.unicam.c3.Anagrafica.Cliente;
+import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
-import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Commercio.PuntoVendita;
 import it.unicam.c3.Consegne.Consegna;
 import it.unicam.c3.Consegne.GestoreConsegne;
@@ -14,8 +14,6 @@ import it.unicam.c3.Ordini.StatoOrdine;
 import it.unicam.c3.View.View;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import it.unicam.c3.Anagrafica.Commerciante;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -62,7 +60,7 @@ public class SpringView implements View {
         GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(0), pvs.get(0).getProdotti().subList(2, 9));
         GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(0), pvs.get(0).getProdotti().subList(1, 2));
 
-        Corriere corriere1 = new Corriere("Elton", "John", "e.john@gmail.com", "p");
+        Corriere corriere1 = new Corriere("Elton", "John", "c", "c");
         CentroCittadino.getInstance().addCorriere(corriere1);
 
         GestoreOrdini.getInstance().addOrdine(cliente1, pvs.get(1), pvs.get(1).getProdotti().subList(1, 10));
