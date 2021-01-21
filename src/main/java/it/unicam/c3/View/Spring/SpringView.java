@@ -49,7 +49,7 @@ public class SpringView implements View {
     @SuppressWarnings("RedundantThrows")
     @Override
     public void start() throws IOException {
-        makeDevData();
+        //makeDevData();
 
         SpringApplication.run(SpringView.class);
     }

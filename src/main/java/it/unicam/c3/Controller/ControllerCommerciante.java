@@ -152,10 +152,10 @@ public class ControllerCommerciante {
         } else throw new IllegalArgumentException();
     }
 
-    public void addOfferta(PuntoVendita pv, String descrizione, String importo, LocalDate date){
+    public void addOfferta(PuntoVendita pv, String descrizione, String importo, LocalDate date) throws Exception {
         if (this.commerciante.getPuntiVendita().contains(pv)){
             pv.addOfferta(descrizione,importo, date);
-            //TODO: DATABASE NON DISPONIBILE!
+           this.database.saveOfferta(pv,pv.getOfferte().get(pv.getOfferte().size()-1),date);
         } else throw new IllegalArgumentException();
     }
 

@@ -26,6 +26,7 @@ package it.unicam.c3.Persistence;
 
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Commercio.IOfferta;
+import it.unicam.c3.Commercio.OffertaSemplice;
 import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Commercio.PuntoVendita;
 import it.unicam.c3.Consegne.Consegna;
@@ -33,6 +34,7 @@ import it.unicam.c3.Ordini.Ordine;
 import it.unicam.c3.Ordini.StatoOrdine;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public interface IDBCommerciante{
 
@@ -66,6 +68,14 @@ public interface IDBCommerciante{
      */
     void saveOfferta(PuntoVendita pv, IOfferta offerta) throws Exception;
 
+    /**
+     * Salva offerta a tempo
+     * @param pv
+     * @param offerta
+     * @param date
+     * @throws Exception
+     */
+    void saveOfferta(PuntoVendita pv, IOfferta offerta, LocalDate date) throws Exception;
     /**
      * Salva rimozione punto vendita
      * @param pv

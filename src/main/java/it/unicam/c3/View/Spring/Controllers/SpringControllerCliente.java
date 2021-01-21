@@ -238,7 +238,11 @@ public class SpringControllerCliente extends SpringControllerBase {
 
         if (consegna == null) return "/not-found";
 
-        controller.setConsegnaRitirata(consegna);
+        try {
+            controller.setConsegnaRitirata(consegna);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "redirect:/cliente";
     }
 }
