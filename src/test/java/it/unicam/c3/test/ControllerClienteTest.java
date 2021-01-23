@@ -81,7 +81,6 @@ public class ControllerClienteTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //assertEquals(2,controller.getOrdini().size());
         assertEquals(ordiniSize + 1, controller.getOrdini().size());
     }
 
