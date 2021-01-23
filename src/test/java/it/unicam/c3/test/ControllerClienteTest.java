@@ -3,7 +3,6 @@ package it.unicam.c3.test;
 import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Citta.CentroCittadino;
-import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Controller.ControllerCliente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,6 +71,7 @@ public class ControllerClienteTest {
 
     @Test
     public void numberOrdini(){
+        int ordiniSize = controller.getOrdini().size();
         controller.addInCarrello(controller.getPuntiVendita().get(0), controller.getPuntiVendita().get(0).getProdotti().get(0));
         controller.addInCarrello(controller.getPuntiVendita().get(0), controller.getPuntiVendita().get(0).getProdotti().get(1));
         controller.addInCarrello(controller.getPuntiVendita().get(1), controller.getPuntiVendita().get(0).getProdotti().get(1));
@@ -80,7 +80,8 @@ public class ControllerClienteTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        assertEquals(2,controller.getOrdini().size());
+        //assertEquals(2,controller.getOrdini().size());
+        assertEquals(ordiniSize + 1, controller.getOrdini().size());
     }
 
 
