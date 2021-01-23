@@ -153,13 +153,6 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         if (prodotto == null) return "/not-found";
 
-        /*TODO:  puntoVendita.removeProdotto(prodotto);
-            ho sostituito questa riga di codice a quella sottostante
-            (quella chiusa nel blocco try catch)
-            perche se non passo per il controller non mi aggiorna
-            il database
-         */
-
         try {
             controller.removeProdotto(puntoVendita,prodotto);
         } catch (Exception e) {
@@ -192,13 +185,6 @@ public class SpringControllerCommerciante extends SpringControllerBase {
                 .orElse(null);
 
         if (prodotto == null) return "/not-found";
-
-        /*TODO: prodotto.setDisponibilita(!prodotto.getDisponibilita());
-            ho sostituito questa riga di codice a quella sottostante
-            (quella chiusa nel blocco try catch)
-            perche se non passo per il controller non mi aggiorna
-            il database
-         */
 
         try {
             controller.cambiaDisponibilitaProdotto(prodotto, !prodotto.getDisponibilita());
@@ -244,12 +230,6 @@ public class SpringControllerCommerciante extends SpringControllerBase {
         if (puntoVendita == null)
             return "/not-found";
 
-         /*TODO: puntoVendita.addProdotto(nome, prezzo);
-            ho sostituito questa riga di codice a quella sottostante
-            (quella chiusa nel blocco try catch)
-            perche se non passo per il controller non mi aggiorna
-            il database
-         */
         try {
             controller.addProdotto(puntoVendita,nome,prezzo);
         } catch (Exception e) {
@@ -282,13 +262,6 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         if (offerta == null) return "/not-found";
 
-
-        /*TODO: puntoVendita.getOfferte().remove(offerta);
-            ho sostituito questa riga di codice a quella sottostante
-            (quella chiusa nel blocco try catch)
-            perche se non passo per il controller non mi aggiorna
-            il database
-         */
         try {
             controller.removeOfferta(puntoVendita,offerta);
         } catch (Exception e) {
@@ -337,12 +310,6 @@ public class SpringControllerCommerciante extends SpringControllerBase {
         if (scadenza != null && !scadenza.isEmpty()) {
             LocalDate date = LocalDate.parse(scadenza, DateTimeFormatter.ISO_DATE_TIME);
 
-            /*TODO:  puntoVendita.addOfferta(descrizione, importo, date);
-                    ho sostituito questa riga di codice a quella sottostante
-                    (quella chiusa nel blocco try catch)
-                 perche se non passo per il controller non mi aggiorna
-                 il database
-         */
             try {
                 controller.addOfferta(puntoVendita,descrizione,importo, date);
             } catch (Exception e) {
@@ -351,12 +318,7 @@ public class SpringControllerCommerciante extends SpringControllerBase {
 
         }
         else {
-            /*TODO:   puntoVendita.addOfferta(descrizione, importo);
-                    ho sostituito questa riga di codice a quella sottostante
-                    (quella chiusa nel blocco try catch)
-                 perche se non passo per il controller non mi aggiorna
-                 il database
-         */
+
             try {
                 controller.addOfferta(puntoVendita,descrizione,importo);
             } catch (Exception e) {
