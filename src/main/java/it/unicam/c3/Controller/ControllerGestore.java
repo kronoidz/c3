@@ -59,19 +59,19 @@ public class ControllerGestore {
         return CentroCittadino.getInstance().getPuntiRitiro();
     }
 
-    public void addPuntoRitiro(String indirizzo, int capienza) throws SQLException {
+    public void addPuntoRitiro(String indirizzo, int capienza) throws Exception {
         if (!autorizzato) throw new RuntimeException("Utente non autorizzato");
         CentroCittadino.getInstance().addPuntoRitiro(indirizzo, capienza);
         dbPuntiRitiro.savePuntoRitiro(CentroCittadino.getInstance().getPuntiRitiro().get(CentroCittadino.getInstance().getPuntiRitiro().size()-1));
     }
 
-    public void removePuntoRitiro(PuntoRitiro pr) throws SQLException {
+    public void removePuntoRitiro(PuntoRitiro pr) throws Exception {
         if (!autorizzato) throw new RuntimeException("Utente non autorizzato");
         CentroCittadino.getInstance().getPuntiRitiro().remove(pr);
         this.dbPuntiRitiro.removePuntoRitiro(pr);
     }
 
-    public void removePuntoRitiro(int indexPr) throws SQLException {
+    public void removePuntoRitiro(int indexPr) throws Exception {
         if (!autorizzato) throw new RuntimeException("Utente non autorizzato");
         this.dbPuntiRitiro.removePuntoRitiro(CentroCittadino.getInstance().getPuntiRitiro().get(indexPr));
         this.removePuntoRitiro(CentroCittadino.getInstance().getPuntiRitiro().get(indexPr));

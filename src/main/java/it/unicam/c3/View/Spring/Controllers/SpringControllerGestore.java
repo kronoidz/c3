@@ -54,7 +54,7 @@ public class SpringControllerGestore {
 
         try {
             controller.removePuntoRitiro(puntoRitiro);
-        } catch (SQLException exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
         return new ModelAndView("redirect:/gestore");
@@ -78,9 +78,9 @@ public class SpringControllerGestore {
 
         try {
             controller.addPuntoRitiro(indirizzo, capienza);
-        } catch (SQLException throwables) {
+        } catch (Exception throwables) {
             throwables.printStackTrace();
-        } // Tanto lo vede subito dopo il redirect
+        }
 
         return new ModelAndView("redirect:/gestore");
     }

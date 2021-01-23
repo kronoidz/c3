@@ -97,7 +97,6 @@ public class ConsoleAccountCliente {
 
 
 
-
     private void mostraCarrello() {
         System.out.println("CARRELLO:");
         int count = 0;

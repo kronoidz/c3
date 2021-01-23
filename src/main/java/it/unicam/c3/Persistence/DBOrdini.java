@@ -46,7 +46,7 @@ public class DBOrdini extends DBConnection implements IDBOrdini{
 
 
     @Override
-    public List<Ordine> getOrdini() throws SQLException {
+    public List<Ordine> getOrdini() throws Exception {
         if(ordini.isEmpty()) {
             sql = "Select * from Ordini";
             setData(sql);
@@ -63,14 +63,14 @@ public class DBOrdini extends DBConnection implements IDBOrdini{
     }
 
 
-    private Cliente getCliente(String emailCliente) throws SQLException {
+    private Cliente getCliente(String emailCliente) throws Exception {
         for(Cliente c:this.accounts.getClienti()){
             if(c.getEmail().equals(emailCliente)) return c;
         }
         return null;
     }
 
-    private PuntoVendita getPV(String idPV) throws SQLException {
+    private PuntoVendita getPV(String idPV) throws Exception {
        for(Commerciante c:this.accounts.getCommercianti()){
            for(PuntoVendita pv:c.getPuntiVendita()){
                if(pv.getId().equals(idPV)) return pv;

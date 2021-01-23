@@ -36,5 +36,5 @@ public interface View {
      * @throws MessagingException
      * @throws SQLException
      */
-    void start() throws IOException, MessagingException, SQLException;
+    void start() throws Exception;
 }

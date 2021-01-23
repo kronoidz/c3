@@ -30,11 +30,17 @@ import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Consegne.GestoreConsegne;
+import it.unicam.c3.Exception.EmailSyntaxException;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.Persistence.*;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ControllerAutenticazione {
@@ -53,8 +59,17 @@ public class ControllerAutenticazione {
         this(new DBAccounts(), new DBPuntiRitiro(), new DBOrdini(), new DBConsegne());
     }
 
+    private boolean emailController(String email){
+        String espressione = "^[0-9a-z]([-_.]?[0-9a-z])*@[0-9a-z]([-.]?[0-9a-z])*\\.[a-z]{2,4}$";
+        Pattern p = Pattern.compile(espressione);
+
+        Matcher m = p.matcher(email);
+
+        return m.matches();
+        }
+
     public Commerciante autenticaCommerciante(String email, String password) {
-        List<Commerciante> commercianti = CentroCittadino.getInstance()
+       List<Commerciante> commercianti = CentroCittadino.getInstance()
                 .getCommercianti()
                 .stream()
                 .filter(commerciante ->
@@ -100,24 +115,25 @@ public class ControllerAutenticazione {
         COMMERCIANTE, CLIENTE, CORRIERE
     }
 
-    public void registra(String nome, String cognome, String email, String password,
-                         TipoUtente tipo) throws SQLException {
-        switch (tipo) {
-            case CLIENTE:
-                Cliente cliente =  new Cliente(nome, cognome, email, password);
-                CentroCittadino.getInstance().addCliente(cliente);
-                this.dbAccounts.registerCliente(cliente);
-                break;
-            case COMMERCIANTE:
-                Commerciante commerciante =  new Commerciante(nome, cognome, email, password);
-                CentroCittadino.getInstance().addCommerciante(commerciante);
-                this.dbAccounts.registerCommerciante(commerciante);
-                break;
-            case CORRIERE:
-                Corriere corriere = new Corriere(nome, cognome, email, password);
-                CentroCittadino.getInstance().addCorriere(corriere);
-                this.dbAccounts.registerCorriere(corriere);
-                break;
-        }
+    public void registra(String nome, String cognome, String email, String password, TipoUtente tipo) throws Exception{
+        if (emailController(email)) {
+            switch (tipo) {
+                case CLIENTE:
+                    Cliente cliente = new Cliente(nome, cognome, email, password);
+                    CentroCittadino.getInstance().addCliente(cliente);
+                    this.dbAccounts.registerCliente(cliente);
+                    break;
+                case COMMERCIANTE:
+                    Commerciante commerciante = new Commerciante(nome, cognome, email, password);
+                    CentroCittadino.getInstance().addCommerciante(commerciante);
+                    this.dbAccounts.registerCommerciante(commerciante);
+                    break;
+                case CORRIERE:
+                    Corriere corriere = new Corriere(nome, cognome, email, password);
+                    CentroCittadino.getInstance().addCorriere(corriere);
+                    this.dbAccounts.registerCorriere(corriere);
+                    break;
+            }
+        }else throw new EmailSyntaxException();
     }
 }

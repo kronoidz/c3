@@ -36,20 +36,20 @@ public interface IDBPuntiRitiro {
      * @param pr
      * @throws SQLException
      */
-    void savePuntoRitiro(PuntoRitiro pr) throws SQLException;
+    void savePuntoRitiro(PuntoRitiro pr) throws Exception;
 
     /**
      * Rimuove un punto ritiro
      * @param pr
      * @throws SQLException
      */
-    void removePuntoRitiro(PuntoRitiro pr) throws SQLException;
+    void removePuntoRitiro(PuntoRitiro pr) throws Exception;
 
     /**
      *
      * @return lista dei punti ritiro
      * @throws SQLException
      */
-    List<PuntoRitiro> getPuntiRitiro() throws SQLException;
+    List<PuntoRitiro> getPuntiRitiro() throws Exception;
 
 }

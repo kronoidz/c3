@@ -27,9 +27,7 @@ package it.unicam.c3.View.Console;
 import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
-import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Controller.ControllerAutenticazione;
-import it.unicam.c3.Controller.ControllerGestore;
 import it.unicam.c3.View.View;
 
 import javax.mail.MessagingException;
@@ -58,7 +56,7 @@ public class ConsoleView implements View {
     }
 
     @Override
-    public void start() throws IOException, MessagingException, SQLException {
+    public void start() throws Exception {
         String line;
         do {
             choiceInit();
@@ -147,6 +145,8 @@ public class ConsoleView implements View {
                 }
             }catch (SQLException e){
                 System.out.println("ERROR: ERRORE DATABASE!");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();

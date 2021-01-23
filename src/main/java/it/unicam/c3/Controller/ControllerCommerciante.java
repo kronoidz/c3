@@ -59,21 +59,44 @@ public class ControllerCommerciante {
         this(c,new DBCommerciante(c));
     }
 
+    /**
+     * Aggiunge un nuovo punto vendita
+     * @param posizione
+     * @param nome
+     * @throws Exception
+     */
     public void addPuntoVendita(String posizione, String nome) throws Exception {
         this.commerciante.addPuntoVendita(nome,posizione);
         this.database.savePuntoVendita(this.getPuntiVendita().get(this.getPuntiVendita().size()-1));
     }
 
+    /**
+     * Rimuove il punto vendita
+     * @param i
+     * @throws Exception
+     */
     public void removePuntoVendita(int i) throws Exception {
         this.commerciante.getPuntiVendita().remove(i);
         this.database.removePuntoVendita(this.getPuntiVendita().get(i));
     }
 
+    /**
+     * Rimuove il punto vendita
+     * @param pv
+     * @throws Exception
+     */
     public void removePuntoVendita(PuntoVendita pv) throws Exception {
         this.commerciante.getPuntiVendita().remove(pv);
         this.database.removePuntoVendita(pv);
     }
 
+    /**
+     * Aggiunge un nuovo prodotto
+     * @param pv
+     * @param descrizione
+     * @param prezzo
+     * @throws Exception
+     */
     public void addProdotto(PuntoVendita pv, String descrizione, double prezzo) throws Exception {
         if(this.commerciante.getPuntiVendita().contains(pv)){
             pv.addProdotto(descrizione,prezzo);
@@ -81,10 +104,23 @@ public class ControllerCommerciante {
         } else throw new IllegalArgumentException();
     }
 
+    /**
+     * Aggiunge un nuovo prodotto
+     * @param indexPv
+     * @param descrizione
+     * @param prezzo
+     * @throws Exception
+     */
     public void addProdotto(int indexPv, String descrizione, double prezzo) throws Exception {
        this.addProdotto(this.commerciante.getPuntiVendita().get(indexPv), descrizione, prezzo);
     }
 
+    /**
+     * Rimuove il prodotto
+     * @param pv
+     * @param prodotto
+     * @throws Exception
+     */
     public void removeProdotto(PuntoVendita pv, Prodotto prodotto) throws Exception {
         if(this.commerciante.getPuntiVendita().contains(pv)){
             pv.removeProdotto(prodotto);
@@ -92,31 +128,67 @@ public class ControllerCommerciante {
         } else throw new Exception("Punto vendita non presente!");
     }
 
+    /**
+     * Rimuove il prodotto
+     * @param indexPv
+     * @param prodotto
+     * @throws Exception
+     */
     public void removeProdotto(int indexPv, Prodotto prodotto) throws Exception {
        this.removeProdotto(this.commerciante.getPuntiVendita().get(indexPv), prodotto);
     }
 
+    /**
+     * Rimuove il prodotto
+     * @param pv
+     * @param indexProdotto
+     * @throws Exception
+     */
     public void removeProdotto(PuntoVendita pv, int indexProdotto) throws Exception {
         this.removeProdotto(pv , pv.getProdotti().get(indexProdotto));
     }
 
+    /**
+     * Rimuove il prodotto
+     * @param indexPv
+     * @param indexProdotto
+     * @throws Exception
+     */
     public void removeProdotto(int indexPv, int indexProdotto) throws Exception {
         this.removeProdotto(this.commerciante.getPuntiVendita().get(indexPv) , this.commerciante.getPuntiVendita().get(indexPv).getProdotti().get(indexProdotto));
     }
 
-
+    /**
+     *
+     * @return la lista dei punti vendita
+     */
     public List<PuntoVendita> getPuntiVendita() {
         return this.commerciante.getPuntiVendita();
     }
 
+    /**
+     *
+     * @return la lista degli ordini
+     */
     public List<Ordine> getOrdini() {
         return GestoreOrdini.getInstance().getOrdini(this.commerciante);
     }
 
+    /**
+     *
+     * @param stato
+     * @return la lista degli ordini in un determinato stato
+     */
     public List<Ordine> getOrdini(StatoOrdine stato) {
         return GestoreOrdini.getInstance().getOrdini(this.commerciante, stato);
     }
 
+    /**
+     * Usato dal commerciante per accettare un ordine
+     * @param ordine
+     * @param pv
+     * @throws Exception
+     */
     public void accettaOrdine(Ordine ordine, PuntoRitiro pv) throws Exception {
         GestoreConsegne.getInstance().addConsegna(ordine,this.commerciante,pv);
         GestoreOrdini.getInstance().setStato(ordine, StatoOrdine.ACCETTATO);
@@ -124,19 +196,37 @@ public class ControllerCommerciante {
         this.database.saveConsegna(GestoreConsegne.getInstance().getConsegne().get(GestoreConsegne.getInstance().getConsegne().size()-1));
     }
 
+    /**
+     * Usato dal commerciante per rifiutare un ordine
+     * @param ordine
+     * @throws Exception
+     */
     public void rifiutaOrdine(Ordine ordine) throws Exception {
         GestoreOrdini.getInstance().setStato(ordine, StatoOrdine.RIFIUTATO);
         this.database.updateStatoOrdine(ordine, StatoOrdine.RIFIUTATO);
     }
 
+    /**
+     *
+     * @return la lista delle consegne
+     */
     public List<Consegna> getConsegne() {
         return GestoreConsegne.getInstance().getConsegne(this.commerciante);
     }
 
+    /**
+     *
+     * @param stato
+     * @return la lista delle consegne in un determinato stato
+     */
     public List<Consegna> getConsegne(StatoConsegna stato) {
         return GestoreConsegne.getInstance().getConsegne(this.commerciante, stato);
     }
 
+    /**
+     *
+     * @return la lista delle consegne da abilitare al ritiro
+     */
     public List<Consegna> getConsegneDaAbilitareAlRitiro(){
         List<Consegna> daAbilitare = new LinkedList<>();
         daAbilitare.addAll(this.getConsegne(StatoConsegna.PRESA_IN_CARICO));
@@ -145,6 +235,13 @@ public class ControllerCommerciante {
         return daAbilitare;
     }
 
+    /**
+     * Aggiunge una nuova offerta
+     * @param pv
+     * @param descrizione
+     * @param importo
+     * @throws Exception
+     */
     public void addOfferta(PuntoVendita pv, String descrizione, String importo) throws Exception {
         if (this.commerciante.getPuntiVendita().contains(pv)){
             pv.addOfferta(descrizione,importo);
@@ -152,6 +249,14 @@ public class ControllerCommerciante {
         } else throw new IllegalArgumentException();
     }
 
+    /**
+     * Aggiunge una nuova offerta
+     * @param pv
+     * @param descrizione
+     * @param importo
+     * @param date
+     * @throws Exception
+     */
     public void addOfferta(PuntoVendita pv, String descrizione, String importo, LocalDate date) throws Exception {
         if (this.commerciante.getPuntiVendita().contains(pv)){
             pv.addOfferta(descrizione,importo, date);
@@ -159,6 +264,12 @@ public class ControllerCommerciante {
         } else throw new IllegalArgumentException();
     }
 
+    /**
+     * Rimuove l'offerta
+     * @param pv
+     * @param offerta
+     * @throws Exception
+     */
     public void removeOfferta(PuntoVendita pv, IOfferta offerta) throws Exception {
         if(this.commerciante.getPuntiVendita().contains(pv) && pv.getOfferte().contains(offerta)){
             pv.getOfferte().remove(offerta);
@@ -166,29 +277,62 @@ public class ControllerCommerciante {
         } else throw new IllegalArgumentException();
     }
 
+    /**
+     * Abilita la consegna al ritiro
+     * @param consegna
+     * @throws Exception
+     */
     public void abilitaRitiro(Consegna consegna) throws Exception {
         GestoreConsegne.getInstance().abilitaRitiro(consegna);
         this.database.updateConsegnaRitirabile(consegna);
     }
 
+    /**
+     * Rimuove l'offerta
+     * @param indexPv
+     * @param offerta
+     * @throws Exception
+     */
     public void removeOfferta(int indexPv, IOfferta offerta) throws Exception {
         this.removeOfferta(this.commerciante.getPuntiVendita().get(indexPv), offerta);
     }
 
+    /**
+     * Rimuove l'offerta
+     * @param pv
+     * @param indexOfferta
+     * @throws Exception
+     */
     public void removeOfferta(PuntoVendita pv, int indexOfferta) throws Exception {
         this.removeOfferta(pv, pv.getOfferte().get(indexOfferta));
     }
 
+    /**
+     * Rimuove l'offerta
+     * @param indexPv
+     * @param indexOfferta
+     * @throws Exception
+     */
     public void removeOfferta(int indexPv, int indexOfferta) throws Exception {
         this.removeOfferta(this.commerciante.getPuntiVendita().get(indexPv), this.commerciante.getPuntiVendita().get(indexPv).getOfferte().get(indexOfferta));
     }
 
+    /**
+     *
+     * @return la lista dei punti di ritiro disponibili
+     */
     public List<PuntoRitiro> getPuntiRitiroDisponibili(){
         return CentroCittadino.getInstance().getPuntiRitiro().stream()
                 .filter(pr->pr.getSlotDisponibili()>0)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Cambia la disponibilità del prodotto
+     * @param p
+     * @param disponibilie
+     * @throws Exception
+     */
     public void cambiaDisponibilitaProdotto(Prodotto p, boolean disponibilie) throws Exception {
         p.setDisponibilita(disponibilie);
         this.database.updateDisponibilitaProdotto(p);

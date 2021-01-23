@@ -112,7 +112,7 @@ public class DBConsegne extends DBConnection implements IDBConsegne{
         return null;
     }
 
-    private PuntoRitiro getPuntoRitiro(String idPuntoRitiro) throws SQLException {
+    private PuntoRitiro getPuntoRitiro(String idPuntoRitiro) throws Exception {
         for(PuntoRitiro pr:this.dbPuntiRitiro.getPuntiRitiro()){
             if(pr.getId().equals(idPuntoRitiro)){
                 return pr;

@@ -27,8 +27,6 @@ package it.unicam.c3.Persistence;
 import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
-import it.unicam.c3.Anagrafica.Utente;
-import it.unicam.c3.Controller.ControllerAutenticazione;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -40,40 +38,40 @@ public interface IDBAccounts {
      * @return lista dei commercianti
      * @throws SQLException
      */
-    List<Commerciante> getCommercianti() throws SQLException;
+    List<Commerciante> getCommercianti() throws Exception;
 
     /**
      *
      * @return lista dei clienti
      * @throws SQLException
      */
-    List<Cliente> getClienti() throws SQLException;
+    List<Cliente> getClienti() throws Exception;
 
     /**
      *
      * @return lista dei corrieri
      * @throws SQLException
      */
-    List<Corriere> getCorrieri() throws SQLException;
+    List<Corriere> getCorrieri() throws Exception;
 
     /**
      * Salva un account commerciante
      * @param commerciante
      * @throws SQLException
      */
-    void registerCommerciante(Commerciante commerciante) throws SQLException;
+    void registerCommerciante(Commerciante commerciante) throws Exception;
 
     /**
      * Salva un account cliente
      * @param cliente
-     * @throws SQLException
+     * @throws Exception
      */
-    void registerCliente(Cliente cliente) throws SQLException;
+    void registerCliente(Cliente cliente) throws Exception;
 
     /**
      * Salva un account corriere
      * @param corriere
      * @throws SQLException
      */
-    void registerCorriere(Corriere corriere) throws SQLException;
+    void registerCorriere(Corriere corriere) throws Exception;
 }

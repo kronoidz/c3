@@ -70,6 +70,7 @@ public class ControllerClienteTest {
         assertEquals(1,controller.getCarrello().get(controller.getPuntiVendita().get(1)).size());
     }
 
+
     @Test
     public void numberOrdini(){
         controller.addInCarrello(controller.getPuntiVendita().get(0), controller.getPuntiVendita().get(0).getProdotti().get(0));

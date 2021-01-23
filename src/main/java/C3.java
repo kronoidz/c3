@@ -23,17 +23,9 @@
  */
 
 
-import it.unicam.c3.Commercio.IOfferta;
-import it.unicam.c3.Commercio.OffertaATempo;
-import it.unicam.c3.Commercio.OffertaSemplice;
 import it.unicam.c3.View.Console.ConsoleView;
 import it.unicam.c3.View.Spring.SpringView;
 import it.unicam.c3.View.View;
-
-
-import javax.mail.MessagingException;
-import java.io.IOException;
-import java.sql.SQLException;
 
 public class C3 {
 
@@ -52,8 +44,7 @@ public class C3 {
                     System.err.println("Argument " + args[0] + " is invalid");
                     return;
                 }
-            } else view = new SpringView(); // Default view
-
+            } else view = new SpringView();
             view.start();
     }
 

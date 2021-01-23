@@ -85,26 +85,33 @@ public class ConsoleAmministrazione {
             if (line.equals("y")) {
                 try {
                     controller.removePuntoRitiro(number);
-                } catch (SQLException exception) {
-                    exception.printStackTrace();
+                } catch (Exception exception) {
+                    System.out.println(exception.getMessage());
                 }
             }
         }
     }
 
-    private void aggiungiPuntoRitiroView() throws IOException, SQLException {
-        String line;
-        System.out.println("Immetti l'indirizzo del punto di ritiro: ");
-        line = br.readLine();
-        String indirizzo = line;
-        System.out.println("Immetti la capienza del punto di ritiro (Slot a disposizione): ");
-        line = br.readLine();
-        int capienza = Integer.parseInt(line);
+    private void aggiungiPuntoRitiroView() throws IOException {
+            String line;
+            System.out.println("Immetti l'indirizzo del punto di ritiro: ");
+            line = br.readLine();
+            String indirizzo = line;
+            System.out.println("Immetti la capienza del punto di ritiro (Slot a disposizione): ");
+             line = br.readLine();
+             int capienza = Integer.parseInt(line);
         System.out.println("Vuoi davvero aggiungere il punto di ritiro?");
         System.out.println("[y+enter per aggiungere il punto ritiro]");
         System.out.println("[n+enter per annullare l'operazione]");
         line = br.readLine();
-        if (line.equals("y")) controller.addPuntoRitiro(indirizzo, capienza);
+
+        if (line.equals("y")) {
+            try {
+                controller.addPuntoRitiro(indirizzo, capienza);
+            } catch (Exception e) {
+              System.out.println(e.getMessage());
+            }
+        }
     }
 
     private boolean autenticazioneAmministrazione() throws IOException {
@@ -115,7 +122,7 @@ public class ConsoleAmministrazione {
     }
 
 
-    public void amministrazioneView() throws IOException, SQLException {
+    public void amministrazioneView() throws IOException {
         String line;
         if(autenticazioneAmministrazione()) {
             do {

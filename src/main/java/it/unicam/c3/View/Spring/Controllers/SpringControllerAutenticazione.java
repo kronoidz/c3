@@ -46,18 +46,16 @@ public class SpringControllerAutenticazione {
     }
 
     @PostMapping("auth")
-    public ModelAndView doAuth (HttpSession session,
-                                Model model,
-                                @RequestParam("email") String email,
-                                @RequestParam("password") String password,
-                                @RequestParam("tipoUtente") String tipoUtente)
-    {
+    public ModelAndView doAuth(HttpSession session,
+                               Model model,
+                               @RequestParam("email") String email,
+                               @RequestParam("password") String password,
+                               @RequestParam("tipoUtente") String tipoUtente) {
         ControllerAutenticazione auth = null;
 
         try {
             auth = new ControllerAutenticazione();
-        }
-        catch (SQLException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
             model.addAttribute("error", "Errore database");
             return new ModelAndView("/auth", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -106,22 +104,22 @@ public class SpringControllerAutenticazione {
     }
 
     @GetMapping("/registra")
-    public String getRegistra() { return "/registrazione"; }
+    public String getRegistra() {
+        return "/registrazione";
+    }
 
     @PostMapping("/registra")
-    public ModelAndView postRegistra (Model model,
-                                      @RequestParam("nome") String nome,
-                                      @RequestParam("cognome") String cognome,
-                                      @RequestParam("email") String email,
-                                      @RequestParam("password") String password,
-                                      @RequestParam("tipoUtente") String tipoUtente)
-    {
+    public ModelAndView postRegistra(Model model,
+                                     @RequestParam("nome") String nome,
+                                     @RequestParam("cognome") String cognome,
+                                     @RequestParam("email") String email,
+                                     @RequestParam("password") String password,
+                                     @RequestParam("tipoUtente") String tipoUtente) {
         ControllerAutenticazione auth = null;
 
         try {
             auth = new ControllerAutenticazione();
-        }
-        catch (SQLException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
             model.addAttribute("error", "Errore database");
             return new ModelAndView("/registrazione", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -147,19 +145,21 @@ public class SpringControllerAutenticazione {
         }
 
         try {
-            auth.registra ( nome,
-                            cognome,
-                            email,
-                            password,
-                            tipo );
+            auth.registra(nome,
+                    cognome,
+                    email,
+                    password,
+                    tipo);
+            model.addAttribute("success",
+                    String.format("Utente %s %s iscritto", nome, cognome));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            model.addAttribute("error", "Errore database");
+            model.addAttribute("error", "ERRORE: Email già presente!");
             return new ModelAndView("/registrazione", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            model.addAttribute("error", "ERRORE: "+e.getMessage());
         }
 
-        model.addAttribute("success",
-                String.format("Utente %s %s iscritto", nome, cognome));
         return new ModelAndView("/registrazione");
     }
 

@@ -41,10 +41,9 @@ public class ControllerEmail {
     private static final String PASSWORD = "C3infoSystem";
 
     public void sendEmail(String from, String password, String toEmail, String ccEmail, String emailTitle, String emailMessage) throws MessagingException {
-        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+      //  Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
         final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 
-        // Get a Properties object
         Properties props = System.getProperties();
         props.setProperty("mail.smtps.host", "smtp.gmail.com");
         props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
@@ -53,22 +52,12 @@ public class ControllerEmail {
         props.setProperty("mail.smtp.socketFactory.port", "465");
         props.setProperty("mail.smtps.auth", "true");
 
-        /*
-        If set to false, the QUIT command is sent and the connection is immediately closed. If set
-        to true (the default), causes the transport to wait for the response to the QUIT command.
-
-        ref :   http://java.sun.com/products/javamail/javadocs/com/sun/mail/smtp/package-summary.html
-                http://forum.java.sun.com/thread.jspa?threadID=5205249
-                smtpsend.java - demo program from javamail
-        */
         props.put("mail.smtps.quitwait", "false");
 
         Session session = Session.getInstance(props, null);
 
-        // -- Create a new message --
         final MimeMessage msg = new MimeMessage(session);
 
-        // -- Set the FROM and TO fields --
         msg.setFrom(new InternetAddress(from));
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
 

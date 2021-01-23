@@ -73,6 +73,6 @@ public interface IDBCorriere {
      * @param pr
      * @throws SQLException
      */
-    void updateDisponibilita(PuntoRitiro pr) throws SQLException;
+    void updateDisponibilita(PuntoRitiro pr) throws Exception;
 
 }
