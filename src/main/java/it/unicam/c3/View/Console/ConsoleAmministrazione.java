@@ -44,8 +44,12 @@ public class ConsoleAmministrazione {
     private final String LOGOUT = "L";
 
 
-    public ConsoleAmministrazione() throws SQLException {
-        controller = new ControllerGestore();
+    public ConsoleAmministrazione() {
+        try {
+            controller = new ControllerGestore();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         br = new BufferedReader(new InputStreamReader(System.in));
     }
 

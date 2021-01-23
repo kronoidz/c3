@@ -27,8 +27,9 @@ package it.unicam.c3.Controller;
 import it.unicam.c3.Anagrafica.Amministrazione;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Citta.PuntoRitiro;
-import it.unicam.c3.Persistence.DBPuntiRitiro;
-import it.unicam.c3.Persistence.IDBPuntiRitiro;
+import it.unicam.c3.Consegne.GestoreConsegne;
+import it.unicam.c3.Ordini.GestoreOrdini;
+import it.unicam.c3.Persistence.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -37,12 +38,15 @@ public class ControllerGestore {
     private boolean autorizzato = false;
     private IDBPuntiRitiro dbPuntiRitiro;
 
-    public ControllerGestore(IDBPuntiRitiro dbPuntiRitiro){
+    public ControllerGestore(IDBAccounts dbAccounts, IDBPuntiRitiro dbPuntiRitiro, IDBOrdini dbOrdini, IDBConsegne dbConsegne ) throws Exception {
         this.dbPuntiRitiro=dbPuntiRitiro;
+        CentroCittadino.getInstance(dbAccounts.getCommercianti(), dbAccounts.getClienti(), dbAccounts.getCorrieri(), dbPuntiRitiro.getPuntiRitiro());
+        GestoreOrdini.getInstance(dbOrdini.getOrdini());
+        GestoreConsegne.getInstance(dbConsegne.getConsegne());
     }
 
-    public ControllerGestore() throws SQLException {
-        this.dbPuntiRitiro=new DBPuntiRitiro();
+    public ControllerGestore() throws Exception {
+        this(new DBAccounts(), new DBPuntiRitiro(), new DBOrdini(), new DBConsegne());
     }
 
     public boolean autorizza(String password) {

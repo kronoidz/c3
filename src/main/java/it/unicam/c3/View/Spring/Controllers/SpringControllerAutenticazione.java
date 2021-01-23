@@ -180,7 +180,7 @@ public class SpringControllerAutenticazione {
                                      Model model,
                                      @RequestParam("password") String password)
     {
-        ControllerGestore controller;
+        ControllerGestore controller = null;
 
         try {
             controller = new ControllerGestore();
@@ -189,6 +189,8 @@ public class SpringControllerAutenticazione {
             throwables.printStackTrace();
             model.addAttribute("error", "Errore database");
             return new ModelAndView("/authAdmin", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (!controller.isAutorizzato()) {

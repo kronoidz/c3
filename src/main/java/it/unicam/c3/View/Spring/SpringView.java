@@ -34,8 +34,6 @@ public class SpringView implements View {
     @SuppressWarnings("RedundantThrows")
     @Override
     public void start() throws Exception {
-        //makeDevData();
-
         SpringApplication.run(SpringView.class);
     }
 
