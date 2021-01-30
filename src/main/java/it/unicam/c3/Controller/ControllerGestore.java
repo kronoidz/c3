@@ -24,7 +24,6 @@
 
 package it.unicam.c3.Controller;
 
-import it.unicam.c3.Anagrafica.Amministrazione;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Consegne.GestoreConsegne;
@@ -34,6 +33,7 @@ import it.unicam.c3.Persistence.*;
 import java.util.List;
 
 public class ControllerGestore {
+    private static String password = "admin";
     private boolean autorizzato = false;
     private IDBPuntiRitiro dbPuntiRitiro;
 
@@ -49,7 +49,7 @@ public class ControllerGestore {
     }
 
     public boolean autorizza(String password) {
-        this.autorizzato = Amministrazione.checkPassword(password);
+        this.autorizzato = ControllerGestore.password.equals(password);
         return this.autorizzato;
     }
 
