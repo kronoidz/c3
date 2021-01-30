@@ -36,11 +36,11 @@ public class SpringControllerCliente extends SpringControllerBase {
 
     public static class ProdottoView {
         private Prodotto prodotto;
-        private boolean inCarrello;
+        private int inCarrello;
 
         public ProdottoView() {}
 
-        public ProdottoView(Prodotto prodotto, boolean inCarrello) {
+        public ProdottoView(Prodotto prodotto, int inCarrello) {
             this.prodotto = prodotto;
             this.inCarrello = inCarrello;
         }
@@ -53,11 +53,11 @@ public class SpringControllerCliente extends SpringControllerBase {
             this.prodotto = prodotto;
         }
 
-        public boolean isInCarrello() {
+        public int getInCarrello() {
             return inCarrello;
         }
 
-        public void setInCarrello(boolean inCarrello) {
+        public void setInCarrello(int inCarrello) {
             this.inCarrello = inCarrello;
         }
     }
@@ -107,8 +107,12 @@ public class SpringControllerCliente extends SpringControllerBase {
         List<Prodotto> prodottiNelCarrello = controller.getCarrello().get(puntoVendita);
         model.addAttribute("prodotti", prodotti.stream()
         .map(
-                p -> new ProdottoView(p, prodottiNelCarrello != null &&
-                        prodottiNelCarrello.contains(p))
+                p -> new ProdottoView(p, prodottiNelCarrello == null ? 0 :
+                        (int)prodottiNelCarrello
+                                .stream()
+                                .filter(p2 -> p2.equals(p))
+                                .count()
+                )
         ).collect(Collectors.toList()));
 
         return "/cliente/puntoVendita";

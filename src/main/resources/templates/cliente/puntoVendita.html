@@ -40,11 +40,11 @@
         <td th:text="${p.prodotto.descrizione}"></td>
         <td th:text="'€ ' + ${p.prodotto.prezzo}"></td>
         <td>
-            <a th:if="${!p.inCarrello}"
-                th:href="@{/cliente/aggiungiAlCarrello(idPuntoVendita=${puntoVendita.id},idProdotto=${p.prodotto.id})}">
+            <a th:href="@{/cliente/aggiungiAlCarrello(idPuntoVendita=${puntoVendita.id},idProdotto=${p.prodotto.id})}">
                 Aggiungi al carrello
             </a>
-            <span class="muted" th:if="${p.inCarrello}">Nel carrello</span>
+            &nbsp;
+            <span class="muted" th:if="${p.inCarrello > 0}" th:text="'('+${p.inCarrello}+')'"></span>
         </td>
     </tr>
     </tbody>
