@@ -25,16 +25,12 @@
 package it.unicam.c3.Controller;
 
 import it.unicam.c3.Anagrafica.Corriere;
-import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Consegne.Consegna;
 import it.unicam.c3.Consegne.GestoreConsegne;
 import it.unicam.c3.Consegne.StatoConsegna;
 import it.unicam.c3.Persistence.DBCorriere;
 import it.unicam.c3.Persistence.IDBCorriere;
 
-import javax.mail.MessagingException;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 public class ControllerCorriere {

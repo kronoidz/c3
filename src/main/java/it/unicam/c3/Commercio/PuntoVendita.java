@@ -121,6 +121,10 @@ public class PuntoVendita {
         this.offerte.add(new OffertaSemplice(descrizione, importo,id));
     }
 
+    public void addOfferta(String id, String descrizione, String importo, LocalDate scadenza) {
+        this.offerte.add(new OffertaATempo(descrizione, importo, scadenza, id));
+    }
+
     public void addOfferta(String descrizione, String importo, LocalDate scadenza) {
         this.offerte.add(new OffertaATempo(descrizione, importo, scadenza));
     }

@@ -24,7 +24,6 @@
 
 package it.unicam.c3.Persistence;
 
-import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.PuntoRitiro;
 
 import java.sql.PreparedStatement;
@@ -74,6 +73,7 @@ public class DBPuntiRitiro extends DBConnection implements IDBPuntiRitiro{
             while (getData().next()) {
                 PuntoRitiro pr = new PuntoRitiro(getData().getString("Indirizzo"), getData().getInt("Capienza"));
                 pr.setId(getData().getString("Id"));
+                pr.incrementOccupati(pr.getCapienza() - getData().getInt("SlotDisponibili"));
                 puntiRitiro.add(pr);
             }
         }

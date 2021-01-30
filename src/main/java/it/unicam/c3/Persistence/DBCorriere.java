@@ -29,7 +29,6 @@ import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Consegne.Consegna;
 import it.unicam.c3.Consegne.StatoConsegna;
 
-import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 

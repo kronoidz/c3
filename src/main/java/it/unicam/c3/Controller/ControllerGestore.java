@@ -31,7 +31,6 @@ import it.unicam.c3.Consegne.GestoreConsegne;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.Persistence.*;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class ControllerGestore {

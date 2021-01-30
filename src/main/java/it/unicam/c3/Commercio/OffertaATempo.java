@@ -29,7 +29,9 @@ import java.time.LocalDate;
 public class OffertaATempo extends Offerta {
     LocalDate scadenza;
 
-    public OffertaATempo() {
+    public OffertaATempo(String descrizione, String importo, LocalDate scadenza, String id) {
+        super(descrizione, importo,id);
+        this.scadenza = scadenza;
     }
 
     public OffertaATempo(String descrizione, String importo, LocalDate scadenza) {

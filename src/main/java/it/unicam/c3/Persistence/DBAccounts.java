@@ -28,7 +28,6 @@ import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Commercio.PuntoVendita;
-
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -157,7 +156,9 @@ public class DBAccounts extends DBConnection implements IDBAccounts{
         String sql = "Select * from Offerte where PuntoVendita='"+pv.getId()+"'";
         setData(sql);
         while (getData().next()) {
-            pv.addOfferta(getData().getString("Id"), getData().getString("Descrizione"), getData().getString("Importo"));
+            if(getData().getDate("Scadenza")!=null){
+                pv.addOfferta(getData().getString("Id"), getData().getString("Descrizione"), getData().getString("Importo"), getData().getDate("Scadenza").toLocalDate());
+            } else pv.addOfferta(getData().getString("Id"), getData().getString("Descrizione"), getData().getString("Importo"));
         }
     }
 

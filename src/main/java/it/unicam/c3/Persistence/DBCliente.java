@@ -24,7 +24,6 @@
 
 package it.unicam.c3.Persistence;
 
-import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Consegne.Consegna;

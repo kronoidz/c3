@@ -27,7 +27,6 @@ package it.unicam.c3.Controller;
 import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Commercio.IOfferta;
-import it.unicam.c3.Commercio.Offerta;
 import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Commercio.PuntoVendita;
 import it.unicam.c3.Consegne.Consegna;

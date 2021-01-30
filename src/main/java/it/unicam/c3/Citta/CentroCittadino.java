@@ -29,8 +29,6 @@ import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Commercio.PuntoVendita;
-import it.unicam.c3.Consegne.Consegna;
-import it.unicam.c3.Consegne.GestoreConsegne;
 
 import java.util.LinkedList;
 import java.util.List;

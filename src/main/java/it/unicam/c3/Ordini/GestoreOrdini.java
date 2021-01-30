@@ -26,7 +26,6 @@ package it.unicam.c3.Ordini;
 
 import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
-import it.unicam.c3.Citta.CentroCittadino;
 import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Commercio.PuntoVendita;
 

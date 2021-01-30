@@ -24,7 +24,6 @@
 
 package it.unicam.c3.Controller;
 
-import it.unicam.c3.Anagrafica.Amministrazione;
 import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
@@ -34,11 +33,7 @@ import it.unicam.c3.Exception.EmailSyntaxException;
 import it.unicam.c3.Ordini.GestoreOrdini;
 import it.unicam.c3.Persistence.*;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -46,7 +41,6 @@ import java.util.stream.Collectors;
 public class ControllerAutenticazione {
     private IDBAccounts dbAccounts;
 
-    //public static boolean autenticazioneAbilitata = false;
 
     public ControllerAutenticazione(IDBAccounts dbAccounts, IDBPuntiRitiro dbPuntiRitiro, IDBOrdini dbOrdini, IDBConsegne dbConsegne ) throws Exception {
         this.dbAccounts=dbAccounts;

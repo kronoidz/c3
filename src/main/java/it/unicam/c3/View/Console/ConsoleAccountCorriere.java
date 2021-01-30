@@ -31,7 +31,6 @@ import javax.mail.MessagingException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 
 public class ConsoleAccountCorriere {
     private Corriere corriere;

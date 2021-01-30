@@ -30,7 +30,6 @@ import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Commercio.PuntoVendita;
 import it.unicam.c3.Consegne.Consegna;
-import it.unicam.c3.Consegne.StatoConsegna;
 import it.unicam.c3.Controller.ControllerCommerciante;
 import it.unicam.c3.Ordini.Ordine;
 import it.unicam.c3.Ordini.StatoOrdine;
@@ -39,9 +38,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ConsoleAccountCommerciante {
     private Commerciante commerciante;

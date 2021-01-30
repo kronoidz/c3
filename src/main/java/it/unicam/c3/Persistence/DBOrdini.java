@@ -2,13 +2,11 @@ package it.unicam.c3.Persistence;
 
 import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
-import it.unicam.c3.Citta.PuntoRitiro;
 import it.unicam.c3.Commercio.Prodotto;
 import it.unicam.c3.Commercio.PuntoVendita;
 import it.unicam.c3.Ordini.Ordine;
 import it.unicam.c3.Ordini.StatoOrdine;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;

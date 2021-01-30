@@ -24,16 +24,12 @@
 
 package it.unicam.c3.View.Console;
 
-import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Citta.CentroCittadino;
-import it.unicam.c3.Controller.ControllerCorriere;
 import it.unicam.c3.Controller.ControllerGestore;
 
-import javax.mail.MessagingException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 
 public class ConsoleAmministrazione {
     private ControllerGestore controller;

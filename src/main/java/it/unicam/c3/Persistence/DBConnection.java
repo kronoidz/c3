@@ -24,12 +24,8 @@
 
 package it.unicam.c3.Persistence;
 
-import it.unicam.c3.Consegne.Consegna;
-import it.unicam.c3.Consegne.GestoreConsegne;
 
 import java.sql.*;
-import java.util.LinkedList;
-import java.util.List;
 
 public abstract class DBConnection {
     private static final String LOCAL_CONNECTION_STRING = "jdbc:mysql://62.11.49.30:3306/c3";
