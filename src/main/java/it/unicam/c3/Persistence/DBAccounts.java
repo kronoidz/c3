@@ -28,8 +28,11 @@ import it.unicam.c3.Anagrafica.Cliente;
 import it.unicam.c3.Anagrafica.Commerciante;
 import it.unicam.c3.Anagrafica.Corriere;
 import it.unicam.c3.Commercio.PuntoVendita;
+
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -157,7 +160,9 @@ public class DBAccounts extends DBConnection implements IDBAccounts{
         setData(sql);
         while (getData().next()) {
             if(getData().getDate("Scadenza")!=null){
-                pv.addOfferta(getData().getString("Id"), getData().getString("Descrizione"), getData().getString("Importo"), getData().getDate("Scadenza").toLocalDate());
+                if(getData().getDate("Scadenza").compareTo(Date.valueOf(LocalDate.now()))>=0) {
+                    pv.addOfferta(getData().getString("Id"), getData().getString("Descrizione"), getData().getString("Importo"), getData().getDate("Scadenza").toLocalDate());
+                }
             } else pv.addOfferta(getData().getString("Id"), getData().getString("Descrizione"), getData().getString("Importo"));
         }
     }
